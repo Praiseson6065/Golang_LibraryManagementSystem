@@ -3,6 +3,8 @@ package handlers
 import (
 	"time"
 
+	"database/sql"
+
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/repository"
@@ -20,7 +22,18 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	// Find the user by credentials
-	user, err := repository.FindByCredentials(loginRequest.Email, loginRequest.Password)
+	db, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/lib")
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+	// 	user, err := FindByCredentials(db, "test@mail.com", "test12345")
+	// if err != nil {
+	//     panic(err)
+	// }
+
+	// fmt.Println(user)
+	user, err := repository.FindByCredentials(db,loginRequest.Email, loginRequest.Password)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": err.Error(),
@@ -31,8 +44,8 @@ func Login(c *fiber.Ctx) error {
 	claims := jtoken.MapClaims{
 		"ID":    user.ID,
 		"email": user.Email,
-		"fav": user.FavoritePhrase,
-		"exp": time.Now().Add(day * 1).Unix(),
+		"fav":   user.FavoritePhrase,
+		"exp":   time.Now().Add(day * 1).Unix(),
 	}
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)

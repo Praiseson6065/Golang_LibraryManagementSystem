@@ -3,37 +3,27 @@ package repository
 import (
     "errors"
     "github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
+    "database/sql"
 )
 
 
-func FindByCredentials(email, password string) (*models.User, error) {
+func FindByCredentials(db *sql.DB, email, password string) (*models.User, error) {
     
-    users := []models.User{
-        models.User{
-            ID:             1,
-            Email:          "test@mail.com",
-            Password:       "test12345",
-            FavoritePhrase: "Hello, World!",
-        },
-        models.User{
-            ID:             2,
-            Email:          "johndoe@mail.com",
-            Password:       "password123",
-            FavoritePhrase: "I love reading books!",
-        },
-        models.User{
-            ID:             3,
-            Email:          "janedoe@mail.com",
-            Password:       "password456",
-            FavoritePhrase: "I love writing stories!",
-        },
+    query := `SELECT id, email, password, favph FROM user_data WHERE email = ? AND password = ?;`
+    
+    result, err := db.Query(query, email, password)
+    if err != nil {
+        return nil, err
     }
-
-    for _, user := range users {
-        if user.Email == email && user.Password == password {
-            return &user, nil
+    
+    if result.Next() {
+        var user models.User
+        err = result.Scan(&user.ID, &user.Email, &user.Password, &user.FavoritePhrase)
+        if err != nil {
+            return nil, err
         }
+        return &user, nil
+    } else {
+        return nil, errors.New("user not found")
     }
-
-    return nil, errors.New("user not found")
 }
