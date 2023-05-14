@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/gofiber/fiber/v2 v2.44.0 // indirect
 	github.com/gofiber/jwt/v3 v3.3.9 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
