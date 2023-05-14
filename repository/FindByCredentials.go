@@ -5,12 +5,13 @@ import (
 	"errors"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
+	_ "github.com/lib/pq"
 )
 
 func FindByCredentials(email, password string) (*models.User, error) {
 
 	// Connect to the database
-	db, err := sql.Open("postgres", "lib:lib@tcp(localhost:5432)/lib")
+	db, err := sql.Open("postgres", "postgres://lib:lib@localhost:5432/lib")
 	if err != nil {
 		return nil, err
 	}
