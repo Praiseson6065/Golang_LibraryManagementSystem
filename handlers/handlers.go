@@ -3,7 +3,7 @@ package handlers
 import (
 	"time"
 
-	"database/sql"
+	
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
@@ -22,19 +22,9 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	// Find the user by credentials
-	db, err := sql.Open("mysql", "root:lib@tcp(localhost:5432)/lib")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-	// 	user, err := FindByCredentials(db, "test@mail.com", "test12345")
-	// if err != nil {
-	//     panic(err)
-	// }
-
-	// fmt.Println(user)
 	
-	user, err := repository.FindByCredentials(db,loginRequest.Email, loginRequest.Password)
+	
+	user, err := repository.FindByCredentials(loginRequest.Email, loginRequest.Password)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": err.Error(),
