@@ -31,8 +31,8 @@ func Login(c *fiber.Ctx) error {
 	claims := jtoken.MapClaims{
 		"ID":    user.ID,
 		"email": user.Email,
-		"fav":   user.FavoritePhrase,
-		"exp":   time.Now().Add(day * 1).Unix(),
+		"fav": user.FavoritePhrase,
+		"exp": time.Now().Add(day * 1).Unix(),
 	}
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)

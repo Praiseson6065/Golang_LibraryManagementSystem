@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ggithub.com/Praiseson6065/Golang_LibraryManagementSystem/config"
+	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/handlers"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/gofiber/fiber/v2"
