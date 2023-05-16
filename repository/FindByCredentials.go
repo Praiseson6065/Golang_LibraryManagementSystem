@@ -1,8 +1,10 @@
 package repository
 
 import (
+	
 	"database/sql"
 	"errors"
+	
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
 	_ "github.com/lib/pq"
@@ -18,7 +20,7 @@ func FindByCredentials(email, password string) (*models.User, error) {
 	defer db.Close()
 
 	// Build the query
-	query := `SELECT id, email, password, favph FROM user_data WHERE email = $1 AND password = $2;`
+	query := `SELECT id, email, password, name FROM user_data WHERE email = $1 AND password = $2;`
 
 	// Execute the query
 	result, err := db.Query(query, email, password)
@@ -33,7 +35,7 @@ func FindByCredentials(email, password string) (*models.User, error) {
 
 	// Scan the row into a User struct
 	user := models.User{}
-	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.FavoritePhrase)
+	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -41,3 +43,4 @@ func FindByCredentials(email, password string) (*models.User, error) {
 	// Return the user
 	return &user, nil
 }
+

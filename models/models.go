@@ -10,8 +10,13 @@ type LoginResponse struct {
 }
 
 type User struct {
-	ID             int
-	Email          string
-	Password       string
-	FavoritePhrase string
+    ID   int    
+    Name string 
+    Email string 
+    Password string 
+}
+type RegisterUser struct{
+	Name string
+	Email string
+	Password string
 }

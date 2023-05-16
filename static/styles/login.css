@@ -1,0 +1,64 @@
+
+body{
+    background-color: rgba(242,245,255,1);
+
+}
+main{
+        display: flex;
+        flex-direction: column;
+        gap :40px;
+        align-items: center;
+}
+h1{
+    font-size: 40px;
+    margin-top: 6rem;
+    margin-bottom: .8rem;
+    font-weight: 800;
+}
+h3{
+    font-size: 24px;
+    text-align: center;
+}
+.login{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* background-color: rgb(238, 244, 252); */
+    border: rgba(197, 211, 245, 0.464) solid 2px;
+    padding: 2rem 3rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(1, 26, 54, 0.133);
+    
+}
+input{
+    width:360px;
+    height: 1.8rem;
+    border: none;
+    border-radius: 8px;
+    margin :0.5rem 0rem 1rem;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 5px 5px rgba(1, 26, 54, 0.176);
+}
+input[type="submit"]{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    width: 100%;
+    
+    box-sizing: content-box;
+}
+a{
+    color: rgba(53,109,253,1);
+    text-decoration: none;
+}
+form{
+    display: flex ;
+    flex-direction: column;
+    
+}
+input[type="text"],[type="email"],[type="password"]:focus{
+
+    outline-color: rgba(53,109,253,1);
+
+}

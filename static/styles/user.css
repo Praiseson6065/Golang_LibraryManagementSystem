@@ -1,0 +1,23 @@
+*{
+    margin:0;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 18px;
+    
+}
+.lightBg{
+    background-color: rgba(242,245,255,1);
+}
+label{
+    font-weight: 600 ;
+}
+.heading_grad{
+    
+        
+        background: linear-gradient(90deg,#35a9fd 0,#004ca6 95%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    
+}
+.headingDark{
+    color: #004ca6;
+}
