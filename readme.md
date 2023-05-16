@@ -1,9 +1,9 @@
-#Golang_Library Management Project
+# Golang_Library Management Project
 
-##Description
+## Description
 	Library management: jwt authentication,admin and user registeration and login page
 	
-##Installing 
+## Installing 
 	In order to use this makefile you will need to make sure that the following
 dependencies are installed on your system:
 	-[Go fiber](https://pkg.go.dev/database/sql)
@@ -20,4 +20,5 @@ dependencies are installed on your system:
 		| - repository				#passwordchecking
 		| - static				#static files like html&css
 		| - main.go				#main function
+		```
 
