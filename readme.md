@@ -10,7 +10,8 @@
 	-[JWT](https://github.com/golang-jwt/jwt)
 
 ## Folder Structure
-	Here's a folder structure :
+	**Here's a folder structure :**
+
 		```
 		Golang_Library Management/		#Root dir
 		| - handlers				#Functions of Pages

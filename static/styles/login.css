@@ -10,10 +10,11 @@ main{
         align-items: center;
 }
 h1{
-    font-size: 40px;
+    font-size: 3.75rem;
     margin-top: 6rem;
     margin-bottom: .8rem;
     font-weight: 800;
+    line-height: 1;
 }
 h3{
     font-size: 24px;
@@ -31,7 +32,7 @@ h3{
     
 }
 input{
-    width:360px;
+    width:360px !important;
     height: 1.8rem;
     border: none;
     border-radius: 8px;
@@ -45,7 +46,6 @@ input[type="submit"]{
     border: none;
     color:white;
     width: 100%;
-    
     box-sizing: content-box;
 }
 a{

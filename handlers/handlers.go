@@ -3,16 +3,51 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
-
 	"time"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
-
+	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/repository"
 	"github.com/gofiber/fiber/v2"
 	jtoken "github.com/golang-jwt/jwt/v4"
 )
+
+//home page
+func HomePage(c *fiber.Ctx) error {
+	return c.Render("static/home.html", map[string]interface{}{})
+}
+
+//profile page
+func ProfilePage(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	token, err := jtoken.Parse(cookie, func(token *jtoken.Token) (interface{},error) {
+		// Provide the secret key used for signing the token
+		return []byte(config.Secret), nil
+	})
+
+	if err != nil {
+		// Handle token parsing error
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid token",
+		})
+	}
+
+	// Access the claims from the parsed token
+	claims, ok := token.Claims.(jtoken.MapClaims)
+	if !ok || !token.Valid {
+		// Handle invalid token or invalid claims
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Invalid token claims",
+		})
+	}
+
+	return c.Render("static/profile.html",map[string]interface{}{
+		"name" : claims["name"],
+		"email" : claims["email"],
+	})
+
+}
 
 // Login route
 func Login(c *fiber.Ctx) error {
@@ -39,6 +74,7 @@ func Login(c *fiber.Ctx) error {
 		"name":  user.Name,
 		"exp":   time.Now().Add(day * 1).Unix(),
 	}
+
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
 	// Generate encoded token and send it as response.
@@ -48,10 +84,17 @@ func Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	// Return the token
-	return c.JSON(models.LoginResponse{
-		Token: t,
+
+	c.Set("Authorization", "Bearer"+t)
+	c.Cookie(&fiber.Cookie{
+		Name:     "jwt",
+		Value:    t,
+		Expires:  time.Now().Add(24 * time.Hour),
+		HTTPOnly: true,
+		SameSite: "lax",
 	})
+
+	return c.Redirect("/profile")
 }
 
 // Protected route
@@ -61,6 +104,7 @@ func Protected(c *fiber.Ctx) error {
 	claims := user.Claims.(jtoken.MapClaims)
 	email := claims["email"].(string)
 	Name := claims["name"].(string)
+	fmt.Println("claims:", claims)
 	return c.SendString("Welcome 👋" + email + " " + Name)
 }
 
@@ -68,27 +112,6 @@ func Protected(c *fiber.Ctx) error {
 func Loginpage(c *fiber.Ctx) error {
 	return c.Render("static/login.html", map[string]interface{}{
 		"title": "Login Page"})
-
-}
-
-//login page post
-func LoginpagePost(c *fiber.Ctx) error {
-	// Get the user data from the request body
-	data := new(models.LoginRequest)
-	if err := c.BodyParser(data); err != nil {
-		return err
-	}
-
-	result, err := repository.FindByCredentials(data.Email, data.Password)
-	if err != nil {
-		return err
-	}
-	
-
-
-	// Return nil to indicate success
-	return c.Render("static/loggedin.html", map[string]interface{}{
-		"msg": "Hello " + result.Name + " Successfully Logged in."})
 }
 
 //register
@@ -111,8 +134,11 @@ func RegisterPost(c *fiber.Ctx) error {
 		return err
 	}
 	defer stmt.Close()
-
-	_, err = stmt.Exec(data.Email, data.Password, data.Name, "user")
+	hashpassword,err:=middlewares.HashPassword(data.Password)
+	if err != nil {
+		return nil
+	}
+	_, err = stmt.Exec(data.Email, hashpassword , data.Name, "user")
 	if err != nil {
 		fmt.Println(err)
 		return err

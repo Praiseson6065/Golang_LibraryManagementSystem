@@ -1,0 +1,11 @@
+.profile-wrap
+{
+    box-sizing: border-box;
+    padding: 8rem 8rem;
+    display: flex;
+    flex-direction: column;
+    gap:2rem;
+    font-size: 2rem !important;
+    
+
+}

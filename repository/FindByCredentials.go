@@ -1,11 +1,10 @@
 package repository
 
 import (
-	
 	"database/sql"
 	"errors"
-	
 
+	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
 	_ "github.com/lib/pq"
 )
@@ -20,10 +19,14 @@ func FindByCredentials(email, password string) (*models.User, error) {
 	defer db.Close()
 
 	// Build the query
-	query := `SELECT id, email, password, name FROM user_data WHERE email = $1 AND password = $2;`
+	query := `SELECT id, email, password, name FROM user_data WHERE email = $1 ;`
 
 	// Execute the query
-	result, err := db.Query(query, email, password)
+
+	if err != nil {
+		return nil, err
+	}
+	result, err := db.Query(query, email)
 	if err != nil {
 		return nil, err
 	}
@@ -32,15 +35,19 @@ func FindByCredentials(email, password string) (*models.User, error) {
 	if !result.Next() {
 		return nil, errors.New("user not found")
 	}
-
-	// Scan the row into a User struct
 	user := models.User{}
 	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	// Return the user
-	return &user, nil
-}
+	// Check the password
+	matched := middlewares.CheckPasswordHash(password,user.Password)
 
+	// If the password matches, return the user
+	if matched {
+		return &user, nil
+	} else {
+		return nil, errors.New("invalid password")
+	}
+}
