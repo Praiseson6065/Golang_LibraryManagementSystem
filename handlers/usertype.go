@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	
 	"log"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
@@ -42,13 +43,10 @@ func AdminPage(c *fiber.Ctx) error {
 func ProfilePage(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
 	claims, err := middlewares.CookieGetData(cookie, c)
-	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid token claims",
-		})
-	}
+	
+	
 
-	if claims["name"] != "nologin" {
+	if err != nil {
 		return c.Render("profile", map[string]interface{}{
 			"name":       claims["name"],
 			"email":      claims["email"],
@@ -62,6 +60,7 @@ func ProfilePage(c *fiber.Ctx) error {
 			"nologin":    "hide-data",
 			"user-st":    "/login",
 			"userstatus": "Login",
+			"hideEle":    "",
 		})
 	}
 

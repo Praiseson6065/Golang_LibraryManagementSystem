@@ -19,25 +19,29 @@
             <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
             <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
             <div class="nav-item"><a  class="nav-link" href="/profile">Profile</a></div>
+            {{if .user-st}}
             <div class="nav-item"><a  class="nav-link" href="{{.user-st}}">{{.userstatus}}</a></div>
+            {{end}}
             
         </div>
         
    </div>
     <div class="profile-wrap">
+        {{if .msg}}
         <div class="{{.hideEle}}">
             {{.msg}}
         </div>
-        <div class="{{.nologin}}">
+        {{end}}
+        {{if .name}}
+        <div class="">
             Name: {{.name}}
         </div>
-        <div class="{{.nologin}}">
+        {{end}}
+        {{if .email}}
+        <div class="">
             Email : {{.email}}
         </div>
-        
-        <div class="{{.nologin}}">
-            Password : {{.password}}
-        </div>
+        {{end}}
     </div>
 
 
