@@ -1,0 +1,19 @@
+form{
+    display: grid;
+    grid-template-columns: 25% 25% 25%;
+    gap:40px 30px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    
+}
+.addbooks-wrap{
+    margin: 5rem auto;
+
+
+}
+.wrap-item{
+    display: flex;
+    justify-content: space-between;
+}
+

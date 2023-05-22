@@ -1,0 +1,50 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="styles/navbar.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbrand"><a class="nav-link" href="">Library Management</a></div>
+            <div class="nav-list">
+                <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
+                <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
+                <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
+                <div class="nav-item"><a  class="nav-link" href="/addbooks">Add Books</a></div>
+            </div>
+            
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>LogId</th>
+                    <th>UserId</th>
+                    <th>UserType</th>
+                    <th>Operation</th>
+                    <th>Timestamp</th>
+                    <th>User(name)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Data}} 
+                <tr>
+                <td>{{.LogId}}</td>
+                <td>{{.UserId}}</td>
+                <td>{{.UserType}}</td>
+                <td>{{.Operation}}</td>
+                <td>{{.InsertTime}}</td>
+                <td>{{.UserName}}</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+    </body>
+    </html>

@@ -14,6 +14,7 @@ type User struct {
 	Name     string
 	Email    string
 	Password string
+	Usertype string
 }
 type RegisterUser struct {
 	Name     string
@@ -25,4 +26,23 @@ type UserData struct {
 	Name  string
 	Email string
 	Exp   int
+}
+type Logdb struct {
+	LogId      int
+	UserId     int
+	UserType   string
+	Operation  string
+	InsertTime string
+	UserName   string
+}
+
+type Book struct {
+	BookId    int
+	BookName  string
+	ISBN      string
+	Pages     int
+	Publisher string
+	Author    string
+	Quantity  int
+	Taglines  []string
 }

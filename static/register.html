@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="styles/register.css">
     <link rel="stylesheet" href="styles/user.css">
+    <link rel="stylesheet" href="styles/navbar.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +14,18 @@
     <title>{{.title}}</title>
 </head>
 <body>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="">Library Management</a></div>
+        <div class="nav-list">
+            <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
+            <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/profile">Profile</a></div>
+            <div class="nav -item {{.login}}"><a class="nav-link" href="/login">Login</a></div>
+            <div class="nav -item {{.signup}}"><a  class="nav-link" href="/register">Signup</a></div>
+        </div>
+        
+   </div>
     <main>
         
         <div>

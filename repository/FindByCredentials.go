@@ -19,7 +19,7 @@ func FindByCredentials(email, password string) (*models.User, error) {
 	defer db.Close()
 
 	// Build the query
-	query := `SELECT id, email, password, name FROM user_data WHERE email = $1 ;`
+	query := `SELECT id, email, password, name,user_type FROM user_data WHERE email = $1 ;`
 
 	// Execute the query
 
@@ -36,7 +36,7 @@ func FindByCredentials(email, password string) (*models.User, error) {
 		return nil, errors.New("user not found")
 	}
 	user := models.User{}
-	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name)
+	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name,&user.Usertype)
 	if err != nil {
 		return nil, err
 	}

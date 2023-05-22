@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/addbooks.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="">Library Management</a></div>
+        <div class="nav-list">
+            <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
+            <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/addbooks">Add Books</a></div>
+        </div>
+        
+</div>
+    <div class="addbooks-wrap">
+        <form action="/Bookadded" method="post">
+            <div class="wrap-item">
+                <label for="BookName">Book Name</label>
+                <input type="text" name="BookName">
+            </div>
+           <div class="wrap-item">
+            <label for="ISBN">ISBN</label>
+            <input type="text" name="ISBN">
+           </div>
+            
+            <div class="wrap-item">
+                <label for="Pages">No of Pages</label>
+                <input type="number" name="Pages">
+            </div>
+            <div class="wrap-item">
+                <label for="Publisher">Publisher</label>
+                <input type="text" name="Publisher">
+            </div>
+            <div class="wrap-item">
+                <label for="Author">Author</label>
+                <input type="text" name="Author">
+            </div>
+            <div class="wrap-item">
+                <label for="Quantity">Quantity</label>
+                <input type="number" name="Quantity">
+
+            </div>
+            <div class="wrap-item">
+                <label for="Taglines">Taglines</label>
+                <input type="text" name="Taglines">
+                
+            </div>
+            <div class="wrap-item">
+                <input type="submit" value="Add">
+            </div>
+            
+        </form>
+
+    </div>
+    
+</body>
+</html>

@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"database/sql"
+	
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
+	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/repository"
@@ -15,40 +17,10 @@ import (
 
 //home page
 func HomePage(c *fiber.Ctx) error {
-	return c.Render("static/home.html", map[string]interface{}{})
+	return c.Render("home", map[string]interface{}{})
 }
 
-//profile page
-func ProfilePage(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-	token, err := jtoken.Parse(cookie, func(token *jtoken.Token) (interface{},error) {
-		// Provide the secret key used for signing the token
-		return []byte(config.Secret), nil
-	})
-
-	if err != nil {
-		// Handle token parsing error
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid token",
-		})
-	}
-
-	// Access the claims from the parsed token
-	claims, ok := token.Claims.(jtoken.MapClaims)
-	if !ok || !token.Valid {
-		// Handle invalid token or invalid claims
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": "Invalid token claims",
-		})
-	}
-
-	return c.Render("static/profile.html",map[string]interface{}{
-		"name" : claims["name"],
-		"email" : claims["email"],
-	})
-
-}
-
+	
 // Login route
 func Login(c *fiber.Ctx) error {
 	// Extract the credentials from the request body
@@ -69,12 +41,13 @@ func Login(c *fiber.Ctx) error {
 	day := time.Hour * 24
 	// Create the JWT claims, which includes the user ID and expiry time
 	claims := jtoken.MapClaims{
-		"ID":    user.ID,
-		"email": user.Email,
-		"name":  user.Name,
-		"exp":   time.Now().Add(day * 1).Unix(),
+		"ID":       user.ID,
+		"email":    user.Email,
+		"name":     user.Name,
+		"usertype": user.Usertype,
+		"exp":      time.Now().Add(day * 1).Unix(),
 	}
-
+	fmt.Printf("claims:%T/n",claims)
 	// Create token
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
 	// Generate encoded token and send it as response.
@@ -84,8 +57,15 @@ func Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-
-	c.Set("Authorization", "Bearer"+t)
+	db, err := database.DbConnect()
+	stmt, err := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
+	_, err = stmt.Exec(user.ID, user.Usertype, "login", user.Name)
+	if err != nil {	
+		fmt.Println(err)
+		return err
+	}
+	defer stmt.Close()
+	// c.Set("Authorization", "Bearer"+t)
 	c.Cookie(&fiber.Cookie{
 		Name:     "jwt",
 		Value:    t,
@@ -93,8 +73,13 @@ func Login(c *fiber.Ctx) error {
 		HTTPOnly: true,
 		SameSite: "lax",
 	})
-
-	return c.Redirect("/profile")
+	if user.Usertype == "user" {
+		return c.Redirect("/profile")
+	} else if user.Usertype == "admin" {
+		return c.Redirect("/admin")
+	} else {
+		return nil
+	}
 }
 
 // Protected route
@@ -110,17 +95,17 @@ func Protected(c *fiber.Ctx) error {
 
 //Login Page
 func Loginpage(c *fiber.Ctx) error {
-	return c.Render("static/login.html", map[string]interface{}{
+	return c.Render("login", map[string]interface{}{
 		"title": "Login Page"})
 }
 
 //register
 func Register(c *fiber.Ctx) error {
-	return c.Render("static/register.html", map[string]interface{}{
+	return c.Render("register", map[string]interface{}{
 		"title": "Register Page"})
 }
 func RegisterPost(c *fiber.Ctx) error {
-	db, err := sql.Open("postgres", "postgres://lib:lib@localhost:5432/lib")
+	db, err := database.DbConnect()
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -134,20 +119,71 @@ func RegisterPost(c *fiber.Ctx) error {
 		return err
 	}
 	defer stmt.Close()
-	hashpassword,err:=middlewares.HashPassword(data.Password)
+
+	hashpassword, err := middlewares.HashPassword(data.Password)
 	if err != nil {
 		return nil
 	}
-	_, err = stmt.Exec(data.Email, hashpassword , data.Name, "user")
+
+	_, err = stmt.Exec(data.Email, hashpassword, data.Name, "user")
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
+
+	query := `SELECT id, email, password, name,user_type FROM user_data WHERE email = $1 ;`
+
+	// Execute the query
+	result, err := db.Query(query, data.Email)
+	if err != nil {
+		return nil
+	}
+	// Check if the query returned any rows
+	if !result.Next() {
+		return errors.New("user not found")
+	}
+	user := models.User{}
+	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Usertype)
+	if err != nil {
+		return nil
+	}
+	stmt, err = db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
+	_, err = stmt.Exec(user.ID, user.Usertype, "resgistration", user.Name)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer stmt.Close()
 	c.Redirect("/regsuccess")
 	return nil
 }
 func RegisterSuccessful(c *fiber.Ctx) error {
-	return c.Render("static/registerationsuccesful.html", map[string]interface{}{
+	return c.Render("registerationsuccesful", map[string]interface{}{
 		"title": "Registeration Successful"})
+
+}
+func Logout(c *fiber.Ctx)error{
+	cookie := c.Cookies("jwt")
+	claims, err := middlewares.CookieGetData(cookie, c)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "Not Logged In",
+		})
+	}
+
+	if claims["name"] != "nologin" {
+		c.ClearCookie()
+		return c.Render("logout", map[string]interface{}{
+			"title" : "Logout",
+			"msg":  claims["name"],
+			"logoutmsg":"Succesfully Logged out.",
+		})
+	} else {
+		return c.Render("logout", map[string]interface{}{
+			"title" : "Logout",
+			"logoutmsg":"Not Logged In.",
+		})
+	}
+
 
 }
