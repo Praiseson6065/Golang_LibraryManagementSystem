@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	
 	"log"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
@@ -43,25 +42,25 @@ func AdminPage(c *fiber.Ctx) error {
 func ProfilePage(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
 	claims, err := middlewares.CookieGetData(cookie, c)
-	
-	
 
 	if err != nil {
+		return c.Render("profile", map[string]interface{}{
+			"msg":        "Not Logged In.",
+			"nologin":    "hide-data",
+			"userst":     "/login",
+			"userstatus": "Login",
+			"hideEle":    "",
+		})
+
+	} else {
 		return c.Render("profile", map[string]interface{}{
 			"name":       claims["name"],
 			"email":      claims["email"],
 			"hideEle":    "hide-data",
-			"user-st":    "/logout",
+			"userst":     "/logout",
 			"userstatus": "Logout",
 		})
-	} else {
-		return c.Render("profile", map[string]interface{}{
-			"msg":        "Not Logged In.",
-			"nologin":    "hide-data",
-			"user-st":    "/login",
-			"userstatus": "Login",
-			"hideEle":    "",
-		})
+
 	}
 
 }
