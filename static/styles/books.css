@@ -1,0 +1,20 @@
+#main-bookswrap{
+    padding: 4rem 5rem;
+    gap:60px;
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    justify-items: center;  
+    align-items: center;
+}
+.bookHolder{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap : 10px;
+    height: 100% !important;
+}
+#search{
+    display: flex;
+    padding: 2rem 5rem;
+    justify-content: center;
+}

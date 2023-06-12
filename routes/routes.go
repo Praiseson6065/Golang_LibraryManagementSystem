@@ -11,18 +11,21 @@ func Setuproutes(app *fiber.App) {
 
 	jwt := middlewares.NewAuthMiddleware(config.Secret)
 
-	app.Get("/", handlers.HomePage)
+	//user
 	app.Get("/profile", handlers.ProfilePage)
-	app.Post("/login", handlers.Login)
 
 	app.Get("/protected", jwt, handlers.Protected)
-
+	//authorization
 	app.Get("/login", handlers.Loginpage)
-
-	app.Get("/register", handlers.Register)
+	app.Post("/login", handlers.Login)
 	app.Post("/register", handlers.RegisterPost)
 	app.Get("/regsuccess", handlers.RegisterSuccessful)
 	app.Get("/logout", handlers.Logout)
 	//admin
 	app.Get("/admin", handlers.AdminPage)
+	//api
+	api := app.Group("/api")
+	api.Post("/book", handlers.AddBooksPost)
+	api.Get("/getbooks", handlers.GetBooks)
+	api.Post("/searchbook", handlers.SearchBooks)
 }

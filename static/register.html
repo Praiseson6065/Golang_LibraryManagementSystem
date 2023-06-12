@@ -20,9 +20,9 @@
             <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
             <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
             <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
-            <div class="nav-item"><a  class="nav-link" href="/profile">Profile</a></div>
-            <div class="nav -item {{.login}}"><a class="nav-link" href="/login">Login</a></div>
-            <div class="nav -item {{.signup}}"><a  class="nav-link" href="/register">Signup</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/profile.html">Profile</a></div>
+            <div class="nav -item "><a class="nav-link" href="/login.html">Login</a></div>
+            
         </div>
         
    </div>
@@ -35,17 +35,18 @@
         <div class="signup">
             <form action="/register" method="post">
                 <label for="name">Name</label>
-                <input type="text" name="name">
+                <input type="text" id="name" name="name">
                 <label for="email">Email</label>
-                <input type="email" name="email">
+                <input type="email" id="email" name="email">
                 <label for="password">Password</label>
-                <input type="password" name="password">
-                <input type="submit" value="Sign up">
+                <input type="password" id="password" name="password">
+                <input type="submit" disabled id="submit" value="Sign up" >
 
                 
-            </form>
+              </form>
         </div>
-        <p>Already have a account <a href="/loginpage">Login</a></p>
+        <p>Already have a account <a href="/login.html">Login</a></p>
     </main>
+    <script src="/js/register.js"></script>
 </body>
 </html>

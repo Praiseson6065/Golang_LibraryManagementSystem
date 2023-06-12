@@ -47,12 +47,15 @@ input{
         
 }
 input[type="submit"]{
-    background-color: rgba(53,109,253,1);
+    background-color: rgb(74, 115, 218);
     border-radius: 6px;
     border: none;
     color:white; 
     box-sizing: content-box;
     
+}
+.active-btn{
+    background-color: rgba(53,109,253,1) !important;
 }
 input[type="text"],[type="email"],[type="password"]:focus{
 
@@ -62,4 +65,11 @@ input[type="text"],[type="email"],[type="password"]:focus{
 a{
     color: rgba(53,109,253,1);
     text-decoration: none;
+}
+
+.error{
+    outline-color: rgb(229, 41, 41) !important;
+}
+#email:invalid{
+    outline-color: rgb(229, 41, 41) !important;
 }

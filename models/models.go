@@ -37,12 +37,17 @@ type Logdb struct {
 }
 
 type Book struct {
-	BookId    int
-	BookName  string
-	ISBN      string
-	Pages     int
-	Publisher string
-	Author    string
-	Quantity  int
-	Taglines  []string
+	BookId       int    `json:"Id"`
+	BookName     string `json:"BookName"`
+	ISBN         string `json:"ISBN"`
+	Pages        int    `json:"Pages"`
+	Publisher    string `json:"Publisher"`
+	Author       string `json:"Author"`
+	Taglines     string `json:"Taglines"`
+	InsertedTime string `json :"InsertedTime"`
+	Votes        int    `json:"votes"`
+}
+type SearchBook struct {
+	SearchValue  string `json:"SearchValue"`
+	SearchColumn string `json:"SearchColumn"`
 }
