@@ -1,19 +1,33 @@
 form{
     display: grid;
-    grid-template-columns: 25% 25% 25%;
-    gap:40px 30px;
+    grid-template-columns: 40% 40%;
+    gap:60px 30px;
     margin-left: auto;
     margin-right: auto;
-    
+    justify-content: center;
+    justify-items: stretch;
+    align-items: center;
     
 }
 .addbooks-wrap{
     margin: 5rem auto;
-
-
+    
 }
 .wrap-item{
     display: flex;
     justify-content: space-between;
+    
 }
-
+.wrap-itemv{
+    display: flex;
+    flex-direction: column;
+    gap : 20px;
+}
+.update-field{
+    display: flex;
+    justify-content: space-between;
+}
+#CoverPage{
+    max-width: 260px;
+    max-height: 365.6666666666667px;
+}

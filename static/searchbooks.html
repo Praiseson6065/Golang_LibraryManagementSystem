@@ -12,14 +12,14 @@
     <title>Search Books</title>
 </head>
 <body>
-   <div class="navbar">
-        <div class="navbrand"><a class="nav-link" href="">Library Management</a></div>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="/home.html">Library Management</a></div>
         <div class="nav-list">
-            <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
-            <div class="nav-item"><a class="nav-link" href="/books">Search Books</a> </div>
-            <div class="nav-item"><a  class="nav-link" href="/featured.html">Featured</a></div>
+            <div class="nav-item"><a class="nav-link" href="/home.html">Home</a> </div>
+            <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
             <div class="nav-item" id="profile"><a   class="nav-link" href="/profile.html">Profile</a></div>
-            <div class="nav-item "><a id="accstatus" class="nav-link" href="/login.html">Login</a></div>
+            <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
             <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
         </div>
         
@@ -43,6 +43,7 @@
 
         </div>
     </main>
-    <script src="/js/books.js"></script>
+    
+    <script src="/js/books.js" type="module"></script>
 </body>
 </html>

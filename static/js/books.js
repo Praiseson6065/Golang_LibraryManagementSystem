@@ -1,9 +1,12 @@
+import {token,DecodedToken,userStatus} from './userstatus.js';
+var decoded = DecodedToken(token);
+userStatus(token);
 function SearchBook(data){
     document.getElementById("main-bookswrap").innerHTML="";
-    booksCount= data['Books'].length;
+    var booksCount= data['Books'].length;
     for (let i=0;i<booksCount;i++)
     {
-        bookDesc = `<div class="bookHolder">
+        var bookDesc = `<div class="bookHolder">
         <div class="bookName">Title : ${data['Books'][i]['BookName']}</div>
         <div class="bookPublisher">Publisher : ${data['Books'][i]['Publisher']}</div>
         <div class="bookAuthor">Author : ${data['Books'][i]['Author']}</div>
@@ -24,9 +27,9 @@ fetch("http://127.0.0.1:3000/api/GetBooks")
                 SearchBook(data);
 });
 
-SearchValue = document.getElementById("SearchValue");
-SearchColumn= document.getElementById("SearchColumn");
-SearchBtn = document.getElementById("Search");
+var SearchValue = document.getElementById("SearchValue");
+var SearchColumn= document.getElementById("SearchColumn");
+var SearchBtn = document.getElementById("Search");
 SearchValue.addEventListener("input",function(){
     if(SearchValue.value===""){
         fetch("http://127.0.0.1:3000/api/GetBooks")
@@ -37,7 +40,7 @@ SearchValue.addEventListener("input",function(){
     }
     else{
         SearchBtn.addEventListener("click",function(){
-            json={
+            var json={
                 "SearchValue": SearchValue.value,
                 "SearchColumn": SearchColumn.value,
             };

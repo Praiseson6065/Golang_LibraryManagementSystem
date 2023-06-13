@@ -3,8 +3,7 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	
-	
+
 	"time"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
@@ -49,8 +48,8 @@ func Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	db, err := database.DbConnect()
-	stmt, err := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
+	db, _ := database.DbConnect()
+	stmt, _ := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
 	_, err = stmt.Exec(user.ID, user.Usertype, "login", user.Name)
 	if err != nil {
 		fmt.Println(err)
@@ -96,9 +95,7 @@ func Loginpage(c *fiber.Ctx) error {
 	} else if claims["usertype"] == "admin" {
 		return c.Redirect("/admin.html")
 	} else {
-		return c.JSON(fiber.Map{
-			"msg": "Invalid",
-		})
+		return c.Redirect(("/login.html"))
 	}
 
 }
@@ -149,6 +146,10 @@ func RegisterPost(c *fiber.Ctx) error {
 		return nil
 	}
 	stmt, err = db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
 	_, err = stmt.Exec(user.ID, user.Usertype, "resgistration", user.Name)
 	if err != nil {
 		fmt.Println(err)
@@ -181,6 +182,10 @@ func Logout(c *fiber.Ctx) error {
 			return err
 		}
 		stmt, err := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
 		_, err = stmt.Exec(claims["ID"], claims["usertype"], "logout", claims["name"])
 		if err != nil {
 			fmt.Println(err)
@@ -198,4 +203,3 @@ func Logout(c *fiber.Ctx) error {
 	}
 
 }
-

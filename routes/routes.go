@@ -28,4 +28,6 @@ func Setuproutes(app *fiber.App) {
 	api.Post("/book", handlers.AddBooksPost)
 	api.Get("/getbooks", handlers.GetBooks)
 	api.Post("/searchbook", handlers.SearchBooks)
+	api.Get("/book/:id", handlers.GetBook)
+	api.Put("/updatebook/:id", handlers.UpdateBook)
 }

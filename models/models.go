@@ -44,8 +44,9 @@ type Book struct {
 	Publisher    string `json:"Publisher"`
 	Author       string `json:"Author"`
 	Taglines     string `json:"Taglines"`
-	InsertedTime string `json :"InsertedTime"`
+	InsertedTime string `json:"InsertedTime"`
 	Votes        int    `json:"votes"`
+	ImgPath      string `json:"ImgPath"`
 }
 type SearchBook struct {
 	SearchValue  string `json:"SearchValue"`

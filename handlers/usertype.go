@@ -14,7 +14,9 @@ func AdminPage(c *fiber.Ctx) error {
 	claims, _ := middlewares.CookieGetData(cookie, c)
 	if claims["usertype"] == "admin" {
 		db, err := database.DbConnect()
-
+		if err!=nil{
+			return err
+		}
 		// Query the database for the data to display.
 		rows, err := db.Query("SELECT * FROM logdb")
 		if err != nil {

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/addbooks.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Book</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="/">Library Management</a></div>
+        <div class="nav-list">
+            <div class="nav-item"><a class="nav-link" href="/user.html">Users</a> </div>
+            <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="/userslog.html">Log</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/addbook.html">Add Books</a></div>
+            <div class="nav-item" id="profile" ><a  class="nav-link" href="/profile.html">Profile</a></div>
+            <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
+            <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
+        </div>
+        
+</div>   
+    
+    <div class="addbooks-wrap">
+        
+        <form action="/api/updatebook/<%= id.value %>" method="put" enctype="multipart/form-data">
+            <div class="wrap-itemv">
+                <div class="existing-field"  id="Id"></div>
+                <div class="update-field">
+                    <label for="BookId">ID</label>
+                    <input type="number" name="BookId" id="id">
+                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+            </div>
+            <div class="wrap-itemv">
+                <div class="existing-field" id="BookName"></div>
+                <div class="update-field">
+                    <label for="BookName">Book Name</label>
+                    <input type="text" name="BookName">
+                </div>
+               
+            </div>
+           <div class="wrap-itemv">
+            <div class="existing-field" id="ISBN"></div>
+            <div class="update-field">
+                <label for="ISBN">ISBN</label>
+                <input type="text" name="ISBN">
+            </div>
+            
+           </div>
+            
+            <div class="wrap-itemv">
+                <div class="existing-field" id="Pages"></div>
+                <div class="update-field">
+                    <label for="Pages">No of Pages</label>
+                    <input type="number" name="Pages">
+                </div>
+            </div>
+            <div class="wrap-itemv">
+                <div class="existing-field" id="Publisher"></div>
+                <div class="update-field">
+                <label for="Publisher">Publisher</label>
+                <input type="text" name="Publisher">
+            </div>
+            </div>
+            <div class="wrap-itemv">
+                <div class="existing-field" id="Author"></div>
+                <div class="update-field">
+                    <label for="Author">Author</label>
+                    <input type="text" name="Author">
+                </div>
+            </div>
+            <!-- <div class="wrap-itemv">
+                <div class="existing-field" id="Quantity"></div>
+                <div class="update-field">
+                    <label for="Quantity">Quantity</label>
+                    <input type="number" name="Quantity">
+                </div>
+            </div> -->
+            <div class="wrap-itemv">
+                <div class="existing-field" id="Taglines"></div>
+                <div class="update-field">
+                <label for="Taglines">Taglines</label>
+                <input type="text" name="Taglines">
+            </div>
+                
+            </div>
+            <div class="wrap-itemv">
+                <div class="existing-field" ><img  id="CoverPage" src="" alt="img"></div>
+                <input type="file" name="ImgPath" id="ImgPath"data-max-size="32154">
+            </div>
+            <div class="wrap-itemv">
+                <input type="submit" value="Update" id="update">
+            </div>
+            
+        </form>
+
+    </div>
+    <script src="/js/updatebook.js" type="module"></script>
+</body>
+</html>
