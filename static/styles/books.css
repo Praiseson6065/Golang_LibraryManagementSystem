@@ -18,3 +18,11 @@
     padding: 2rem 5rem;
     justify-content: center;
 }
+.bookImg{
+    display: flex;
+    justify-content: center;
+}
+.bookImgCP{
+    max-width: 260px;
+    max-height: 365.6666666666667px;
+}

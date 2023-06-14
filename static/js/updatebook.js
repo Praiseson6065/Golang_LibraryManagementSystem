@@ -1,8 +1,12 @@
 import {token,userStatus,DecodedToken} from "./userstatus.js";
 userStatus(token);
-var url = "http://127.0.0.1:3000/api/book/";
-var IdValue = document.getElementById("id");
-IdValue.addEventListener("input",function(){
+var decoded = DecodedToken(token);
+if(decoded.payload["usertype"]!="admin")
+{
+    window.location="/profile.html";
+}
+function ExistingData(){
+    var url = "http://127.0.0.1:3000/api/book/";
     if(IdValue.value==='')
     {
         var divFields =["Id","BookName","ISBN","Author","Publisher","Pages","Taglines"];
@@ -53,37 +57,42 @@ IdValue.addEventListener("input",function(){
                 
         });
     }
-    
-});
-function updateBook(id) {
-    const formData = new FormData();
-    formData.append('BookName', document.getElementById('BookName').value);
-    formData.append('ISBN', document.getElementById('ISBN').value);
-    formData.append('Pages', document.getElementById('Pages').value);
-    formData.append('Publisher', document.getElementById('Publisher').value);
-    formData.append('Author', document.getElementById('Author').value);
-    formData.append('Taglines', document.getElementById('Taglines').value);
-    const file = document.getElementById('ImgPath').files[0];
-    if (file) {
-      formData.append('ImgPath', file);
-    }
-  
-    const url = `http://127.0.0.1:3000/api/updatebook/${id}`;
-    console.log(formData);
-    return fetch(url, {
-      method: 'PUT',
-      body: formData
-    });
-  }
-  updateBook(1);
-  const form = document.querySelector('form');
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const response = await updateBook(IdValue.value);
-    if (response.status === 200) {
-      console.log('Book updated successfully!');
-    } else {
-      console.log('Error updating book:', response.status);
-    }
-  });
+}
 
+var IdValue = document.getElementById("id");
+IdValue.addEventListener("input",ExistingData);
+const form = document.querySelector('form');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const bookId = document.querySelector('#id').value;
+  const bookName = document.querySelector('input[name="BookName"]').value;
+  const isbn = document.querySelector('input[name="ISBN"]').value;
+  const pages = document.querySelector('input[name="Pages"]').value;
+  const publisher = document.querySelector('input[name="Publisher"]').value;
+  const author = document.querySelector('input[name="Author"]').value;
+  const taglines = document.querySelector('input[name="Taglines"]').value;
+  const imageFile = document.querySelector('input[name="ImgPath"]').files[0];
+  const formData = new FormData();
+  formData.append('BookId', bookId);
+  formData.append('BookName', bookName);
+  formData.append('ISBN', isbn);
+  formData.append('Pages', pages);
+  formData.append('Publisher', publisher);
+  formData.append('Author', author);
+  formData.append('Taglines', taglines);
+  formData.append('ImgPath', imageFile);
+  fetch(`/api/updatebook/${bookId}`, {
+    method: 'PUT',
+    body: formData,
+  })
+    .then(response => response.json())
+    .then(data => {
+        
+      console.log(data["msg"]);
+      
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+});

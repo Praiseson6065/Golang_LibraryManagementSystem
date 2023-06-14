@@ -7,6 +7,7 @@ function SearchBook(data){
     for (let i=0;i<booksCount;i++)
     {
         var bookDesc = `<div class="bookHolder">
+        <div class="bookImg"><a href=""><img class="bookImgCP" src="/img/${data['Books'][i]['ImgPath']}"></a></div>
         <div class="bookName">Title : ${data['Books'][i]['BookName']}</div>
         <div class="bookPublisher">Publisher : ${data['Books'][i]['Publisher']}</div>
         <div class="bookAuthor">Author : ${data['Books'][i]['Author']}</div>

@@ -22,7 +22,7 @@
         
 </div>      
     <div class="addbooks-wrap">
-        <form action="/api/book" method="post">
+        <form action="/api/book" method="post" enctype="multipart/form-data">
             <div class="wrap-item">
                 <label for="BookName">Book Name</label>
                 <input type="text" name="BookName">
@@ -55,7 +55,7 @@
                 
             </div>
             <div class="wrap-item">
-                <input type="file" name="Coverpage" data-max-size="32154">
+                <input type="file" name="ImgPath" >
             </div>
             <div class="wrap-item">
                 <input type="submit" value="Add">

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -24,7 +25,7 @@ func GetBooks(c *fiber.Ctx) error {
 	var Books []models.Book
 	for rows.Next() {
 		var book models.Book
-		err := rows.Scan(&book.BookId, &book.BookName, &book.ISBN, &book.Pages, &book.Publisher, &book.Author, &book.Taglines, &book.InsertedTime, &book.Votes)
+		err := rows.Scan(&book.BookId, &book.BookName, &book.ISBN, &book.Pages, &book.Publisher, &book.Author, &book.Taglines, &book.InsertedTime, &book.Votes, &book.ImgPath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -55,7 +56,7 @@ func SearchBooks(c *fiber.Ctx) error {
 	var Books []models.Book
 	for rows.Next() {
 		var book models.Book
-		err := rows.Scan(&book.BookId, &book.BookName, &book.ISBN, &book.Pages, &book.Publisher, &book.Author, &book.Taglines, &book.InsertedTime, &book.Votes)
+		err := rows.Scan(&book.BookId, &book.BookName, &book.ISBN, &book.Pages, &book.Publisher, &book.Author, &book.Taglines, &book.InsertedTime, &book.Votes, &book.ImgPath)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -110,18 +111,24 @@ func UpdateBook(c *fiber.Ctx) error {
 	}
 	Book := new(models.Book)
 	c.BodyParser(Book)
+
 	file, err := c.FormFile("ImgPath")
 	if err != nil {
-		fmt.Println(err)
-		return err
+		if err == errors.New("there is no uploaded file associated with the given key") {
+			fmt.Println("err")
+		}
 	}
-	path := "./static/img/" + file.Filename
-	Book.ImgPath = path
-	err = c.SaveFile(file, path)
-	if err != nil {
-		fmt.Println(err)
-		return err
+	if file != nil {
+		path := "./static/img/" + Book.ISBN
+		Book.ImgPath = Book.ISBN
+
+		err = c.SaveFile(file, path)
+		if err != nil {
+			fmt.Println("file")
+			return err
+		}
 	}
+
 	defer db.Close()
 	updateQuery := "UPDATE books SET"
 	updateArgs := []interface{}{}
@@ -161,7 +168,7 @@ func UpdateBook(c *fiber.Ctx) error {
 		updateArgs = append(updateArgs, Book.Taglines)
 		argCount++
 	}
-	if Book.ImgPath != "" {
+	if file != nil {
 		updateQuery += fmt.Sprintf(" img=$%d,", argCount)
 		updateArgs = append(updateArgs, Book.ImgPath)
 		argCount++
@@ -169,7 +176,7 @@ func UpdateBook(c *fiber.Ctx) error {
 
 	// Remove the trailing comma and complete the query
 	updateQuery = updateQuery[:len(updateQuery)-1]
-	updateQuery += fmt.Sprintf(" WHERE id=$%d", argCount)
+	updateQuery += fmt.Sprintf(" WHERE bookid=$%d", argCount)
 	updateArgs = append(updateArgs, id)
 	_, err = db.Exec(updateQuery, updateArgs...)
 	if err != nil {

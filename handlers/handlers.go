@@ -131,12 +131,12 @@ func RegisterPost(c *fiber.Ctx) error {
 
 	query := `SELECT id, email, password, name,user_type FROM user_data WHERE email = $1 ;`
 
-	// Execute the query
+	
 	result, err := db.Query(query, data.Email)
 	if err != nil {
 		return nil
 	}
-	// Check if the query returned any rows
+	
 	if !result.Next() {
 		return errors.New("user not found")
 	}
