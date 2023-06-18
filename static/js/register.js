@@ -1,8 +1,21 @@
+import{token,DecodedToken,userStatus} from "./userstatus.js"
+userStatus(token);
+if(token!=undefined){
+    var decoded=DecodedToken(token);
+    if(decoded.payload["usertype"]==="user"){
+        window.location="/profile.html";    
+    }
+}
+    
+    
+
+
+
 nameInput = document.getElementById("name");
 emailInput = document.getElementById("email");
 password = document.getElementById("password");
 submit = document.getElementById("submit");
-const isName= str => /^[a-zA-Z .]*$/.test(str);
+/*const isName= str => /^[a-zA-Z .]*$/.test(str);
 const isEmail= str=> /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(str);
 const isPass = str => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(str);
 nameInput.addEventListener("input",function (){
@@ -26,7 +39,7 @@ password.addEventListener("input",function(){
     else{
         password.classList.add("error");
     }
-});
+});*/
 
 
 

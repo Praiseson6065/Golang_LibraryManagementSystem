@@ -47,7 +47,7 @@ input{
         
 }
 input[type="submit"]{
-    background-color: rgb(74, 115, 218);
+    background-color: rgba(53,109,253,1);
     border-radius: 6px;
     border: none;
     color:white; 

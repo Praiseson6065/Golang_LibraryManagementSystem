@@ -19,14 +19,40 @@ label{
         -webkit-text-fill-color: transparent;
     
 }
+a{
+    text-decoration: none;
+}
 .headingDark{
     color: #001b3b;
 }
 .heading-large{
-    font-size: 3.75rem;
-    line-height: 1;
+    font-size: 4.5rem;
+    line-height: 1.6;
     font-weight: 700;
+}
+.heading-medium{
+    font-size: 2.25rem;
+    line-height: 1;
+    font-weight: 600;
 }
 .hide-data{
     display: none;
+}
+.text-center{
+    text-align: center;
+}
+.footer{
+    background-color: rgba(17,24,39,1);
+    padding : 2rem 8rem;
+    justify-content: space-between;
+    align-items: center;
+}
+.heading-light{
+    color:white;    
+}
+.footer-items{
+    display: flex;
+    justify-content: space-around;
+    gap: 50px;
+    align-items: center;
 }

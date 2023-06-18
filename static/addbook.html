@@ -12,15 +12,18 @@
 </head>
 <body>
     <div class="navbar">
-        <div class="navbrand"><a class="nav-link" href="">Library Management</a></div>
+        <div class="navbrand"><a class="nav-link" href="/">Library Management</a></div>
         <div class="nav-list">
-            <div class="nav-item"><a class="nav-link" href="/">Home</a> </div>
-            <div class="nav-item"><a class="nav-link" href="">Search Books</a> </div>
-            <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
+            <div class="nav-item"><a class="nav-link" href="/user.html">Users</a> </div>
+            <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="/updatebook.html">UpdateBooks</a></div>
             <div class="nav-item"><a  class="nav-link" href="/addbook.html">Add Books</a></div>
+            <div class="nav-item" id="profile" ><a  class="nav-link" href="/profile.html">Profile</a></div>
+            <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
+            <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
         </div>
         
-</div>      
+</div>     
     <div class="addbooks-wrap">
         <form action="/api/book" method="post" enctype="multipart/form-data">
             <div class="wrap-item">
@@ -46,7 +49,7 @@
             </div>
             <div class="wrap-item">
                 <label for="Quantity">Quantity</label>
-                <input type="number" name="Quantity">
+                <input min=1 type="number" name="Quantity">
 
             </div>
             <div class="wrap-item">

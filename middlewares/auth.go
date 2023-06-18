@@ -25,23 +25,22 @@ func CheckPasswordHash(password, hash string) bool {
 }
 func CookieGetData(cookie string, c *fiber.Ctx) (jtoken.MapClaims, error) {
 
-	// decryptedCookie, _ := encryptcookie.DecryptCookie(cookie, config.CookieSecret)
 	token, err := jtoken.Parse(cookie, func(token *jtoken.Token) (interface{}, error) {
-		// Provide the secret key used for signing the token
+
 		return []byte(config.Secret), nil
 	})
 	if err != nil {
-		// Handle token parsing error
+
 		return jtoken.MapClaims{
 				"name": "nologin",
 			}, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 				"error": "Invalid token",
 			})
 	}
-	// Access the claims from the parsed token
+
 	claims, ok := token.Claims.(jtoken.MapClaims)
 	if !ok || !token.Valid {
-		// Handle invalid token or invalid claims
+
 		return jtoken.MapClaims{
 				"name": "nologin",
 			}, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

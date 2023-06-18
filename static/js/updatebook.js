@@ -9,7 +9,7 @@ function ExistingData(){
     var url = "http://127.0.0.1:3000/api/book/";
     if(IdValue.value==='')
     {
-        var divFields =["Id","BookName","ISBN","Author","Publisher","Pages","Taglines"];
+        var divFields =["BookId","BookName","ISBN","Author","Publisher","Pages","Taglines","Quantity"];
                 for (let i in divFields){
                     document.getElementById(divFields[i].toString()).innerText = "";
                 
@@ -38,21 +38,21 @@ function ExistingData(){
         .then(data => {
             if(data===405)
             {
-                document.getElementById("Id").innerText="NotFound";
+                document.getElementById("BookId").innerText="NotFound";
             }
             else if(data===500)
             {
                 
-                document.getElementById("Id").innerText="Error";
+                document.getElementById("BookId").innerText="Error";
             }
             else{
                 data = JSON.parse(data);
-                var divFields =["Id","BookName","ISBN","Author","Publisher","Pages","Taglines"];
+                var divFields =["BookId","BookName","ISBN","Author","Publisher","Pages","Taglines","Quantity"];
                 for (let i in divFields){
                     document.getElementById(divFields[i].toString()).innerText = divFields[i] + " : "+ data[divFields[i]] ;
                 
                 }
-                document.getElementById("CoverPage").setAttribute("src","http://127.0.0.1:3000/img/"+data["ImgPath"]);
+                document.getElementById("CoverPage").setAttribute("src","http://127.0.0.1:3000/img/books/"+data["ImgPath"]);
             }
                 
         });
@@ -72,6 +72,7 @@ form.addEventListener('submit', (event) => {
   const publisher = document.querySelector('input[name="Publisher"]').value;
   const author = document.querySelector('input[name="Author"]').value;
   const taglines = document.querySelector('input[name="Taglines"]').value;
+  const quantity = document.querySelector('input[name="Quantity"]').value
   const imageFile = document.querySelector('input[name="ImgPath"]').files[0];
   const formData = new FormData();
   formData.append('BookId', bookId);
@@ -81,6 +82,7 @@ form.addEventListener('submit', (event) => {
   formData.append('Publisher', publisher);
   formData.append('Author', author);
   formData.append('Taglines', taglines);
+  formData.append('Quantity', quantity);
   formData.append('ImgPath', imageFile);
   fetch(`/api/updatebook/${bookId}`, {
     method: 'PUT',

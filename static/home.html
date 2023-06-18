@@ -18,7 +18,7 @@
         <div class="nav-list">
             <div class="nav-item"><a class="nav-link" href="/home.html">Home</a> </div>
             <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
-            <div class="nav-item"><a  class="nav-link" href="">Featured</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/cart.html">Cart</a></div>
             <div class="nav-item" id="profile" ><a   class="nav-link" href="/profile.html">Profile</a></div>
             <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
             <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
@@ -27,10 +27,37 @@
    </div>
     <main>
         <div class="wrap-heading">
-            <h1 class="heading-large">Welcome to Library Management</h1>
+            <h1 class="heading-large text-center">Library Management</h1>
+            <p class="tagline">Your library has never looked so good.</p>
+        </div>
+        <div class="wrap-search">
+            <div class="d-flex flex-direction-column  pt">
+                <div class="d-flex searchholder"><input type="text"  class="searchbar"><button class="searchbtn">Search</button></div>
+                <div class="justify-content-center "><h3 class="heading-large heading_grad">Search Books</h3></div>
+                
+            </div>
+            <div class="justify-content-center pt "> <p class="searchp">Our library management service caters to libraries, schools, organizations, and home catalogs. We offer two different subscription options to best fit your needs.  Now which version is the best for you?</p></div>
+               
+        </div>
+        <div class="stats">
+            <div>
+                
+            </div>
+
         </div>
         
     </main>
+    <div class="footer d-flex">
+        <div><h4 class="heading-light heading-medium">Library Management</h4></div>
+        <div class="footer-items">
+            <div><a class="heading-light" href="/">Home</a></div>
+            <div><a class="heading-light" href="/searchbooks.html">SearchBooks</a></div>
+            <div><a class="heading-light" href="/profile.html">Profile</a></div>
+            
+            
+        </div>
+        
+    </div>
     <script src="/js/home.js" type="module"></script>
 </body>
 </html>

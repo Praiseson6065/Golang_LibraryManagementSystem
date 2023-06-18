@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"errors"
 	"fmt"
+	"strconv"
 
+	"encoding/base64"
 	"time"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
@@ -48,14 +49,6 @@ func Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	db, _ := database.DbConnect()
-	stmt, _ := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
-	_, err = stmt.Exec(user.ID, user.Usertype, "login", user.Name)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer stmt.Close()
 
 	c.Cookie(&fiber.Cookie{
 		Name:    "jwt",
@@ -103,59 +96,27 @@ func Loginpage(c *fiber.Ctx) error {
 //register
 
 func RegisterPost(c *fiber.Ctx) error {
-	db, err := database.DbConnect()
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	data := new(models.RegisterUser)
-	c.BodyParser(data)
-	// Insert the user data into the table.
-	stmt, err := db.Prepare("INSERT INTO user_data (email, password, name,user_type) VALUES ($1, $2, $3,$4)")
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer stmt.Close()
+	db, err := database.DbGormConnect()
 
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	db.AutoMigrate(&models.User{})
+	data := new(models.User)
+	c.BodyParser(data)
 	hashpassword, err := middlewares.HashPassword(data.Password)
 	if err != nil {
 		return nil
 	}
-
-	_, err = stmt.Exec(data.Email, hashpassword, data.Name, "user")
-	if err != nil {
-		fmt.Println(err)
-		return err
+	user := models.User{
+		Email:    data.Email,
+		UserId:   base64.StdEncoding.EncodeToString([]byte(data.Name)),
+		Password: hashpassword,
+		Name:     data.Name,
+		Usertype: "user",
 	}
-
-	query := `SELECT id, email, password, name,user_type FROM user_data WHERE email = $1 ;`
-
-	
-	result, err := db.Query(query, data.Email)
-	if err != nil {
-		return nil
-	}
-	
-	if !result.Next() {
-		return errors.New("user not found")
-	}
-	user := models.User{}
-	err = result.Scan(&user.ID, &user.Email, &user.Password, &user.Name, &user.Usertype)
-	if err != nil {
-		return nil
-	}
-	stmt, err = db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	_, err = stmt.Exec(user.ID, user.Usertype, "resgistration", user.Name)
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-	defer stmt.Close()
+	db.Create(&user)
 	c.Redirect("/regsuccess.html")
 	return nil
 }
@@ -176,22 +137,6 @@ func Logout(c *fiber.Ctx) error {
 
 	if claims["name"] != "nologin" {
 		c.ClearCookie()
-		db, err := database.DbConnect()
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-		stmt, err := db.Prepare("INSERT INTO logdb (userid,user_type,operation,userName) VALUES ($1, $2, $3, $4)")
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-		_, err = stmt.Exec(claims["ID"], claims["usertype"], "logout", claims["name"])
-		if err != nil {
-			fmt.Println(err)
-			return err
-		}
-		defer stmt.Close()
 		return c.JSON(fiber.Map{
 			"logoutmsg": claims["name"],
 		})
@@ -202,4 +147,17 @@ func Logout(c *fiber.Ctx) error {
 		})
 	}
 
+}
+
+func GetUserCart(c *fiber.Ctx) error {
+	Userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var CBooks []models.Book
+	CBooks, err = models.GetCartBooksByUserID(Userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(CBooks)
 }

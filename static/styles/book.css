@@ -1,0 +1,103 @@
+h3{
+  font-size: 24px;
+  margin:.8rem 5rem;  
+}
+#book-wrap{
+    margin-top: 4rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 8rem;
+}
+.bookCoverPage{
+    max-width: 300px;
+    max-height: 540px;
+}
+.BookDetails{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+input[type="checkbox"]:checked + label::before {
+    content: "\2713";
+    font-size: 16px;
+    color: rgba(53,109,253,1);;
+  }
+input[type="submit"]{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    width: 100%;
+    box-sizing: content-box;
+    padding: .4rem 1rem ;
+}
+
+.container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  svg {
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 50px;
+    transition: all 0.3s;
+    fill: #666;
+  }
+  
+  svg:hover {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  
+  .container input:checked ~ svg {
+    fill: rgba(53,109,253,1);
+  }
+  #book-suggestions{
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    padding: 2rem 5rem;
+    justify-content: space-around;
+  }
+  .bookHolder{
+    display: grid;
+    grid-template-columns: 40% 40%;
+    
+  }
+  .bookHolder-Suggested{
+    display: flex;
+    grid-template-columns: 40% 40%;
+    gap : 20px;
+  }
+  .bookHolder-Suggested .bookImg .bookImgCP{
+    max-width: 200px;
+    max-height: 280px;
+  }
+  .bookHolder-Suggested .bookDetails{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  #addtocart{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    width: 100%;
+    box-sizing: content-box;
+    padding: .4rem 1rem ;
+  }
+  #cartstatus{
+    padding: 1rem 8rem ;
+  }

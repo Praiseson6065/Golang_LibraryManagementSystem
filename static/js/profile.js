@@ -1,9 +1,10 @@
 import {token,DecodedToken,userStatus} from './userstatus.js';
 var decoded = DecodedToken(token);
+userStatus(token);
 if(decoded.payload["usertype"]==="admin"){
-  window.location="http://127.0.0.1:3000/admin.html"
+  window.location="/admin.html"
 }
-var url="http://127.0.0.1:3000/profile";
+var url="/profile";
 fetch(url)
     .then(response => response.text())
     .then(data=>{

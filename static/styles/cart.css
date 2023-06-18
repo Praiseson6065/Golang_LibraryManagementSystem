@@ -1,0 +1,38 @@
+.bookHolder{
+    display: grid;
+    grid-template-columns: 30% 50% 15% ;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    height: 100% !important;
+    
+}
+button{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    
+    padding: .8rem .8rem;
+    box-sizing: content-box;
+}
+.bookDetails{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+#cart-bookswrap{
+    padding: 4rem 8rem;
+    
+    display: flex;
+    flex-direction: column;
+}
+.bookImg{
+    display: flex;
+    justify-content: center;
+}
+.bookImgCP{
+    max-width: 200px;
+    max-height: 280px;
+    border-radius:4px ;
+}

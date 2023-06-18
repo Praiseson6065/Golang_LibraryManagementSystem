@@ -21,13 +21,17 @@ func Setuproutes(app *fiber.App) {
 	app.Post("/register", handlers.RegisterPost)
 	app.Get("/regsuccess", handlers.RegisterSuccessful)
 	app.Get("/logout", handlers.Logout)
-	//admin
-	app.Get("/admin", handlers.AdminPage)
+
 	//api
 	api := app.Group("/api")
 	api.Post("/book", handlers.AddBooksPost)
 	api.Get("/getbooks", handlers.GetBooks)
 	api.Post("/searchbook", handlers.SearchBooks)
 	api.Get("/book/:id", handlers.GetBook)
+	api.Get("/bookc/:bc", handlers.GetBookByCode)
 	api.Put("/updatebook/:id", handlers.UpdateBook)
+	//cart
+	api.Post("/cart/:userid/:bookid", handlers.AddtoCart)
+	api.Get("/getusercart/:userid", handlers.GetUserCart)
+	api.Delete("/cart/:userid/:bookid", handlers.RemoveFromCart)
 }
