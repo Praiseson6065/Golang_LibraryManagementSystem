@@ -9,3 +9,45 @@
     
 
 }
+button{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    
+    padding: .4rem .6rem;
+    box-sizing: content-box;
+}
+h3{
+    padding: 1rem 8rem;
+    font-weight: 700;
+    font-size: 20px;
+}
+#issuedbooks{
+    display: grid;
+    padding: 1rem 8rem;
+    gap: 20px;
+    justify-content: space-between;
+    grid-template-columns: 45% 45% ;
+}
+.bookholder{
+    display: flex;
+    gap: 20px;
+}
+.bookDetails{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.bookDesc{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: space-around;
+}
+.bookImg{
+    max-width: 200px ;
+    max-height: 280px;
+    border-radius: 8px;
+
+}

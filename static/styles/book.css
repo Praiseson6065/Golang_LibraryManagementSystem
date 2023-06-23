@@ -11,6 +11,7 @@ h3{
 .bookCoverPage{
     max-width: 300px;
     max-height: 540px;
+    border-radius: 16px;
 }
 .BookDetails{
     display: flex;
@@ -83,6 +84,12 @@ input[type="submit"]{
   .bookHolder-Suggested .bookImg .bookImgCP{
     max-width: 200px;
     max-height: 280px;
+    object-fit: cover;
+    
+  }
+  .bookImg .bookImgCP{
+    object-fit: cover;
+    border-radius: 10px;
   }
   .bookHolder-Suggested .bookDetails{
     display: flex;
@@ -101,3 +108,17 @@ input[type="submit"]{
   #cartstatus{
     padding: 1rem 8rem ;
   }
+
+ #likebtn{
+  background-color: transparent;
+  border: none;
+  
+
+ }
+ #like{
+  font-size: 28px;
+  color: rgba(53,109,253,1) ;
+ }
+ .bookoutofstock{
+  background-color: rgba(0, 23, 80, 0.801) !important;
+ }

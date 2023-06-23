@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users List</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="/">Library Management</a></div>
+        <div class="nav-list">
+            
+            <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
+            <div class="nav-item" id="profile" ><a  class="nav-link" href="/profile.html">Profile</a></div>
+            <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
+            <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
+        </div>
+        
+</div>
+<div id="main-wrap">
+   <table>
+    <thead>
+        <th>Id</th>
+        <th>User Id</th>
+        <th>Name</th>
+        <th>Email</th>
+    </thead>
+    <tbody>
+        
+    </tbody>
+   </table>
+        
+    
+</div>
+<script src="/js/admin-users.js" type="module"></script>
+<script src="/js/admin.js" type="module"></script>
+</body>
+</html>

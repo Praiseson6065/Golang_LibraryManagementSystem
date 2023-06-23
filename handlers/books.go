@@ -46,6 +46,11 @@ func AddBooksPost(c *fiber.Ctx) error {
 		db.AutoMigrate(&models.Book{})
 
 		db.Create(&Book)
+		sqlDB, err := db.DB()
+		if err != nil {
+			panic(err)
+		}
+		sqlDB.Close()
 
 		return c.JSON(fiber.Map{
 			"Message": "Book Added Succesfully",
@@ -89,8 +94,12 @@ func GetBook(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	book := models.Book{}
+	var book models.Book
 	book, err = models.GetBookById(id)
+	if err != nil {
+		return err
+	}
+	book.Votes, err = models.GetVotesByBook(id)
 	if err != nil {
 		return err
 	}
@@ -98,8 +107,12 @@ func GetBook(c *fiber.Ctx) error {
 }
 func GetBookByCode(c *fiber.Ctx) error {
 	bc := c.Params("bc")
-	Book := models.Book{}
+	var Book models.Book
 	Book, err := models.GetBookByBookCode(bc)
+	if err != nil {
+		return err
+	}
+	Book.Votes, err = models.GetVotesByBook(Book.ID)
 	if err != nil {
 		return err
 	}
@@ -190,12 +203,11 @@ func UpdateBook(c *fiber.Ctx) error {
 	updateQuery += fmt.Sprintf(" WHERE id=$%d", argCount)
 	updateArgs = append(updateArgs, id)
 	_, err = db.Exec(updateQuery, updateArgs...)
+	defer db.Close()
 	if err != nil {
 		return err
 	}
-	return c.JSON(fiber.Map{
-		"msg": "Successfully Updated",
-	})
+	return c.JSON(true)
 
 }
 func AddtoCart(c *fiber.Ctx) error {
@@ -221,6 +233,11 @@ func AddtoCart(c *fiber.Ctx) error {
 	}
 	UserDetails.CartBooks = append(UserDetails.CartBooks, BookDetails)
 	db.Save(&UserDetails)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return c.JSON(fiber.Map{
 		"msg": "AddedToCart",
 	})
@@ -236,18 +253,8 @@ func RemoveFromCart(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	db, err := database.DbGormConnect()
-	if err != nil {
-		return err
-	}
 
-	if err != nil {
-		return err
-	}
-
-	query := fmt.Sprintf("Delete from user_cart_books where user_id=%d and book_id=%d ;", userid, bookId)
-
-	err = db.Exec(query).Error
+	_, err = models.RemovefromCart(userid, bookId)
 	if err != nil {
 		return err
 	}
@@ -256,4 +263,181 @@ func RemoveFromCart(c *fiber.Ctx) error {
 		"msg": "Removed",
 	})
 
+}
+func CheckOutFromCart(c *fiber.Ctx) error {
+	Userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	value, err := models.IssueBooks(Userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(value)
+
+}
+func ReturnBook(c *fiber.Ctx) error {
+	bookId, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	value, err := models.ReturnBookByUser(userid, bookId)
+	if err != nil {
+		return err
+	}
+	return c.JSON(value)
+}
+func ChkBookCart(c *fiber.Ctx) error {
+	bookId, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var CartBooks []models.Book
+	CartBooks, err = models.GetCartBooksByUserID(userid)
+	if err != nil {
+		return err
+	}
+
+	var book models.Book
+	for _, book = range CartBooks {
+		if book.ID == bookId {
+			return c.JSON(true)
+		}
+	}
+	return c.JSON(false)
+}
+func UserIssuedBooks(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var books []models.Book
+	books, err = models.GetIssuedBooks(userid)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(books)
+}
+func LikeBook(c *fiber.Ctx) error {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return err
+	}
+
+	bookId, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+
+	IsLiked := false
+	if !IsLiked {
+		var UserLikedBooks []models.Book
+		UserLikedBooks, err = models.GetUserLikedBooks(userid)
+
+		if err != nil {
+			return err
+		}
+		var LikedBook models.Book
+		for _, LikedBook = range UserLikedBooks {
+			if LikedBook.ID == bookId {
+				Query := fmt.Sprintf("Delete from user_liked_books where book_id=%d and user_id=%d ;", bookId, userid)
+				err = db.Exec(Query).Error
+				LikedBook.Votes = LikedBook.Votes - 1
+				db.Save(&LikedBook)
+				if err != nil {
+					return c.JSON(err)
+				}
+				return c.JSON(false)
+			}
+
+		}
+
+	}
+
+	UserDetails := models.User{}
+
+	UserDetails, err = models.GetUser(userid)
+	if err != nil {
+		return err
+	}
+	var LikedBook models.Book
+	LikedBook, err = models.GetBookById(bookId)
+
+	if err != nil {
+		return err
+	}
+	LikedBook.Votes = LikedBook.Votes + 1
+	db.Save(&LikedBook)
+	UserDetails.LikedBooks = append(UserDetails.LikedBooks, LikedBook)
+	db.Save(&UserDetails)
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return c.JSON(true)
+
+}
+func IsLiked(c *fiber.Ctx) error {
+	bookId, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var LikedBooks []models.Book
+	LikedBooks, err = models.GetUserLikedBooks(userid)
+	if err != nil {
+		return err
+	}
+	var book models.Book
+	for _, book = range LikedBooks {
+		if book.ID == bookId {
+			return c.JSON(true)
+		}
+	}
+	return c.JSON(false)
+
+}
+func IsBookIssued(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	bookid, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+	var IssuedBooksByUser []models.Book
+	IssuedBooksByUser, err = models.GetIssuedBooks(userid)
+	if err != nil {
+		return err
+	}
+	var book models.Book
+	for _, book = range IssuedBooksByUser {
+		if book.ID == bookid {
+			return c.JSON(true)
+		}
+	}
+	return c.JSON(false)
 }

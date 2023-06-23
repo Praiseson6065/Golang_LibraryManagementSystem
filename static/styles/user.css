@@ -56,3 +56,6 @@ a{
     gap: 50px;
     align-items: center;
 }
+::-webkit-scrollbar {
+    display: none;
+}

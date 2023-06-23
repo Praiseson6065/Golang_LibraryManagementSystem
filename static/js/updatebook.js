@@ -14,6 +14,7 @@ function ExistingData(){
                     document.getElementById(divFields[i].toString()).innerText = "";
                 
                 }
+        document.getElementById("CoverPage").src="";
     }
     else{
         fetch(url+IdValue.value)
@@ -47,6 +48,7 @@ function ExistingData(){
             }
             else{
                 data = JSON.parse(data);
+                
                 var divFields =["BookId","BookName","ISBN","Author","Publisher","Pages","Taglines","Quantity"];
                 for (let i in divFields){
                     document.getElementById(divFields[i].toString()).innerText = divFields[i] + " : "+ data[divFields[i]] ;
@@ -98,3 +100,8 @@ form.addEventListener('submit', (event) => {
       console.error('Error:', error);
     });
 });
+var ImgPath=document.getElementById("ImgPath");
+ImgPath.addEventListener("change",function (){
+    const file = ImgPath.files[0];
+    document.getElementById("updatedimg").src=URL.createObjectURL(file);
+})   

@@ -7,14 +7,40 @@ if(token!=undefined){
     }
 }
     
-    
+var submit=document.getElementById("submit");
+submit.addEventListener("click",function(){
+    var json={
+        "Name": document.getElementById("name").value,
+        "Email":document.getElementById("email").value,
+        "Password":document.getElementById("password").value,
+    };
+    const headers = {
+        "Content-Type": "application/json",
+      };
+      
+    fetch("/register",{method:"POST",headers,body: JSON.stringify(json)})
+        .then(response=>response.json())
+        .then(data=>{
+            console.log(data);
+            if(data===true)
+            {
+                document.querySelector("main").innerHTML="<h2>Registered Successfully</h2>";
+                setTimeout(function(){
+                    window.location="/register.html";
+                },5000)
+            }
+            else{
+                document.querySelector("main").innerText="Error";
+            }
+        });
+})
 
 
 
-nameInput = document.getElementById("name");
-emailInput = document.getElementById("email");
-password = document.getElementById("password");
-submit = document.getElementById("submit");
+// nameInput = document.getElementById("name");
+// emailInput = document.getElementById("email");
+// password = document.getElementById("password");
+// submit = document.getElementById("submit");
 /*const isName= str => /^[a-zA-Z .]*$/.test(str);
 const isEmail= str=> /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(str);
 const isPass = str => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(str);

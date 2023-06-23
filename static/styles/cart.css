@@ -22,7 +22,7 @@ button{
 
 }
 #cart-bookswrap{
-    padding: 4rem 8rem;
+    padding: 4rem 8rem 1rem;
     
     display: flex;
     flex-direction: column;
@@ -35,4 +35,72 @@ button{
     max-width: 200px;
     max-height: 280px;
     border-radius:4px ;
+}
+#CheckoutCart{
+    padding: 1rem 8rem;
+    display: flex;
+    justify-content: end;
+}
+.modal{
+    display: none;
+    position: fixed;
+    z-index:1 ;
+    padding-top: 2rem;
+    top: 0;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+}
+.modalcontent{
+    background-color: white;
+    padding: 2rem;
+    width: 80%;
+    margin: 0 auto;  
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap :2rem;
+}
+.close {
+    color: #000000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    align-self: self-end;
+  }
+  .close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.ModalBookWrap{
+   display: grid;
+   grid-template-columns: 50% 50%;
+   justify-content: space-around;
+}
+.ModalBookHolder{
+    display: flex;
+    gap :20px;
+}
+.ModalBookImgHolder,.ModalBookImg{
+    max-width: 100px;
+    max-height: 140px;
+    border-radius: 4px;
+}
+.ModalBookDetails{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.ModalUserWrap{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+.ModalConfirmHolder{
+    align-self: self-end;
 }

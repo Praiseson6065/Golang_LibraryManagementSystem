@@ -30,8 +30,21 @@ func Setuproutes(app *fiber.App) {
 	api.Get("/book/:id", handlers.GetBook)
 	api.Get("/bookc/:bc", handlers.GetBookByCode)
 	api.Put("/updatebook/:id", handlers.UpdateBook)
+	//like
+
 	//cart
 	api.Post("/cart/:userid/:bookid", handlers.AddtoCart)
 	api.Get("/getusercart/:userid", handlers.GetUserCart)
 	api.Delete("/cart/:userid/:bookid", handlers.RemoveFromCart)
+	api.Post("/checkoutcart/:userid", handlers.CheckOutFromCart)
+	api.Get("/cartbkchk/:userid/:bookid", handlers.ChkBookCart)
+	//user
+	api.Get("/issuedbooks/:userid", handlers.UserIssuedBooks)
+	api.Get("/isbookIssued/:userid/:bookid", handlers.IsBookIssued)
+	api.Post("/returnbook/:userid/:bookid", handlers.ReturnBook)
+	api.Post("/like/:userid/:bookid", handlers.LikeBook)
+	api.Get("/isliked/:userid/:bookid", handlers.IsLiked)
+	//admin
+	admin := app.Group("/admin")
+	admin.Get("/users", handlers.Userslist)	
 }

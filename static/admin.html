@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="stylesheet" href="styles/navbar.css">
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/admin.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,17 +15,32 @@
         <div class="navbar">
             <div class="navbrand"><a class="nav-link" href="/">Library Management</a></div>
             <div class="nav-list">
-                <div class="nav-item"><a class="nav-link" href="/user.html">Users</a> </div>
+                
                 <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
-                <div class="nav-item"><a  class="nav-link" href="/updatebook.html">UpdateBooks</a></div>
-                <div class="nav-item"><a  class="nav-link" href="/addbook.html">Add Books</a></div>
                 <div class="nav-item" id="profile" ><a  class="nav-link" href="/profile.html">Profile</a></div>
                 <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
                 <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
             </div>
             
     </div>
-    <div id="main-wrap"></div>
+    <div id="main-wrap">
+       
+            <div>
+                Admin Features
+            </div>
+            <div>
+                <h3>Books</h3>
+                <a class="admin-features" href="/addbook.html"><button>Add Books</button></a>
+                <a class="admin-features" href="/updatebook.html"><button>UpdateBooks</button></a>
+            </div>
+            <div>
+                <h3>Users</h3>
+                <a class="admin-features" href="/users.html"><button>Users</button></a>
+                <a class="admin-features" href="/AddAdmin.html"><button>Add Admin</button></a>
+            </div>
+        
+        
+    </div>
     <script src="/js/admin.js" type="module"></script>
     </body>
     </html>

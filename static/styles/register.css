@@ -46,12 +46,14 @@ input{
     box-shadow: 0 5px 5px rgba(1, 26, 54, 0.176);
         
 }
-input[type="submit"]{
+button{
     background-color: rgba(53,109,253,1);
     border-radius: 6px;
     border: none;
     color:white; 
     box-sizing: content-box;
+    height: 1.8rem;
+    padding: 0.5rem 0.8rem;
     
 }
 .active-btn{

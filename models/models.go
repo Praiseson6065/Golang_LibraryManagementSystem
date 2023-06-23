@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
@@ -39,14 +40,7 @@ type UserData struct {
 	Email string
 	Exp   int
 }
-type Logdb struct {
-	LogId      int
-	UserId     int
-	UserType   string
-	Operation  string
-	InsertTime string
-	UserName   string
-}
+
 
 type Book struct {
 	gorm.Model
@@ -75,7 +69,11 @@ func GetBookByBookCode(BookCode string) (Book, error) {
 	}
 	book := new(Book)
 	db.Where("book_code = ?", BookCode).Find(&book)
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return *book, nil
 
 }
@@ -86,7 +84,11 @@ func GetBookById(Id int) (Book, error) {
 	}
 	book := new(Book)
 	db.Where("id = ?", Id).Find(&book)
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return *book, nil
 
 }
@@ -99,7 +101,11 @@ func GetBooks() ([]Book, error) {
 
 	books := []Book{}
 	db.Find(&books)
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return books, nil
 
 }
@@ -113,6 +119,11 @@ func SearchBooks(SearchValue, SearchColumn string) ([]Book, error) {
 	if err != nil {
 		return nil, err
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return books, nil
 
 }
@@ -123,6 +134,11 @@ func GetUser(Id int) (User, error) {
 	}
 	user := new(User)
 	db.Where("id=?", Id).Find(&user)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return *user, nil
 }
 
@@ -138,7 +154,146 @@ func GetCartBooksByUserID(userID int) ([]Book, error) {
 		Find(&cartBooks).Error; err != nil {
 		return nil, err
 	}
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return cartBooks, nil
 }
+func RemovefromCart(UserId, BookId int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	query := fmt.Sprintf("Delete from user_cart_books where user_id=%d and book_id=%d ;", UserId, BookId)
 
+	err = db.Exec(query).Error
+	if err != nil {
+		return false, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return true, nil
+}
+func IssueBooks(Userid int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	var cartBooks []Book
+	cartBooks, err = GetCartBooksByUserID(Userid)
+	if err != nil {
+		return false, err
+	}
+	UserDetails := User{}
+	UserDetails, err = GetUser(Userid)
+	if err != nil {
+		return false, err
+	}
+	UserDetails.IssuedBooks = append(UserDetails.IssuedBooks, cartBooks...)
+
+	for _, book := range UserDetails.IssuedBooks {
+		RemovefromCart(Userid, book.ID)
+		book.Quantity = book.Quantity - 1
+		db.Save(&book)
+	}
+	db.Save(&UserDetails)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return true, nil
+}
+func GetIssuedBooks(Userid int) ([]Book, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+
+	var IssuedBooks []Book
+	if err := db.Joins("JOIN user_issued_books ON user_issued_books.book_id = books.id").
+		Where("user_issued_books.user_id = ?", Userid).
+		Find(&IssuedBooks).Error; err != nil {
+		return nil, err
+	}
+
+	return IssuedBooks, nil
+}
+func ReturnBookByUser(UserId, BookId int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	query := fmt.Sprintf("Delete from user_issued_books where user_id=%d and book_id=%d ;", UserId, BookId)
+
+	err = db.Exec(query).Error
+	if err != nil {
+		return false, err
+	}
+	BookDetails := Book{}
+	BookDetails, err = GetBookById(BookId)
+	if err != nil {
+		return false, err
+	}
+	BookDetails.Quantity = BookDetails.Quantity + 1
+	db.Save(&BookDetails)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return true, nil
+
+}
+func GetUserLikedBooks(userId int) ([]Book, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+
+	var LikedBooks []Book
+	if err := db.Joins("JOIN user_liked_books ON user_liked_books.book_id = books.id").
+		Where("user_liked_books.user_id = ?", userId).
+		Find(&LikedBooks).Error; err != nil {
+		return nil, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return LikedBooks, nil
+}
+func GetVotesByBook(BookId int) (int, error) {
+	db,err:= database.DbGormConnect()
+	if err!=nil{
+		return 0,err
+	}
+	var votes int
+	err=db.Select("Count(*)").Where("book_id="+strconv.Itoa(BookId)).Table("user_liked_books").Find(&votes).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return votes, nil
+}
+func GetUsers() ([]User,error){
+	db,err:=database.DbGormConnect();
+	if err!=nil{
+		return nil,err	
+	}
+	var Users []User
+	db.Find(&Users)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return Users,nil
+}

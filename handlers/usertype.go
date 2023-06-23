@@ -22,3 +22,4 @@ func ProfilePage(c *fiber.Ctx) error {
 	}
 
 }
+

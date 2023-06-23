@@ -1,3 +1,7 @@
+main{
+    
+   z-index: -1;
+}
 .tagline{
     font-size: 1.8rem;
     font-weight: 500;
@@ -11,6 +15,7 @@
     padding: 5rem 5rem;
     flex-direction: column;
     gap : 30px;
+    background-image: linear-gradient(180deg, rgba(251, 251, 251, 0) 0.05%, #DEEBFF 99.95%);  
 }
 .wrap-search{
     background-color: rgba(242,245,255,1);
@@ -78,4 +83,71 @@ p{
 }
 .d-flex{
     display: flex;
+}
+#wrap-addedbooks{
+    display: flex;
+    gap:70px;
+    padding: 1rem 0rem;
+    overflow-x: scroll;
+    
+}
+::-webkit-scrollbar {
+    display: none;
+}
+.BookCountHolder{
+    position: relative;
+    top:-120px;
+    left: 15px;
+    z-index: 2 ;
+    display: inline-block;
+
+}
+.BookCount{
+    color: rgba(192, 192, 192, 0.328);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 6rem;
+   
+}
+.bookimg{
+    width: 180px;
+    height: 252px;
+    object-fit: cover;
+    border-radius: 8px;
+    z-index: 50;
+    box-shadow: 2px 6px 12px #acacacc9;
+    border: 2px solid transparent ;
+   
+}
+.bookimg:hover{
+    border: 2px solid rgb(255, 255, 255);
+}
+.bookholder{
+    display: flex;
+    padding: 3rem 0rem;
+    
+}
+.bookimga{
+    z-index: 90;
+}
+.bookholder:hover .BookCount{
+   -webkit-text-stroke: 2px rgba(59,130,246,1);
+   color: transparent;
+    
+}
+.RecentBooks{
+    padding: 4rem 8rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 50px;
+    background:linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 85%, #e6e6e69b 100%);
+}
+.heading-outline{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 80px;    
+    color: transparent;
+    font-weight: bold;
+    -webkit-text-stroke: 2px rgba(59,130,246,1);
+
+
 }

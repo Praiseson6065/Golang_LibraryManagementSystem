@@ -28,7 +28,16 @@ form{
     justify-content: space-between;
 }
 #CoverPage{
-    max-width: 260px;
-    max-height: 365.6666666666667px;
-    
+    width: 260px;
+    height: 365.6666666666667px;
+    object-fit: cover;
+}
+#updatedimg{
+    width: 260px;
+    height: 365.6666666666667px;
+    object-fit: cover;
+}
+.imgHolder{
+    display: flex;
+    gap :10px;
 }

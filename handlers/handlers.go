@@ -107,7 +107,7 @@ func RegisterPost(c *fiber.Ctx) error {
 	c.BodyParser(data)
 	hashpassword, err := middlewares.HashPassword(data.Password)
 	if err != nil {
-		return nil
+		return err
 	}
 	user := models.User{
 		Email:    data.Email,
@@ -116,9 +116,11 @@ func RegisterPost(c *fiber.Ctx) error {
 		Name:     data.Name,
 		Usertype: "user",
 	}
-	db.Create(&user)
-	c.Redirect("/regsuccess.html")
-	return nil
+	err = db.Create(&user).Error
+	if err != nil {
+		return err
+	}
+	return c.JSON(true)
 }
 func RegisterSuccessful(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
@@ -161,3 +163,4 @@ func GetUserCart(c *fiber.Ctx) error {
 	}
 	return c.JSON(CBooks)
 }
+

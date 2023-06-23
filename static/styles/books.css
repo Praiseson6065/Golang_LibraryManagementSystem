@@ -30,11 +30,15 @@
 .bookImg{
     display: flex;
     justify-content: center;
+    
 }
 .bookImgCP{
     max-width: 200px;
     max-height: 280px;
-    border-radius:4px ;
+    width: 200px;
+    height: 280px;
+    border-radius:12px ;
+    object-fit: cover !important;
 }
 .searchbar{
     line-height: 1.6;
@@ -82,4 +86,7 @@ select option{
     background-color: white;
     color: black;
     border-radius: 2px;
+}
+::-webkit-scrollbar {
+    display: none;
 }

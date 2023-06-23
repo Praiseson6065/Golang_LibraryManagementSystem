@@ -29,7 +29,7 @@
         
         <form  enctype="multipart/form-data">
             <div class="wrap-itemv">
-                <div class="existing-field"  id=""></div>
+                <div class="existing-field"  id="BookId"></div>
                 <div class="update-field">
                     <label for="BookId">ID</label>
                     <input type="number" name="BookId" id="id">
@@ -90,8 +90,9 @@
                 
             </div>
             <div class="wrap-itemv">
-                <div class="existing-field" ><img  id="CoverPage" src="" alt="img"></div>
-                <input type="file" name="ImgPath" id="ImgPath"data-max-size="32154">
+                <div class="imgHolder"><div class="existing-field" ><img  id="CoverPage" src="" alt="img"></div>
+                <div><img src="" alt="" id="updatedimg"></div></div>
+                <input type="file" name="ImgPath" id="ImgPath"  data-max-size="32154" accept="image/jpeg, image/png, image/jpg" >
             </div>
             <div class="wrap-itemv">
                 <input type="submit" value="Update" id="update">
