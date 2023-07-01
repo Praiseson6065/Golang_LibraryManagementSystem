@@ -29,6 +29,10 @@ type User struct {
 	LikedBooks  []Book `json:"LikedBooks" gorm:"many2many:user_liked_books;"`
 	IssuedBooks []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books"`
 }
+type UserRequestedBooks struct {
+	UserId   int      `json:"UserId" gorm:"primary_key;unique"`
+	BookName []string `json:"RequestedBooks"`
+}
 type RegisterUser struct {
 	Name     string
 	Email    string
@@ -40,7 +44,6 @@ type UserData struct {
 	Email string
 	Exp   int
 }
-
 
 type Book struct {
 	gorm.Model
@@ -271,22 +274,22 @@ func GetUserLikedBooks(userId int) ([]Book, error) {
 	return LikedBooks, nil
 }
 func GetVotesByBook(BookId int) (int, error) {
-	db,err:= database.DbGormConnect()
-	if err!=nil{
-		return 0,err
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return 0, err
 	}
 	var votes int
-	err=db.Select("Count(*)").Where("book_id="+strconv.Itoa(BookId)).Table("user_liked_books").Find(&votes).Error
+	err = db.Select("Count(*)").Where("book_id=" + strconv.Itoa(BookId)).Table("user_liked_books").Find(&votes).Error
 	if err != nil {
 		return 0, err
 	}
 
 	return votes, nil
 }
-func GetUsers() ([]User,error){
-	db,err:=database.DbGormConnect();
-	if err!=nil{
-		return nil,err	
+func GetUsers() ([]User, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
 	}
 	var Users []User
 	db.Find(&Users)
@@ -295,5 +298,5 @@ func GetUsers() ([]User,error){
 		panic(err)
 	}
 	sqlDB.Close()
-	return Users,nil
+	return Users, nil
 }
