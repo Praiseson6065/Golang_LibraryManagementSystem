@@ -1,6 +1,4 @@
-import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
-
-UserPage(token);
+import{token,DecodedToken,userStatus} from "./userstatus.js";
 userStatus(token);
 if(token!=undefined){
     var decoded=DecodedToken(token);

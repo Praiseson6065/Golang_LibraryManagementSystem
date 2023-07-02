@@ -1,2 +1,2 @@
-*.html linguist-detectable=false
-*.js linguist-detectable=false
+*.go linguist-language=Go
+    
