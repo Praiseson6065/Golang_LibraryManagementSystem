@@ -1,4 +1,5 @@
-import {token,DecodedToken,userStatus} from './userstatus.js';
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+UserPage(token);
 var decoded = DecodedToken(token);
 userStatus(token);
 if(decoded.payload["usertype"]==="admin"){
@@ -64,6 +65,50 @@ fetch(`/api/issuedbooks/${decoded.payload["ID"]}`)
       }
       
     });
+
+var RequestBook = document.getElementById("RSubmit");
+RequestBook.addEventListener("click",function (){
+  const json={
+    "UserId":decoded.payload["ID"],
+    "RequestedBooks": document.getElementById("RbookName").value,
+    "ISBN":document.getElementById("RISBN").value,
+    "Status":false,
+
+};
+const headers = {
+  "Content-Type": "application/json",
+};
+  if(json.RequestedBooks==="" && json.ISBN===""){
+    alert("Empty Details of Book");
+  }
+  else{
+    fetch(`/api/reqbooks/`,{method:"post",headers,body: JSON.stringify(json)})
+    .then(response=> response.json())
+    .then(data=>{
+      if(data===true);
+      alert("Book Requested");
+    })
+  }
+
+
+})
+fetch(`/api/userreqbook/${decoded.payload["ID"]}`)
+  .then(response=>response.json())
+  .then(data=>{
+    var tbody="";
+    for(let i=0;i<data.length;i++){
+      var row =`
+        <div class="rowReqBook">
+          <div>${data[i].RequestedBooks}</div>
+          <div>${data[i].ISBN}</div>
+          <div>${data[i].Status}</div>
+        </div>`;
+        tbody+=row;
+    
+    }
+    document.getElementById("bodyReqBook").innerHTML=tbody;
+    
+  })
 
 
     

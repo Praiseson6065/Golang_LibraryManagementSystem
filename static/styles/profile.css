@@ -1,7 +1,7 @@
 .profile-wrap
 {
     box-sizing: border-box;
-    padding: 8rem 8rem;
+    padding: 8rem 8rem 4rem;
     display: flex;
     flex-direction: column;
     gap:2rem;
@@ -50,4 +50,41 @@ h3{
     max-height: 280px;
     border-radius: 8px;
 
+}
+.request-wrap{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 8rem;
+    
+}
+.userReq{
+    display: flex;
+
+    gap : 30px;
+    justify-content: space-between;
+}
+.ReqHead{
+    font-size: 20px;
+    margin: 1rem 0rem;
+}
+.userReq-Container{
+    display: flex;
+    justify-content: space-between;
+    width: 25rem ;
+    align-items: center;
+}
+#RequestedBooks{
+    padding: 2rem 0;
+}
+#HeadReqBook{
+    display: flex;
+    justify-content: space-between;
+    width:50rem;
+    padding: 1rem 0rem;
+}
+.rowReqBook{
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: 33% 33% 33%;
+    
 }

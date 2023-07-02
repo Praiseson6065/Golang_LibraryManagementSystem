@@ -1,16 +1,14 @@
-import {token,DecodedToken,userStatus} from './userstatus.js'
-userStatus(token);
-if(DecodedToken(token).payload["usertype"]!="admin")
-{
+
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+
+UserPage(token);
+if(token === undefined){
+  window.location=`/home.html`;
+  if(DecodedToken(token).payload["usertype"]!="admin")
+  {
   window.location="http://127.0.0.1:3000/profile.html";
+  }
 }
-// fetch("http://127.0.0.1:3000/admin")
-//     .then(response => response.json())
-//     .then(data => {
-//         if(data['error']==="UnAuthorized"){
-//             document.getElementById("main-wrap").innerText=data['error'];
-//         }
-//         else{
-             
-//         }
-//     });
+else{
+  userStatus(token);
+}

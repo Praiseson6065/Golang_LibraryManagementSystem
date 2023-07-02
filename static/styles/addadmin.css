@@ -1,0 +1,12 @@
+.add-admin-wrap{
+    margin:2rem 8rem;
+    display: flex;
+    flex-direction: column;
+    
+    gap : 2rem ;
+}
+.admin-input-div{
+    display: flex;
+    justify-content: space-between;
+    width: 40rem ;
+}

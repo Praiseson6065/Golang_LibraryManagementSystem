@@ -1,10 +1,16 @@
-import {token,userStatus,DecodedToken} from "./userstatus.js";
-userStatus(token);
-var decoded = DecodedToken(token);
-if(decoded.payload["usertype"]!="admin")
-{
-    window.location="/profile.html";
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+UserPage(token);
+if(token === undefined){
+    window.location=`/home.html`;
+    if(DecodedToken(token).payload["usertype"]!="admin")
+    {
+    window.location="http://127.0.0.1:3000/profile.html";
+    }
 }
+else{
+    userStatus(token);
+}
+
 function ExistingData(){
     var url = "http://127.0.0.1:3000/api/book/";
     if(IdValue.value==='')
@@ -62,6 +68,13 @@ function ExistingData(){
 }
 
 var IdValue = document.getElementById("id");
+const queryString = window.location.search;
+var url  = new URLSearchParams(queryString);
+var bookId = url.get('BId');
+if(bookId!=null){
+    document.getElementById("id").value=bookId; 
+    ExistingData();
+}
 IdValue.addEventListener("input",ExistingData);
 const form = document.querySelector('form');
 

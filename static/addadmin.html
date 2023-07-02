@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/addadmin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Book</title>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbrand"><a class="nav-link" href="/">Library Management</a></div>
+        <div class="nav-list">
+            <div class="nav-item"><a class="nav-link" href="/users.html">Users</a> </div>
+            <div class="nav-item"><a class="nav-link" href="/searchbooks.html">Search Books</a> </div>
+            <div class="nav-item"><a  class="nav-link" href="/updatebook.html">UpdateBooks</a></div>
+            <div class="nav-item"><a  class="nav-link" href="/addbook.html">Add Books</a></div>
+            <div class="nav-item" id="profile" ><a  class="nav-link" href="/profile.html">Profile</a></div>
+            <div class="nav-item"><a id="accstatus" class="nav-link" href="{{.userst}}">{{.userstatus}}</a></div>
+            <div class="nav-item" id = "accsignup" ><a  class="nav-link" href="/register.html">Signup</a></div>
+        </div>
+        
+    </div>
+    <div class="add-admin-wrap">
+        <div class="admin-input-div"><label for="name">Name</label><input type="text" name="Name" id="name"></div>
+        <div class="admin-input-div">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div class="admin-input-div"><label for="password">Password</label><input type="password" name="Password" id="password"></div>
+        <div><button id="addadmin">Submit</button></div>
+    </div> 
+    
+<script src="/js/addadmin.js" type="module"></script>
+</body>
+</html>

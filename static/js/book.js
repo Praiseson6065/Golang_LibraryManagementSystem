@@ -1,4 +1,4 @@
-import {token,DecodedToken,userStatus} from "./userstatus.js"
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
 userStatus(token);
 var decoded=DecodedToken(token);
 const queryString = window.location.search;
@@ -21,8 +21,8 @@ function suggestedBooks(taglines){
       });
     const PrintBook = async () => {
         const book = await SearchData;
-        
-        for(let i=0;i<book['Books'].length;i++)
+        const noOfBooks =book['Books'].length<=3 ? book['Books'].length : 4;
+        for(let i=0;i<noOfBooks;i++)
         {   if(book['Books'][i]["BookCode"]===bookId){
             continue;
             }
@@ -47,6 +47,7 @@ function suggestedBooks(taglines){
     PrintBook();
     
 }
+
 fetch(`/api/bookc/${bookId}`)
     .then(response => response.json())
     .then(data => {
@@ -61,19 +62,51 @@ fetch(`/api/bookc/${bookId}`)
         <div>Publisher : ${data['Publisher']}</div>
         <div>Quantity : ${data['Quantity']}</div>
         <div>ISBN : ${data['ISBN']}</div>
-        <div>Votes : ${data['votes']}</div>
+        <div id="votes">Votes : ${data['votes']}</div>
         <div>Tags : ${data['Taglines']}</div>
         </div>
-        <div class="BookCheckout">
+        <div class="BookCheckout" id="Bookchk">
             <button id="likebtn"><i class='bx bx-like'id="like"></i></button>
             <button id="addtocart" >Add to Cart</button>
         </div>`;
+        
         document.getElementById("book-wrap").innerHTML=book;
+        if(token!=undefined && decoded.payload["usertype"]==="admin"){
+            document.getElementById("Bookchk").innerHTML+=`<a href="/updatebook.html?BId=${data['BookId']}"><button id="editbook" >Edit Book</button></a>`;
+        }
         if(data['Quantity']===0){
             document.getElementById("addtocart").innerText="Out of Stock";
             document.getElementById("addtocart").classList.add("bookoutofstock");
             document.getElementById("addtocart").disabled=true;
 
+        }
+        function cartstatus(){
+            fetch(`/api/cartbkchk/${decoded.payload["ID"]}/${bId}`)
+                .then(response=>response.json())
+                .then(data=>{
+                    if(data===true)
+                    {
+                        document.getElementById("addtocart").innerText="AddedToCart";
+                        document.getElementById("addtocart").classList.add("bookoutofstock");
+                        document.getElementById("addtocart").disabled=true;
+                        
+                    }
+                });
+        }
+        function bookIssueChk(){
+            if(token!=undefined){
+                fetch(`/api/isbookissued/${decoded.payload["ID"]}/${bId}`)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        if(data===true)
+                        {
+                            document.getElementById("addtocart").innerText="Already Book Issued   ";
+                            document.getElementById("addtocart").classList.add("bookoutofstock");
+                            document.getElementById("addtocart").disabled=true;
+                        }
+                    });
+                
+            }
         }
         var tags = data['Taglines'].split(",");
         var likebtn=document.getElementById("likebtn");
@@ -100,6 +133,11 @@ fetch(`/api/bookc/${bookId}`)
                 .then(data=> {
                         console.log(data);
                         isliked();
+                        fetch(`/api/bookc/${bookId}`)
+                            .then(response => response.json())
+                            .then(data=>{
+                               document.getElementById("votes").innerText=`Votes : ${data['votes']}`;
+                            })
                 });
         })
         suggestedBooks(tags);
@@ -115,6 +153,7 @@ fetch(`/api/bookc/${bookId}`)
                         .then(response=>response.json())
                         .then(data=>{
                                 document.getElementById("cartstatus").innerText=data["msg"];
+                                cartstatus();
 
                         });
                     
@@ -122,29 +161,9 @@ fetch(`/api/bookc/${bookId}`)
                     
             });
         }
-        if(token!=undefined){
-            fetch(`/api/isbookissued/${decoded.payload["ID"]}/${bId}`)
-                .then(response=>response.json())
-                .then(data=>{
-                    if(data===true)
-                    {
-                        document.getElementById("addtocart").innerText="Already Book Issued   ";
-                        document.getElementById("addtocart").classList.add("bookoutofstock");
-                        document.getElementById("addtocart").disabled=true;
-                    }
-                })
-            fetch(`/api/cartbkchk/${decoded.payload["ID"]}/${bId}`)
-                .then(response=>response.json())
-                .then(data=>{
-                    if(data===true)
-                    {
-                        document.getElementById("addtocart").innerText="AddedToCart";
-                        document.getElementById("addtocart").classList.add("bookoutofstock");
-                        document.getElementById("addtocart").disabled=true;
-                        
-                    }
-                })
-        }
+        cartstatus();   
+        bookIssueChk();
+        
         
         
 

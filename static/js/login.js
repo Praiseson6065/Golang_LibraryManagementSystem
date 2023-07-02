@@ -1,4 +1,5 @@
-import {token,DecodedToken,userStatus} from "./userstatus.js";
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+UserPage(token);
 var decoded = DecodedToken(token);
 userStatus(token);
 if(decoded.payload["usertype"]==="user" || decoded.payload["usertype"]==="admin")

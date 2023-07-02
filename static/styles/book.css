@@ -87,6 +87,11 @@ input[type="submit"]{
     object-fit: cover;
     
   }
+  .BookCheckout{
+    display: flex;
+    flex-direction: column;
+    gap:1rem;
+  }
   .bookImg .bookImgCP{
     object-fit: cover;
     border-radius: 10px;
@@ -96,7 +101,7 @@ input[type="submit"]{
     flex-direction: column;
     justify-content: space-around;
   }
-  #addtocart{
+  #addtocart,#editbook{
     background-color: rgba(53,109,253,1);
     border-radius: 6px;
     border: none;

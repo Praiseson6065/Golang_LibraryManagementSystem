@@ -30,14 +30,12 @@ type User struct {
 	IssuedBooks []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books"`
 }
 type UserRequestedBooks struct {
-	UserId   int      `json:"UserId" gorm:"primary_key;unique"`
-	BookName []string `json:"RequestedBooks"`
+	UserId        int    `json:"UserId"`
+	BookName      string `json:"RequestedBooks"`
+	ISBN          string `json:"ISBN"`
+	RequestStatus bool   `json:"Status"`
 }
-type RegisterUser struct {
-	Name     string
-	Email    string
-	Password string
-}
+
 type UserData struct {
 	ID    int
 	Name  string
@@ -283,7 +281,11 @@ func GetVotesByBook(BookId int) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return votes, nil
 }
 func GetUsers() ([]User, error) {

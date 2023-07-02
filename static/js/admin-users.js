@@ -1,3 +1,6 @@
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+userStatus(token);
+UserPage(token);
 fetch("/admin/users")
     .then(response=>response.json())
     .then(data=>{

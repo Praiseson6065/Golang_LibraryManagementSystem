@@ -1,8 +1,8 @@
-import{token,DecodedToken,userStatus} from "./userstatus.js";
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
 userStatus(token);
-
+UserPage(token);
 if(token!=undefined)
-{
+{   
     var Decoded=DecodedToken(token);
     document.getElementById("CheckoutCart").hidden=true;    
 
@@ -15,8 +15,9 @@ function GetUserCart(){
         .then(response=> response.json())
         .then(data=>{   
             
-            if(data===null){
-                document.getElementById("cart-bookswrap").innerHTML="Empty Cart"
+            if(data.length===0){
+                document.getElementById("CheckoutBtn").hidden=true;
+                document.getElementById("cart-bookswrap").innerHTML="Empty Cart";
             }
             else{
 
@@ -33,25 +34,26 @@ function GetUserCart(){
                 <div class="bookTag">Tags : ${(data[i]['Taglines']).replace(/[{}"]/g,'')}</div>
     
                 </div>
-                <div><button class="rmbookbtn" data-bookvalue="${data[i]['BookId']}">RemoveFromCart</button></div>
+                <div> <button class="rmBookbtn" data-bookvalue="${data[i]['BookId']}">Remove From Cart</button></div>
     
                 
-            </div>`
+            </div>`;
                     document.getElementById("cart-bookswrap").innerHTML+=BookDetails;
                 }
-                const RmBtns = document.querySelectorAll(".rmbookbtn");
-                for (let i=0;i<RmBtns.length;i++){
-                    RmBtns[i].addEventListener("click",function (event){
-                        var bookId=event.target.dataset.bookvalue;
-                        fetch(`api/cart/${Decoded.payload["ID"]}/${bookId}`,{method:
-                        "DELETE"})
-                            .then(response=> response.json())
-                            .then(data=> {
-                                console.log(data);
-                                window.location.reload();
-                            });
-                    })
-                }
+                const RmBtns = document.querySelectorAll(".rmBookbtn")
+                
+                for (var k = 0; k < RmBtns.length; k++) {
+                    RmBtns[k].addEventListener('click', function(event) {
+                      console.log(event);
+                      let bookId = event.target.dataset.bookvalue;
+                      fetch(`/api/cart/${Decoded.payload["ID"]}/${bookId}`, { method: 'DELETE' })
+                        .then(response => response.json())
+                        .then(data => {
+                          console.log(data);
+                          window.location.reload();
+                        });
+                    });
+                  }
                 
                 var books="";
                     for(let i in data){
@@ -71,7 +73,7 @@ function GetUserCart(){
 
                     }
                     var maintag=document.querySelector("main");
-                    console.log(DecodedToken(token));
+                
                     maintag.innerHTML+=`
                     <div class="modal">
                     
@@ -102,11 +104,11 @@ function GetUserCart(){
                 span.onclick =  function (){
                     modal.style.display="none";
                 }
-                window.onclick = function(event) {
-                    if (event.target == modal) {
-                    modal.style.display = "none";
-                    }
-                }
+                // window.onclick = function(event) {
+                //     if (event.target == modal) {
+                //     modal.style.display = "none";
+                //     }
+                // }
                 var Confirm=document.getElementById("ModalConfirm");
                 var modalcontent=document.querySelector(".modalcontent");
                 Confirm.addEventListener("click",function(){

@@ -44,7 +44,11 @@ func Setuproutes(app *fiber.App) {
 	api.Post("/returnbook/:userid/:bookid", handlers.ReturnBook)
 	api.Post("/like/:userid/:bookid", handlers.LikeBook)
 	api.Get("/isliked/:userid/:bookid", handlers.IsLiked)
+	api.Post("/reqbooks/",handlers.UserRequestedBooks)
+	api.Get("/userreqbook/:userid",handlers.RequestedBooks)
 	//admin
 	admin := app.Group("/admin")
-	admin.Get("/users", handlers.Userslist)	
+	admin.Get("/users", handlers.Userslist)
+	admin.Post("/addadmin", handlers.AddAdmin)
+	admin.Get("/reqbooks",handlers.ReqBook)
 }

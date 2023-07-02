@@ -52,14 +52,10 @@ func AddBooksPost(c *fiber.Ctx) error {
 		}
 		sqlDB.Close()
 
-		return c.JSON(fiber.Map{
-			"Message": "Book Added Succesfully",
-		})
+		return c.JSON(true)
 
 	} else {
-		return c.JSON(fiber.Map{
-			"msg": "unauthorized",
-		})
+		return c.JSON("unauthorized")
 	}
 
 }
@@ -259,9 +255,7 @@ func RemoveFromCart(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.JSON(fiber.Map{
-		"msg": "Removed",
-	})
+	return c.JSON(true)
 
 }
 func CheckOutFromCart(c *fiber.Ctx) error {

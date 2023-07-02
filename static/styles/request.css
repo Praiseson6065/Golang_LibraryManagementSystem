@@ -1,0 +1,17 @@
+#UserRequestBooks{
+    display: flex;
+    margin: 4rem 8rem;
+    flex-direction: column;
+
+}
+#HeadReqBooks{
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(4,1fr);
+    
+}
+.RowReqBook{
+    display: grid;
+    justify-content: space-between;
+    grid-template-columns: repeat(4,1fr);    
+}

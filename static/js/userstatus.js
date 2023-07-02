@@ -1,4 +1,9 @@
 export const token = document.cookie.split("=")[1];
+export function UserPage(token){
+    if(token===undefined){
+        window.location="/home.html";
+    }
+}
 export function DecodedToken(token){
     if(token!=undefined){
         const header = token.split('.')[0];
@@ -12,6 +17,7 @@ export function DecodedToken(token){
         };
         return decoded;
     }
+    
 }
 export function userStatus(t){
     
@@ -26,6 +32,7 @@ export function userStatus(t){
 
       }
       else{
+        document.getElementById("cart").hidden=true;
         document.getElementById("profile").hidden=true; 
         document.getElementById("accstatus").innerText="Login";
         document.getElementById("accstatus").setAttribute("href","/login.html");

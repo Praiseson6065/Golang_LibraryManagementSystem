@@ -1,4 +1,6 @@
-import{token,DecodedToken,userStatus} from "./userstatus.js"
+import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
+
+UserPage(token);
 userStatus(token);
 if(token!=undefined){
     var decoded=DecodedToken(token);
@@ -17,8 +19,11 @@ submit.addEventListener("click",function(){
     const headers = {
         "Content-Type": "application/json",
       };
-      
-    fetch("/register",{method:"POST",headers,body: JSON.stringify(json)})
+    if(json.Name==="" || json.Email==="" || json.Password===""){
+        alert("Empty Fields");
+    }
+    else{
+        fetch("/register",{method:"POST",headers,body: JSON.stringify(json)})
         .then(response=>response.json())
         .then(data=>{
             console.log(data);
@@ -33,6 +38,8 @@ submit.addEventListener("click",function(){
                 document.querySelector("main").innerText="Error";
             }
         });
+    }
+    
 })
 
 
