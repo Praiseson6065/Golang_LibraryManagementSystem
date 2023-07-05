@@ -1,6 +1,10 @@
 package middlewares
 
 import (
+	"fmt"
+	
+	"strconv"
+
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"golang.org/x/crypto/bcrypt"
@@ -49,4 +53,26 @@ func CookieGetData(cookie string, c *fiber.Ctx) (jtoken.MapClaims, error) {
 	}
 
 	return claims, err
+}
+func UserMiddleWare(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	claims, _ := CookieGetData(cookie, c)
+	if claims["usertype"] != "user" {
+		return c.SendString("Un Authorized")
+	}
+	userID := claims["ID"]
+	Uid ,err:=strconv.Atoi(c.Params("userid"))
+	if err!=nil{
+		return c.JSON("Unauthorized")
+	}
+	s := fmt.Sprintf("%.0f",userID)
+	k,err:= strconv.Atoi(s)
+	if err!=nil{
+		return c.JSON("Unauthorized")
+	}
+	if  Uid==k {
+		return c.Next()
+	}
+
+	return c.SendString("Unauthorized")
 }

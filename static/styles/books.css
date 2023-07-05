@@ -1,86 +1,163 @@
 *{
     scroll-behavior: smooth ;
 }
+body{
+    background-color:#fefefe
+}
 #main-bookswrap{
-    padding: 4rem 8rem;
+    padding: 2rem 8rem 4rem;
+    display: grid;
+    grid-template-columns: 48% 48%;
+    justify-content: space-between;
+    row-gap: 4rem;
+    
+    
+}
+#searchResDiv{
+    border-radius: 16px;
+    background-color: rgb(7, 15, 32);
+    background-image: url('/img/1600-n.png');    
+    background-position-y:-10px ;
+    background-repeat: no-repeat;   
+    height: 15rem;
+    margin: 2rem 8rem 1rem;
+    font-size: 40px;
+    color: #fff;
     
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     
 }
 .bookHolder{
-    display: grid;
-    grid-template-columns: 50% 30%  ;
-    justify-content: space-between;
-    padding: 1.5rem 0;
+    display: flex;
+    gap :2rem;
+    padding: 1rem 2rem;
     height: 100% !important;
-    
+    border-radius:16px ;
+    box-shadow: 2px  4px 12px rgba(0,0,0,.08);
+    background-image: url('data:image/svg+xml,<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 590" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23F78DA7"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,200 0,200 C 64.47846889952149,192.86124401913875 128.95693779904298,185.7224880382775 234,206 C 339.043062200957,226.2775119617225 484.6507177033494,273.97129186602876 583,252 C 681.3492822966506,230.02870813397126 732.4401913875597,138.39234449760764 814,132 C 895.5598086124403,125.60765550239236 1007.5885167464116,204.45933014354068 1117,230 C 1226.4114832535884,255.54066985645932 1333.2057416267942,227.77033492822966 1440,200 C 1440,200 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-0"></path><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23F78DA7"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,400 0,400 C 98.9377990430622,425.03349282296654 197.8755980861244,450.066985645933 284,457 C 370.1244019138756,463.933014354067 443.4354066985645,452.7655502392344 545,445 C 646.5645933014355,437.2344497607656 776.3827751196171,432.8708133971292 890,413 C 1003.6172248803829,393.1291866028708 1101.0334928229665,357.7511961722488 1190,353 C 1278.9665071770335,348.2488038277512 1359.4832535885166,374.1244019138756 1440,400 C 1440,400 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-1"></path></svg>');    background-repeat: no-repeat;
+    background-position-y:  100px;
+    background-color: #fff;
+    border: 2px solid white;
+    align-items: center;
 }
 .bookDetails{
+    width: 75% !important;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
+    
+    height: 196px;
 
 }
-#search{
-    margin:1rem auto;
-    display: flex;
-    justify-content: center;
+.bookCritics{
+    
+    display: grid;
+    grid-template-columns: 50% 50%;
+    justify-content: start ;
+    
 }
+.bookName{
+    font-size: 24px;
+}
+.bookAuthor{
+    color: rgb(0, 50, 91) ;
+}
+.bookD,.bookDName{
+   color: rgb(13, 13, 13) ;
+}
+
+.bookDes{
+    display: grid;
+    grid-template-columns: 100%;
+}
+#search{
+    margin: -3rem auto 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    z-index: 3;
+}
+
 .bookImg{
     display: flex;
     justify-content: center;
+    align-items: center;
+    width: 140px;
+    height: 196px;
+   
+    
     
 }
+
 .bookImgCP{
-    max-width: 200px;
-    max-height: 280px;
-    width: 200px;
-    height: 280px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,.08);
+    width: 140px;
+    height: 196px;
     border-radius:12px ;
     object-fit: cover !important;
+    
 }
 .searchbar{
     line-height: 1.6;
     outline: 2px solid transparent;
     outline-offset: 2px;
     border: 0 solid #e5e7eb;
-    width: 80% !important; 
+    width: 60% !important; 
     height: 3rem !important;
     padding: 0 0rem;
     font-size: 1.4rem;
 }
+.bookName{
+    width: 100% !important;
+}
 .searchholder{
-    padding: .75rem 1.75rem;
+    padding: .75rem 1rem;
     box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.212),0 -4px 6px -1px rgba(0,0,0,0.06);
-    width: 80% !important;
-    
+    width: calc(55% - 100px) !important;
     background-color: white;
     border-radius: 10px ;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    gap: 20px;
+    
 }
 .searchbtn{
-    width: 20% !important;
-    font-size: 1.4rem;
+    box-sizing: border-box;
     border: none;
-    background-color:rgba(53,109,253,1) ;
+    background-color: transparent;
+    border: 2px solid rgba(53,109,253,1);
     border-radius: 6px;
-    color: white;
+    color: rgba(53,109,253,1);
+    height: 3rem !important;
+    padding: .4rem .8rem ;
+
+}
+.bx-search{
+    font-size: 30px;
 }
 .searchopt{
     border: none;
     border-radius: 6px;
-    background-color:rgba(53,109,253,1);
-    color: white;
-    width: 20%;
+    background-color: transparent;
+    color: rgba(53,109,253,1);
     text-align: center; 
-    font-size: 1.4rem;
+    font-size: 1rem;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(53, 109, 253, 1);transform: ;msFilter:;"><path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: calc(100% - 3px);
+    background-size: 25px;
+    border: 2px solid rgba(53,109,253,1);
+    appearance: none;
+    box-sizing: border-box;
+    height: 3rem !important;
+    outline-color: rgba(53,109,253,1)   ;
+    padding: .4rem 1.2rem.4rem .4rem ;
+   
 }
-.searchopt:focus{
-    border: none;
+
+select:active{
+    border: 2px solid rgba(53,109,253,1);
 }
 select option{
     background-color: white;

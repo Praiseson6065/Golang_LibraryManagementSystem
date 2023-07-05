@@ -11,3 +11,21 @@ if(token === undefined){
 else{
     userStatus(token);
 }
+
+document.querySelector("form").addEventListener("submit", function(event){
+    event.preventDefault();
+    fetch("/api/book", {
+        method: "POST",
+        body: new FormData(event.target)})
+    .then(response => response.json())
+    .then(data=>{
+        if(data===true){
+            window.location="/home.html";
+        }
+        else{
+            alert(data);
+        }
+    })
+
+});
+

@@ -28,20 +28,20 @@
         <form action="/api/book" method="post" enctype="multipart/form-data">
             <div class="wrap-item">
                 <label for="BookName">Book Name</label>
-                <input type="text" name="BookName">
+                <input required type="text" name="BookName">
             </div>
            <div class="wrap-item">
             <label for="ISBN">ISBN</label>
-            <input type="text" name="ISBN">
+            <input required type="text" name="ISBN">
            </div>
             
             <div class="wrap-item">
                 <label for="Pages">No of Pages</label>
-                <input type="number" name="Pages">
+                <input  required type="number" name="Pages">
             </div>
             <div class="wrap-item">
                 <label for="Publisher">Publisher</label>
-                <input type="text" name="Publisher">
+                <input required type="text" name="Publisher">
             </div>
             <div class="wrap-item">
                 <label for="Author">Author</label>
@@ -49,16 +49,16 @@
             </div>
             <div class="wrap-item">
                 <label for="Quantity">Quantity</label>
-                <input min=1 type="number" name="Quantity">
+                <input required min=1 type="number" name="Quantity">
 
             </div>
             <div class="wrap-item">
                 <label for="Taglines">Taglines</label>
-                <input type="text" name="Taglines">
+                <input  required type="text" name="Taglines">
                 
             </div>
             <div class="wrap-item">
-                <input type="file" name="ImgPath" >
+                <input required type="file" name="ImgPath" >
             </div>
             <div class="wrap-item">
                 <input type="submit" value="Add">
@@ -68,5 +68,6 @@
 
     </div>
     <script src="/js/addbook.js" type="module"></script>
+   
 </body>
 </html>

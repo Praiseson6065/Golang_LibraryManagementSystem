@@ -20,29 +20,24 @@ fetch(url)
       }
 
     });
-fetch(`/api/issuedbooks/${decoded.payload["ID"]}`)
+fetch(`/user/approvbooks/${decoded.payload["ID"]}`)
     .then(response=> response.json())
     .then(data=> {
-      if(data!=[])
+      if(data.length!=0)
       {
         for (let i=0;i<data.length;i++){
-          var Issuedbook=`
-          <div class="bookholder">
-              <div><img class="bookImg" src="/img/books/${data[i]['ImgPath']}" alt="${data[i]["BookName"]}"></div>
-              <div class="bookDetails">
-              <div class="bookDesc">
-                <div>Title : ${data[i]["BookName"]}</div>
-                <div>Pages : ${data[i]["Pages"]}</div>
-                <div>ISBN : ${data[i]["ISBN"]}</div>
-                <div>Author : ${data[i]["Author"]}</div>
-                <div>Publisher : ${data[i]["Publisher"]}</div>
-              </div>
-              <button class="returnbook" data-bookid=${data[i]["BookId"]}>Return Book</button> 
-              </div>
-              
-          </div>
-          `
-          document.getElementById("issuedbooks").innerHTML+=Issuedbook;
+          var Approvedbook=`
+          <div class="bookHolder">
+        <div class="bookImg"><a href="/book.html?BookC=${data[i]["BookCode"]}"><img class="bookImgCP" src="/img/books/${data[i]['ImgPath']}"></a></div>
+        <div class="bookDetails">
+        <div class="bookName">${data[i]['BookName']}</div>
+        <div class="bookAuthor">by ${(data[i]['Author']).replace(/[{}"]/g,'')}</div>
+      
+        <div><button class="returnbook" data-bookid=${data[i]["BookId"]}>Return Book</button></div>
+
+        
+    </div>`;
+          document.getElementById("approvedbooks").innerHTML+=Approvedbook;
          
         }
   
@@ -50,7 +45,7 @@ fetch(`/api/issuedbooks/${decoded.payload["ID"]}`)
         
         for (let i=0;i<ReturnBtns.length;i++){
               ReturnBtns[i].addEventListener("click",function(event){
-                  fetch(`/api/returnbook/${decoded.payload["ID"]}/${event.target.dataset.bookid}`,{method:"POST"})
+                  fetch(`/user/returnbook/${decoded.payload["ID"]}/${event.target.dataset.bookid}`,{method:"POST"})
                     .then(response=> response.json())
                     .then(data=> {
                         if(data===true)
@@ -82,7 +77,7 @@ const headers = {
     alert("Empty Details of Book");
   }
   else{
-    fetch(`/api/reqbooks/`,{method:"post",headers,body: JSON.stringify(json)})
+    fetch(`/user/reqbooks/`,{method:"post",headers,body: JSON.stringify(json)})
     .then(response=> response.json())
     .then(data=>{
       if(data===true);
@@ -92,7 +87,7 @@ const headers = {
 
 
 })
-fetch(`/api/userreqbook/${decoded.payload["ID"]}`)
+fetch(`/user/userreqbook/${decoded.payload["ID"]}`)
   .then(response=>response.json())
   .then(data=>{
     var tbody="";
@@ -102,13 +97,46 @@ fetch(`/api/userreqbook/${decoded.payload["ID"]}`)
           <div>${data[i].RequestedBooks}</div>
           <div>${data[i].ISBN}</div>
           <div>${data[i].Status}</div>
-        </div>`;
+        </div>
+        <div class="gradLine"></div>
+        `;
+
+
         tbody+=row;
     
     }
     document.getElementById("bodyReqBook").innerHTML=tbody;
     
   })
+
+fetch(`/user/issuedbooks/${decoded.payload["ID"]}`)
+  .then(response=>response.json())
+  .then(data=>{
+    if(data.length!=0){
+      for (let i=0;i<data.length;i++){
+        var Issuedbook=`
+        <div class="bookHolder">
+        <div class="bookImg"><a href="/book.html?BookC=${data[i]["BookCode"]}"><img class="bookImgCP" src="/img/books/${data[i]['ImgPath']}"></a></div>
+        <div class="bookDetails">
+        <div class="bookName">${data[i]['BookName']}</div>
+        <div class="bookAuthor">by ${(data[i]['Author']).replace(/[{}"]/g,'')}</div>
+        <div class="bookCritics">
+            <div class="bookDes"><div class="bookD">${data[i]['Pages']}</div><div  class="bookDName">Pages</div></div>
+            <div class="bookDes"><div class="bookD">${data[i]['votes']}</div ><div class="bookDName">Likes</div></div>
+        </div>
+        
+    </div>`;
+        
+        document.getElementById("issuedbooks").innerHTML+=Issuedbook;
+       
+      }
+
+    }
+    else{
+      document.getElementById("issuedbooks").innerHTML="No Books Are Request To Issue"
+    }
+
+  });
 
 
     

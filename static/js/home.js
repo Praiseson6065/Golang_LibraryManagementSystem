@@ -19,3 +19,16 @@ fetch(`/api/Getbooks/`)
         document.getElementById("wrap-addedbooks").innerHTML += bookDesc;
     }
     })
+var searchbtn = document.querySelector(".searchbtn");
+
+
+searchbtn.addEventListener("click",function(){
+    var searchBar= document.getElementById("searchbar");
+    if(searchBar.value===""){
+        alert("Empty Field");
+    }
+    else{
+        var RedirectUrl = `/searchbooks.html?Search=${searchBar.value}`;
+        window.location = RedirectUrl;
+    }
+});

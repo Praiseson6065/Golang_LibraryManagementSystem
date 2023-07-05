@@ -9,7 +9,7 @@ if(token!=undefined)
 }
 
 function GetUserCart(){
-    var url ="/api/getusercart/" + Decoded.payload["ID"];
+    var url ="/user/getusercart/" + Decoded.payload["ID"];
 
     fetch(url)
         .then(response=> response.json())
@@ -37,23 +37,10 @@ function GetUserCart(){
                 <div> <button class="rmBookbtn" data-bookvalue="${data[i]['BookId']}">Remove From Cart</button></div>
     
                 
-            </div>`;
+                </div>`;
                     document.getElementById("cart-bookswrap").innerHTML+=BookDetails;
                 }
-                const RmBtns = document.querySelectorAll(".rmBookbtn")
-                
-                for (var k = 0; k < RmBtns.length; k++) {
-                    RmBtns[k].addEventListener('click', function(event) {
-                      console.log(event);
-                      let bookId = event.target.dataset.bookvalue;
-                      fetch(`/api/cart/${Decoded.payload["ID"]}/${bookId}`, { method: 'DELETE' })
-                        .then(response => response.json())
-                        .then(data => {
-                          console.log(data);
-                          window.location.reload();
-                        });
-                    });
-                  }
+                   
                 
                 var books="";
                     for(let i in data){
@@ -104,15 +91,15 @@ function GetUserCart(){
                 span.onclick =  function (){
                     modal.style.display="none";
                 }
-                // window.onclick = function(event) {
-                //     if (event.target == modal) {
-                //     modal.style.display = "none";
-                //     }
-                // }
+                window.onclick = function(event) {
+                    if (event.target == modal) {
+                    modal.style.display = "none";
+                    }
+                }
                 var Confirm=document.getElementById("ModalConfirm");
                 var modalcontent=document.querySelector(".modalcontent");
                 Confirm.addEventListener("click",function(){
-                    fetch(`/api/checkoutcart/${DecodedToken(token).payload["ID"]}`,{method:"POST"})
+                    fetch(`/user/checkoutcart/${DecodedToken(token).payload["ID"]}`,{method:"POST"})
                         .then(response=> response.json())
                         .then(data=>{
                             if(data===true)
@@ -130,7 +117,20 @@ function GetUserCart(){
                 })
                 
             }
-            
+            let RmBtns = document.querySelectorAll(".rmBookbtn")
+                    
+            for (var k = 0; k < RmBtns.length; k++) {
+                RmBtns[k].addEventListener('click', function(event) {
+                console.log(event);
+                let bookId = event.target.dataset.bookvalue;
+                fetch(`/api/cart/${Decoded.payload["ID"]}/${bookId}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                    console.log(data);
+                    window.location.reload();
+                    });
+                });
+            }
             
         });
             

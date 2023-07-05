@@ -24,31 +24,47 @@ func Setuproutes(app *fiber.App) {
 
 	//api
 	api := app.Group("/api")
+
 	api.Post("/book", handlers.AddBooksPost)
 	api.Get("/getbooks", handlers.GetBooks)
 	api.Post("/searchbook", handlers.SearchBooks)
 	api.Get("/book/:id", handlers.GetBook)
 	api.Get("/bookc/:bc", handlers.GetBookByCode)
 	api.Put("/updatebook/:id", handlers.UpdateBook)
-	//like
 
 	//cart
-	api.Post("/cart/:userid/:bookid", handlers.AddtoCart)
-	api.Get("/getusercart/:userid", handlers.GetUserCart)
-	api.Delete("/cart/:userid/:bookid", handlers.RemoveFromCart)
-	api.Post("/checkoutcart/:userid", handlers.CheckOutFromCart)
-	api.Get("/cartbkchk/:userid/:bookid", handlers.ChkBookCart)
+	user := app.Group("/user")
+	user.Post("/cart/:userid/:bookid",middlewares.UserMiddleWare, handlers.AddtoCart)
+	user.Get("/getusercart/:userid",middlewares.UserMiddleWare, handlers.GetUserCart)
+	user.Delete("/cart/:userid/:bookid",middlewares.UserMiddleWare, handlers.RemoveFromCart)
+	user.Post("/checkoutcart/:userid",middlewares.UserMiddleWare, handlers.CheckOutFromCart)
+	user.Get("/cartbkchk/:userid/:bookid",middlewares.UserMiddleWare, handlers.ChkBookCart)
 	//user
-	api.Get("/issuedbooks/:userid", handlers.UserIssuedBooks)
-	api.Get("/isbookIssued/:userid/:bookid", handlers.IsBookIssued)
-	api.Post("/returnbook/:userid/:bookid", handlers.ReturnBook)
-	api.Post("/like/:userid/:bookid", handlers.LikeBook)
-	api.Get("/isliked/:userid/:bookid", handlers.IsLiked)
-	api.Post("/reqbooks/",handlers.UserRequestedBooks)
-	api.Get("/userreqbook/:userid",handlers.RequestedBooks)
+	user.Get("/issuedbooks/:userid",middlewares.UserMiddleWare, handlers.UserIssuedBooks)
+	user.Get("/isbookIssued/:userid/:bookid",middlewares.UserMiddleWare, handlers.IsBookIssued)
+	user.Post("/returnbook/:userid/:bookid",middlewares.UserMiddleWare, handlers.ReturnBook)
+	user.Post("/like/:userid/:bookid",middlewares.UserMiddleWare, handlers.LikeBook)
+	user.Get("/isliked/:userid/:bookid",middlewares.UserMiddleWare, handlers.IsLiked)
+	user.Post("/reqbooks/", handlers.UserRequestedBooks)
+	user.Get("/userreqbook/:userid",middlewares.UserMiddleWare, handlers.RequestedBooks)
+	user.Get("/approvbooks/:userid",middlewares.UserMiddleWare, handlers.UserApprovedBooks)
+
 	//admin
+
 	admin := app.Group("/admin")
+	admin.Use(func(c *fiber.Ctx) error {
+		cookie := c.Cookies("jwt")
+		claims, _ := middlewares.CookieGetData(cookie, c)
+		if claims["usertype"] != "admin" {
+			return c.SendString("Un Authorized")
+		}
+
+		return c.Next()
+	})
+
 	admin.Get("/users", handlers.Userslist)
 	admin.Post("/addadmin", handlers.AddAdmin)
-	admin.Get("/reqbooks",handlers.ReqBook)
+	admin.Get("/reqbooks", handlers.ReqBook)
+	admin.Post("/approvbooks", handlers.ApprovBookByAdmin)
+	admin.Get("/approvalbookslist", handlers.GetApprovalBooks)
 }

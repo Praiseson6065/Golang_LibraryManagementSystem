@@ -17,17 +17,24 @@ type LoginRequest struct {
 type LoginResponse struct {
 	Token string `json:"token"`
 }
+type Log struct {
+	UserId    int
+	BookId    int
+	Operation string
+}
+
 type User struct {
 	gorm.Model
-	ID          int    `json:"Id" gorm:"auto_increment:true;primary_key;unique"`
-	UserId      string `json:"UserId" gorm:"unique"`
-	Name        string `json:"Name"`
-	Email       string `json:"Email" gorm:"unique"`
-	Password    string `json:"Password"`
-	Usertype    string `json:"Usertype"`
-	CartBooks   []Book `json:"CartBooks" gorm:"many2many:user_cart_books;"`
-	LikedBooks  []Book `json:"LikedBooks" gorm:"many2many:user_liked_books;"`
-	IssuedBooks []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books"`
+	ID            int    `json:"Id" gorm:"auto_increment:true;primary_key;unique"`
+	UserId        string `json:"UserId" gorm:"unique"`
+	Name          string `json:"Name"`
+	Email         string `json:"Email" gorm:"unique"`
+	Password      string `json:"Password"`
+	Usertype      string `json:"Usertype"`
+	CartBooks     []Book `json:"CartBooks" gorm:"many2many:user_cart_books;"`
+	LikedBooks    []Book `json:"LikedBooks" gorm:"many2many:user_liked_books;"`
+	IssuedBooks   []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books;"`
+	ApprovedBooks []Book `json:"ApprovedBooks" gorm:"many2many:user_approved_books;"`
 }
 type UserRequestedBooks struct {
 	UserId        int    `json:"UserId"`
@@ -42,7 +49,11 @@ type UserData struct {
 	Email string
 	Exp   int
 }
-
+type BookReviews struct {
+	UserId int    `json:"UserId"`
+	BookId int    `json:"BookId"`
+	Review string `json:"Review"`
+}
 type Book struct {
 	gorm.Model
 	ID           int    `json:"BookId" gorm:"auto_increment:true;primary_key;unique"`
@@ -61,6 +72,10 @@ type Book struct {
 type SearchBook struct {
 	SearchValue  string `json:"SearchValue"`
 	SearchColumn string `json:"SearchColumn"`
+}
+type ApprovBooks struct {
+	Userid  int   `json:"UserId"`
+	BookIds []int `json:"BookId"`
 }
 
 func GetBookByBookCode(BookCode string) (Book, error) {
@@ -222,10 +237,34 @@ func GetIssuedBooks(Userid int) ([]Book, error) {
 		Find(&IssuedBooks).Error; err != nil {
 		return nil, err
 	}
-
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
 	return IssuedBooks, nil
 }
-func ReturnBookByUser(UserId, BookId int) (bool, error) {
+func RemoveIssueBook(UserId, BookId int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	query := fmt.Sprintf("Delete from user_issued_books where user_id=%d and book_id=%d ;", UserId, BookId)
+
+	err = db.Exec(query).Error
+	if err != nil {
+		return false, err
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return true, nil
+
+}
+func RemoveIssueBookByUser(UserId, BookId int) (bool, error) {
 	db, err := database.DbGormConnect()
 	if err != nil {
 		return false, err
@@ -301,4 +340,104 @@ func GetUsers() ([]User, error) {
 	}
 	sqlDB.Close()
 	return Users, nil
+}
+func LogOperation(userid, bookid int, opr string) bool {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	db.AutoMigrate(&Log{})
+	LogOpr := Log{
+		UserId:    userid,
+		BookId:    bookid,
+		Operation: opr,
+	}
+	err = db.Create(&LogOpr).Error
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return true
+}
+func ReturnBookByUser(UserId, BookId int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	query := fmt.Sprintf("Delete from user_approved_books where user_id=%d and book_id=%d ;", UserId, BookId)
+
+	err = db.Exec(query).Error
+	if err != nil {
+		return false, err
+	}
+	BookDetails := Book{}
+	BookDetails, err = GetBookById(BookId)
+	if err != nil {
+		return false, err
+	}
+	BookDetails.Quantity = BookDetails.Quantity + 1
+	db.Save(&BookDetails)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return true, nil
+}
+func ApprovBook(userid int, BookId []int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	var ApprovBooks []Book
+	for _, i := range BookId {
+		RemoveIssueBook(userid, i)
+		book, err := GetBookById(i)
+		if err != nil {
+			return false, err
+		}
+		ApprovBooks = append(ApprovBooks, book)
+
+	}
+
+	UserDetails, err := GetUser(userid)
+	if err != nil {
+		return false, err
+	}
+	UserDetails.ApprovedBooks = append(UserDetails.ApprovedBooks, ApprovBooks...)
+	db.Save(&UserDetails)
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return true, nil
+
+}
+func GetUserApprovedBooks(userid int) ([]Book, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+	var AppRovBooks []Book
+	if err := db.Joins("JOIN user_approved_books ON user_approved_books.book_id = books.id").
+		Where("user_approved_books.user_id = ?", userid).
+		Find(&AppRovBooks).Error; err != nil {
+		return nil, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return AppRovBooks, nil
+
 }

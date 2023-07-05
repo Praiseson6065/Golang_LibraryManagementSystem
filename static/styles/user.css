@@ -5,6 +5,16 @@
     font-size: 1rem;
     
 }
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+.gradLine{
+    height: 1px;
+    background-image: linear-gradient(90deg, rgba(9,9,121,0) 15%, rgba(53,109,253,1) 50%, rgba(0,212,255,0) 85%);
+}
 .lightBg{
     background-color: rgba(242,245,255,1);
 }
@@ -42,18 +52,31 @@ a{
     text-align: center;
 }
 .footer{
-    background-color: rgba(17,24,39,1);
+   
+    display: flex;
+    background: rgb(0,189,255);
+    background: radial-gradient(circle, rgba(0, 187, 255, 0.4) 0%, rgba(9,9,121,0) 70%);
+    
+     /* background-image: url('/img/1600-n.png'); */
+    background-color: rgb(7, 15, 32);
     padding : 2rem 8rem;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    width:calc(100vw - 16rem) !important;
+    height: 5rem;
+    left: 0;
+        bottom: 0;
+
+    
 }
 .heading-light{
     color:white;    
 }
 .footer-items{
     display: flex;
+
     justify-content: space-around;
-    gap: 50px;
+    gap: 10px;
     align-items: center;
 }
 ::-webkit-scrollbar {

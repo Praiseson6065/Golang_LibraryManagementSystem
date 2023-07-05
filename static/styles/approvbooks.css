@@ -1,0 +1,65 @@
+#ApprovDiv{
+    display: flex;
+    flex-direction: column;
+}
+.t-align-center{
+    text-align: center;
+}
+.t-ver-ali-middle{
+    vertical-align: middle;
+}
+.ApprovUserId,.ApprovUserName{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#ApprovHead{
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%  ;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem ;
+    padding-bottom: 1rem;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    
+}
+.apprvbtndiv{
+    display: flex;
+    justify-content: center;
+}
+#ApprovBody{
+    display: flex;
+    flex-direction: column;
+}
+.ApprovRow{
+    display: grid;
+    grid-template-columns: 20% 20% 60% ;
+    border-bottom: 1px solid black;
+    padding: .4rem 0rem;
+}
+.ApprovBooks{
+    display: flex;
+    flex-direction: column;
+}
+.ApprovBook{
+    display: grid;
+    grid-template-columns: 33.3% 33.3% 33.3%;
+    
+
+}
+#ApprvBtnDiv{
+    display: grid;
+    grid-template-columns: 20%;
+    justify-content:end;
+    margin: 1rem 0rem;
+    padding: 1rem 0rem;
+}
+#ApprovBtn{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.m-1{
+    margin: 1rem;
+}

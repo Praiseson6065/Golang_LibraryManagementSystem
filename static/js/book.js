@@ -20,22 +20,21 @@ function suggestedBooks(taglines){
         return books;
       });
     const PrintBook = async () => {
-        const book = await SearchData;
-        const noOfBooks =book['Books'].length<=3 ? book['Books'].length : 4;
+        const data = await SearchData;
+        const noOfBooks =data['Books'].length<=3 ? data['Books'].length : 4;
         for(let i=0;i<noOfBooks;i++)
-        {   if(book['Books'][i]["BookCode"]===bookId){
+        {   if(data['Books'][i]["BookCode"]===bookId){
             continue;
             }
             
             var suggested=`<div class="bookHolder-Suggested">
-            <div class="bookImg"><a href="/book.html?BookC=${book['Books'][i]["BookCode"]}"><img class="bookImgCP" src="/img/books/${book['Books'][i]['ImgPath']}"></a></div>
+            <div class="bookImg"><a href="/book.html?BookC=${data['Books'][i]["BookCode"]}"><img class="bookImgCPS" src="/img/books/${data['Books'][i]['ImgPath']}"></a></div>
             <div class="bookDetails">
-            <div class="bookName">Title : ${book['Books'][i]['BookName']}</div>
-            <div class="bookPublisher">Publisher : ${book['Books'][i]['Publisher']}</div>
-            <div class="bookAuthor">Author : ${book['Books'][i]['Author']}</div>
-            <div class="bookISBN">ISBN : ${book['Books'][i]['ISBN']}</div>
-            <div class="bookPages">Pages : ${book['Books'][i]['Pages']}</div>
-            <div class="bookTag">Tags : ${book['Books'][i]['Taglines']}</div>
+            <div class="bookName">${data['Books'][i]['BookName']}</div>
+            <div class="bookAuthor">by ${(data['Books'][i]['Author']).replace(/[{}"]/g,'')}</div>
+            <div class="bookCritics">
+                <div class="bookDes"><div class="bookD">${data['Books'][i]['Pages']}</div><div  class="bookDName">Pages</div></div>
+                <div class="bookDes"><div class="bookD">${data['Books'][i]['votes']}</div ><div class="bookDName">Likes</div></div>
             </div>
             
         </div>`;
@@ -56,17 +55,18 @@ fetch(`/api/bookc/${bookId}`)
         var book =`
         <div class="BookImg"><img  class="bookCoverPage" src="/img/books/${data['ImgPath']}" alt="${data['BookName']}"></div>
         <div class="BookDetails">
-        <div>Title : ${data['BookName']}</div>
-        <div>Pages : ${data['Pages']}</div>
-        <div>Author : ${data['Author']}</div>
-        <div>Publisher : ${data['Publisher']}</div>
-        <div>Quantity : ${data['Quantity']}</div>
+        <div>${data['BookName']}</div>
+        <div>${data['Pages']} pages,Paperback</div>
+        <div>by ${data['Author']}</div>
+        <div>Published by ${data['Publisher']}</div>
+        <div>Available  ${data['Quantity']} Books</div>
         <div>ISBN : ${data['ISBN']}</div>
-        <div id="votes">Votes : ${data['votes']}</div>
+    
         <div>Tags : ${data['Taglines']}</div>
         </div>
         <div class="BookCheckout" id="Bookchk">
-            <button id="likebtn"><i class='bx bx-like'id="like"></i></button>
+        
+            <div class="likediv"><button id="likebtn"><i class='bx bx-like'id="like"></i></button><span id="likecnt">${data['votes']}</span></div>
             <button id="addtocart" >Add to Cart</button>
         </div>`;
         
@@ -81,7 +81,7 @@ fetch(`/api/bookc/${bookId}`)
 
         }
         function cartstatus(){
-            fetch(`/api/cartbkchk/${decoded.payload["ID"]}/${bId}`)
+            fetch(`/user/cartbkchk/${decoded.payload["ID"]}/${bId}`)
                 .then(response=>response.json())
                 .then(data=>{
                     if(data===true)
@@ -95,7 +95,7 @@ fetch(`/api/bookc/${bookId}`)
         }
         function bookIssueChk(){
             if(token!=undefined){
-                fetch(`/api/isbookissued/${decoded.payload["ID"]}/${bId}`)
+                fetch(`/user/isbookissued/${decoded.payload["ID"]}/${bId}`)
                     .then(response=>response.json())
                     .then(data=>{
                         if(data===true)
@@ -108,10 +108,28 @@ fetch(`/api/bookc/${bookId}`)
                 
             }
         }
+        function bookApproved(){
+            if(token!=undefined){
+                fetch(`/user/approvbooks/${decoded.payload["ID"]}`)
+                    .then(response=>response.json())
+                    .then(data=>{
+                        for(let i=0;i<data.length;i++){
+                            if (data[i].BookId===bId){
+
+                                document.getElementById("addtocart").innerText="Already Book Taken";
+                                document.getElementById("addtocart").classList.add("bookoutofstock");
+                                document.getElementById("addtocart").disabled=true;
+                                return;
+                            }
+                            continue;
+                        }
+                    })
+            }
+        }
         var tags = data['Taglines'].split(",");
         var likebtn=document.getElementById("likebtn");
         function isliked(){
-            fetch(`/api/isliked/${decoded.payload["ID"]}/${data['BookId']}`)
+            fetch(`/user/isliked/${decoded.payload["ID"]}/${data['BookId']}`)
                     .then(response=> response.json())
                     .then(data=>{
                         if(data===true)
@@ -128,7 +146,7 @@ fetch(`/api/bookc/${bookId}`)
         }
         isliked();
         likebtn.addEventListener("click",function(event){
-            fetch(`/api/like/${decoded.payload["ID"]}/${data['BookId']}`,{method:"POST"})
+            fetch(`/user/like/${decoded.payload["ID"]}/${data['BookId']}`,{method:"POST"})
                 .then(response=> response.json())
                 .then(data=> {
                         console.log(data);
@@ -136,7 +154,7 @@ fetch(`/api/bookc/${bookId}`)
                         fetch(`/api/bookc/${bookId}`)
                             .then(response => response.json())
                             .then(data=>{
-                               document.getElementById("votes").innerText=`Votes : ${data['votes']}`;
+                               document.getElementById("likecnt").innerText=`${data['votes']}`;
                             })
                 });
         })
@@ -149,7 +167,7 @@ fetch(`/api/bookc/${bookId}`)
                 }
                 else{
                     
-                    fetch(`/api/cart/${decoded.payload["ID"]}/${bId}`,{method:`Post`})
+                    fetch(`/user/cart/${decoded.payload["ID"]}/${bId}`,{method:`Post`})
                         .then(response=>response.json())
                         .then(data=>{
                                 document.getElementById("cartstatus").innerText=data["msg"];
@@ -163,6 +181,7 @@ fetch(`/api/bookc/${bookId}`)
         }
         cartstatus();   
         bookIssueChk();
+        bookApproved();
         
         
         

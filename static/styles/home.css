@@ -37,7 +37,7 @@ main{
     margin-left: auto;
     margin-right: auto;
 }
-.searchbar{
+#searchbar{
     line-height: 1.6;
     outline: 2px solid transparent;
     outline-offset: 2px;
@@ -128,7 +128,8 @@ p{
     
 }
 .bookimga{
-    z-index: 90;
+    
+    cursor: pointer;
 }
 .bookholder:hover .BookCount{
    -webkit-text-stroke: 2px rgba(59,130,246,1);

@@ -9,9 +9,10 @@ h3{
     padding: 1rem 8rem;
 }
 .bookCoverPage{
-    max-width: 300px;
-    max-height: 540px;
+  max-width: 200px;
+  max-height: 280px;
     border-radius: 16px;
+    box-shadow: 2px  4px 12px rgba(0,0,0,.08);
 }
 .BookDetails{
     display: flex;
@@ -67,9 +68,11 @@ input[type="submit"]{
   }
   #book-suggestions{
     display: grid;
-    grid-template-columns: 33% 33% 33%;
-    padding: 2rem 5rem;
+    grid-template-columns: 48% 48%;
+    padding: 2rem 8rem;
     justify-content: space-around;
+    row-gap: 4rem;
+    margin-bottom: 2rem;
   }
   .bookHolder{
     display: grid;
@@ -78,10 +81,29 @@ input[type="submit"]{
   }
   .bookHolder-Suggested{
     display: flex;
-    grid-template-columns: 40% 40%;
-    gap : 20px;
+    gap :2rem;
+    padding: 1rem 2rem;
+    height: 100% !important;
+    border-radius:16px ;
+    box-shadow: 2px  4px 12px rgba(0,0,0,.08);
+    background-image: url('data:image/svg+xml,<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 590" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23F78DA7"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,200 0,200 C 64.47846889952149,192.86124401913875 128.95693779904298,185.7224880382775 234,206 C 339.043062200957,226.2775119617225 484.6507177033494,273.97129186602876 583,252 C 681.3492822966506,230.02870813397126 732.4401913875597,138.39234449760764 814,132 C 895.5598086124403,125.60765550239236 1007.5885167464116,204.45933014354068 1117,230 C 1226.4114832535884,255.54066985645932 1333.2057416267942,227.77033492822966 1440,200 C 1440,200 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-0"></path><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23F78DA7"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,400 0,400 C 98.9377990430622,425.03349282296654 197.8755980861244,450.066985645933 284,457 C 370.1244019138756,463.933014354067 443.4354066985645,452.7655502392344 545,445 C 646.5645933014355,437.2344497607656 776.3827751196171,432.8708133971292 890,413 C 1003.6172248803829,393.1291866028708 1101.0334928229665,357.7511961722488 1190,353 C 1278.9665071770335,348.2488038277512 1359.4832535885166,374.1244019138756 1440,400 C 1440,400 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-1"></path></svg>');    background-repeat: no-repeat;
+    background-position-y:  100px;
+    background-color: #fff;
+    border: 2px solid white;
+    align-items: center;
   }
-  .bookHolder-Suggested .bookImg .bookImgCP{
+  .BookImg{
+    width: 320px;
+    height: 320px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" id="SvgjsSvg1230" x="0" y="0" version="1.1" viewBox="0 0 487.272 487.272" width="200" height="200" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs"><path d="M468.018 196.707 289.885 18.573c-26.341-23.625-66.246-23.625-92.587 0L19.165 196.493c-25.554 25.573-25.554 67.014 0 92.587L197.298 467a63.997 63.997 0 0 0 46.293 19.413 64 64 0 0 0 46.293-18.987l178.133-178.133.267-.267c25.421-25.567 25.302-66.9-.266-92.319z" fill="rgba(232, 249, 255, 1)"></path></svg>');
+  }
+  .bookHolder-Suggested  .bookImgCP{
     max-width: 200px;
     max-height: 280px;
     object-fit: cover;
@@ -120,6 +142,15 @@ input[type="submit"]{
   
 
  }
+ .likediv{
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+ }
+ #likecnt{
+  font-size: 20px;
+  color: rgba(53,109,253,1) ;
+ }
  #like{
   font-size: 28px;
   color: rgba(53,109,253,1) ;
@@ -127,3 +158,35 @@ input[type="submit"]{
  .bookoutofstock{
   background-color: rgba(0, 23, 80, 0.801) !important;
  }
+ .bookImgCPS{
+  box-shadow: 2px 4px 12px rgba(0,0,0,.08);
+    width: 140px;
+    height: 196px;
+    border-radius:12px ;
+    object-fit: cover !important;
+ }
+ .bookCritics{
+    
+  display: grid;
+  grid-template-columns: 50% 50%;
+  justify-content: start ;
+  
+}
+.bookName{
+  font-size: 24px;
+}
+.bookAuthor{
+  color: rgb(0, 50, 91) ;
+}
+.bookD,.bookDName{
+ color: rgb(13, 13, 13) ;
+}
+.bookDetails{
+  width: 75% !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  
+  height: 196px;
+
+}

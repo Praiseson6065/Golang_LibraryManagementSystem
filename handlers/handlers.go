@@ -99,15 +99,15 @@ func RegisterPost(c *fiber.Ctx) error {
 	db, err := database.DbGormConnect()
 
 	if err != nil {
-		fmt.Println(err)
-		return err
+		// fmt.Println(err)
+		return c.JSON(err)
 	}
-	db.AutoMigrate(&models.User{})
+
 	data := new(models.User)
 	c.BodyParser(data)
 	hashpassword, err := middlewares.HashPassword(data.Password)
 	if err != nil {
-		return err
+		return c.JSON(err)
 	}
 	user := models.User{
 		Email:    data.Email,
@@ -116,9 +116,12 @@ func RegisterPost(c *fiber.Ctx) error {
 		Name:     data.Name,
 		Usertype: "user",
 	}
+
+	db.AutoMigrate(&models.User{})
+
 	err = db.Create(&user).Error
 	if err != nil {
-		return err
+		return c.JSON(err)
 	}
 	return c.JSON(true)
 }
@@ -163,4 +166,3 @@ func GetUserCart(c *fiber.Ctx) error {
 	}
 	return c.JSON(CBooks)
 }
-

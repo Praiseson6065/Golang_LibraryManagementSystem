@@ -43,6 +43,7 @@ func AddBooksPost(c *fiber.Ctx) error {
 			fmt.Println(err)
 			return err
 		}
+
 		db.AutoMigrate(&models.Book{})
 
 		db.Create(&Book)
@@ -323,6 +324,20 @@ func UserIssuedBooks(c *fiber.Ctx) error {
 
 	return c.JSON(books)
 }
+func UserApprovedBooks(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var ApprovBooks []models.Book
+	ApprovBooks, err = models.GetUserApprovedBooks(userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(ApprovBooks)
+
+}
+
 func LikeBook(c *fiber.Ctx) error {
 	db, err := database.DbGormConnect()
 	if err != nil {

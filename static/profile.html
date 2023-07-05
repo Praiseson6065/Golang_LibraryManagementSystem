@@ -24,6 +24,8 @@
         </div>
         
    </div>
+   <div class="userProfile">
+   
     <div class="profile-wrap">
         
         <div id="accname" class="">
@@ -32,21 +34,27 @@
         <div id ="accemail" class="">
             
         </div>
+        <div> <button>ChangePassword</button></div>
     
     </div>
-    <div class="request-wrap">
-        <span class="ReqHead">Request Books</span>
         <div class="userReq">
             <div class="userReq-Container"><label for="">Book Name</label><input id="RbookName" type="text"></div>
             <div class="userReq-Container"><label for="">ISBN</label><input id="RISBN" type="text"></div>
             <div><button id="RSubmit">Request</button></div>
-        </div>
+    </div>
+</div>
+    
+    
+    <div class="request-wrap">
+        <span class="ReqHead">Request Books</span>
+        
         <div id="RequestedBooks">
             <div id="HeadReqBook">
                 <div>BookName</div>
                 <div>ISBN</div>
                 <div>Status</div>
             </div>
+            <div class="gradLine"></div>
             <div id="bodyReqBook">
                 
 
@@ -56,12 +64,36 @@
         </div>
 
     </div>
-    <h3>Issued Books</h3>
-    <div id="issuedbooks">
+    <details>
+        <summary>Request To Issue Books</summary>
+        <div id="issuedbooks">
+        
+
+        </div>
+    </details>
+    <details>
+        <summary>Approved Books</summary>
+        <div id="approvedbooks">
         
         
 
+        </div>
+    </details>
+    <div class="footer d-flex">
+        <div><h4 class="heading-light heading-medium">Library Management</h4></div>
+        <div class="footer-items">
+            <div><a class="heading-light" href="/">Home</a></div>
+            <div><a class="heading-light" href="/searchbooks.html">SearchBooks</a></div>
+            <div><a class="heading-light" href="/profile.html">Profile</a></div>
+            
+            
+        </div>
+        
     </div>
+    
+    
+    
+
 
     <script src="/js/profile.js" type="module"></script>
     
