@@ -76,3 +76,25 @@ func UserMiddleWare(c *fiber.Ctx) error {
 
 	return c.SendString("Unauthorized")
 }
+func AdminMiddleware(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	claims, _ := CookieGetData(cookie, c)
+	if claims["usertype"] != "admin" {
+		return c.SendString("Un Authorized")
+	}
+	userID := claims["ID"]
+	Uid ,err:=strconv.Atoi(c.Params("userid"))
+	if err!=nil{
+		return c.JSON("Unauthorized")
+	}
+	s := fmt.Sprintf("%.0f",userID)
+	k,err:= strconv.Atoi(s)
+	if err!=nil{
+		return c.JSON("Unauthorized")
+	}
+	if  Uid==k {
+		return c.Next()
+	}
+
+	return c.JSON("Unauthorized")
+}

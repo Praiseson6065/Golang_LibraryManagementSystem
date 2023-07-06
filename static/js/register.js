@@ -33,7 +33,15 @@ submit.addEventListener("click",function(){
                 },5000)
             }
             else{
-                document.querySelector("main").innerText="Error";
+                if(data.ConstraintName ==="users_email_key")
+                {
+                    document.getElementById("error").innerText="Email Already Exists"
+                    setTimeout(()=>{
+                        window.location.reload()
+                    }
+                        ,3000)
+                }
+               
             }
         });
     }

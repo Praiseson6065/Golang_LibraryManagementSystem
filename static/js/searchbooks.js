@@ -25,7 +25,6 @@ function DisplayBook(data){
         <div class="bookDetails">
         <div class="bookName">${data['Books'][i]['BookName']}</div>
         <div class="bookAuthor">by ${(data['Books'][i]['Author']).replace(/[{}"]/g,'')}</div>
-        <div class="bookAuthor">Pub by <br>${(data['Books'][i]['Publisher']).replace(/[{}"]/g,'')}</div>
         <div class="bookCritics">
             <div class="bookDes"><div class="bookD">${data['Books'][i]['Pages']}</div><div  class="bookDName">Pages</div></div>
             <div class="bookDes"><div class="bookD">${data['Books'][i]['votes']}</div ><div class="bookDName">Likes</div></div>

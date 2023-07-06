@@ -26,17 +26,10 @@ function GetUserCart(){
                 <div class="bookHolder">
                 <div class="bookImg"><a href="/book.html?BookC=${data[i]["BookCode"]}"><img class="bookImgCP" src="/img/books/${data[i]['ImgPath']}"></a></div>
                 <div class="bookDetails">
-                <div class="bookName">Title : ${data[i]['BookName']}</div>
-                <div class="bookPublisher">Publisher : ${data[i]['Publisher']}</div>
-                <div class="bookAuthor">Author : ${data[i]['Author']}</div>
-                <div class="bookISBN">ISBN : ${data[i]['ISBN']}</div>
-                <div class="bookPages">Pages : ${data[i]['Pages']}</div>
-                <div class="bookTag">Tags : ${(data[i]['Taglines']).replace(/[{}"]/g,'')}</div>
-    
-                </div>
+                <div class="bookName">${data[i]['BookName']}</div>
+                <div class="bookAuthor">by ${data[i]['Author']}</div>
+               
                 <div> <button class="rmBookbtn" data-bookvalue="${data[i]['BookId']}">Remove From Cart</button></div>
-    
-                
                 </div>`;
                     document.getElementById("cart-bookswrap").innerHTML+=BookDetails;
                 }
@@ -118,18 +111,19 @@ function GetUserCart(){
                 
             }
             let RmBtns = document.querySelectorAll(".rmBookbtn")
-                    
+            
             for (var k = 0; k < RmBtns.length; k++) {
-                RmBtns[k].addEventListener('click', function(event) {
-                console.log(event);
-                let bookId = event.target.dataset.bookvalue;
-                fetch(`/api/cart/${Decoded.payload["ID"]}/${bookId}`, { method: 'DELETE' })
-                    .then(response => response.json())
-                    .then(data => {
-                    console.log(data);
-                    window.location.reload();
-                    });
-                });
+                
+                RmBtns[k].addEventListener('click',function (event) {
+                    
+                    let bookId = event.target.dataset.bookvalue;
+                    fetch(`/user/cart/${Decoded.payload["ID"]}/${bookId}`, { method: 'DELETE' })
+                        .then(response => response.json())
+                        .then(data => {
+                       
+                        window.location.reload();
+                        });
+                } );
             }
             
         });

@@ -26,7 +26,7 @@ type Log struct {
 type User struct {
 	gorm.Model
 	ID            int    `json:"Id" gorm:"auto_increment:true;primary_key;unique"`
-	UserId        string `json:"UserId" gorm:"unique"`
+	UserId        string `json:"UserId"`
 	Name          string `json:"Name"`
 	Email         string `json:"Email" gorm:"unique"`
 	Password      string `json:"Password"`
@@ -50,10 +50,13 @@ type UserData struct {
 	Exp   int
 }
 type BookReviews struct {
-	UserId int    `json:"UserId"`
-	BookId int    `json:"BookId"`
-	Review string `json:"Review"`
+	gorm.Model
+	UserId   int    `json:"UserId"`
+	UserName string `json:"UserName"`
+	BookId   int    `json:"BookId"`
+	Review   string `json:"Review"`
 }
+
 type Book struct {
 	gorm.Model
 	ID           int    `json:"BookId" gorm:"auto_increment:true;primary_key;unique"`
@@ -440,4 +443,40 @@ func GetUserApprovedBooks(userid int) ([]Book, error) {
 	sqlDB.Close()
 	return AppRovBooks, nil
 
+}
+func GetReviewByUserBookId(UserId, BookId int) (BookReviews, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return BookReviews{}, err
+	}
+
+	var bkRvw BookReviews
+
+	err = db.Where("user_id=? and book_id=?", UserId, BookId).Find(&bkRvw).Error
+	if err != nil {
+		return BookReviews{}, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return bkRvw, nil
+}
+func GetReviewsByBookId(BookId int) ([]BookReviews, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+	var BookReviews []BookReviews
+	err = db.Where("book_id=?", BookId).Find(&BookReviews).Error
+	if err != nil {
+		return nil, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return BookReviews, nil
 }

@@ -1,6 +1,6 @@
 h3{
   font-size: 24px;
-  margin:.8rem 5rem;  
+  margin:.8rem 8rem;  
 }
 #book-wrap{
     margin-top: 4rem;
@@ -8,11 +8,22 @@ h3{
     justify-content: space-between;
     padding: 1rem 8rem;
 }
-.bookCoverPage{
+#UsRv{
+  border: 2px solid rgb(53, 110, 253);
+  border-radius: 10px;
+  margin-top:1rem ;
+  padding: 1rem;
+}
+#UsRv:focus{
+  border: 2px solid rgb(53, 110, 253);
+  outline: 2px solid rgba(53, 110, 253, 0.437);
+}
+.bookCoverPage{   
   max-width: 200px;
   max-height: 280px;
     border-radius: 16px;
-    box-shadow: 2px  4px 12px rgba(0,0,0,.08);
+    box-shadow: 2px  4px 8px rgba(0,0,0,.08);
+    border: 2px solid white ;
 }
 .BookDetails{
     display: flex;
@@ -33,7 +44,14 @@ input[type="submit"]{
     box-sizing: content-box;
     padding: .4rem 1rem ;
 }
-
+#submitRv{
+  background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    box-sizing: content-box;
+    padding: .4rem .8rem ;
+}
 .container input[type="checkbox"] {
     position: absolute;
     opacity: 0;
@@ -73,6 +91,69 @@ input[type="submit"]{
     justify-content: space-around;
     row-gap: 4rem;
     margin-bottom: 2rem;
+  }
+  details{
+    padding: 1rem 8rem;
+    
+  }
+  summary{
+    font-size: 24px;
+  }
+  #BookReviews{
+    padding: 1rem 2rem;
+    display: grid;
+    grid-template-columns: 48% 48%;
+    gap:2rem; 
+  }
+  .UserName{
+    color: black;
+  }
+  .BookReviewBody > div:first-child{
+    color: #a6a6a6;
+  }
+  .BookReviewBody > div:nth-child(2){
+    color: #a6a6a6; 
+    display: flex;
+    align-items: center;
+  }
+  .UserReview{
+    display: inline-block;
+    width: 60%;
+    padding-top: .3rem ;
+    padding-left: .3rem;
+    padding-bottom: .3rem;
+    color: black;
+  }
+  .BookReviewBody{
+    background-color: #ffffffa5;
+    padding: 2rem;
+    border-radius: 10px ;
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.08) ;
+    display: flex;
+    flex-direction: column;
+    gap :1rem;
+    border: 2px solid white;
+    background-image: url('data:image/svg+xml,<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 590" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23abb8c3"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,200 0,200 C 54.247790868924895,224.64414580265094 108.49558173784979,249.28829160530188 177,265 C 245.5044182621502,280.7117083946981 328.2654639175257,287.4909793814433 384,267 C 439.7345360824743,246.5090206185567 468.4425625920471,198.74779086892488 516,163 C 563.5574374079529,127.25220913107512 629.9642857142858,103.51785714285714 700,126 C 770.0357142857142,148.48214285714286 843.7002945508099,217.18078055964656 914,251 C 984.2997054491901,284.81921944035344 1051.2345360824743,283.7590206185567 1113,266 C 1174.7654639175257,248.2409793814433 1231.361561119293,213.78313696612668 1285,200 C 1338.638438880707,186.21686303387332 1389.3192194403537,193.10843151693666 1440,200 C 1440,200 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-0"></path><defs><linearGradient id="gradient" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="5%" stop-color="%23abb8c3"></stop><stop offset="95%" stop-color="%238ED1FC"></stop></linearGradient></defs><path d="M 0,600 C 0,600 0,400 0,400 C 41.78645066273933,376.2089469808542 83.57290132547865,352.41789396170844 150,363 C 216.42709867452135,373.58210603829156 307.49484536082474,418.53737113402053 377,446 C 446.50515463917526,473.46262886597947 494.44771723122244,483.43262150220914 557,459 C 619.5522827687776,434.56737849779086 696.7142857142858,375.73214285714283 746,347 C 795.2857142857142,318.26785714285717 816.6951399116347,319.6388070692194 875,345 C 933.3048600883653,370.3611929307806 1028.5051546391753,419.7126288659794 1099,413 C 1169.4948453608247,406.2873711340206 1215.2842415316643,343.51067746686306 1268,332 C 1320.7157584683357,320.48932253313694 1380.3578792341677,360.24466126656847 1440,400 C 1440,400 1440,600 1440,600 Z" stroke="none" stroke-width="0" fill="url(%23gradient)" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-1"></path></svg>');
+    background-repeat: no-repeat;
+    background-position-y: 60px ;
+    object-fit: cover !important;
+    background-size: cover;
+
+  }
+  #BtnDiv{
+    display: flex;
+    gap:1.6rem;
+
+  }
+
+  #EditRvw ,#UpdateRvw,#deletervw{
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    box-sizing: content-box;
+    padding: .4rem .8rem ;
+    pointer-events: all;
   }
   .bookHolder{
     display: grid;
@@ -189,4 +270,21 @@ input[type="submit"]{
   
   height: 196px;
 
+}
+.reviewEntryOutline{
+  /* border: ; */
+  border-radius: 4px;
+  border:2px solid rgb(53, 110, 253) ;
+  
+}
+.reviewEntryOutline:focus{
+  outline: 2px solid rgba(53, 110, 253, 0.412);
+  
+}
+#BookReviewEntry
+{
+  display: flex;
+  flex-direction: column;
+  gap : 1rem;
+  
 }

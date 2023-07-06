@@ -2,6 +2,10 @@ main{
     
    z-index: -1;
 }
+body{
+    pointer-events: none;
+}
+
 .tagline{
     font-size: 1.8rem;
     font-weight: 500;
@@ -36,6 +40,7 @@ main{
     border-radius: 10px ;
     margin-left: auto;
     margin-right: auto;
+    pointer-events: all;
 }
 #searchbar{
     line-height: 1.6;
@@ -98,7 +103,7 @@ p{
     position: relative;
     top:-120px;
     left: 15px;
-    z-index: 2 ;
+    z-index: 0 ;
     display: inline-block;
 
 }
@@ -107,6 +112,7 @@ p{
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 6rem;
+    
    
 }
 .bookimg{
@@ -125,10 +131,12 @@ p{
 .bookholder{
     display: flex;
     padding: 3rem 0rem;
+    pointer-events: all;
+    
     
 }
 .bookimga{
-    
+    z-index: 10;
     cursor: pointer;
 }
 .bookholder:hover .BookCount{

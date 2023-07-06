@@ -179,14 +179,151 @@ fetch(`/api/bookc/${bookId}`)
                     
             });
         }
+
         cartstatus();   
         bookIssueChk();
         bookApproved();
+        async function BookReviewed(){
+            
+            var flag=0;
+            await fetch(`/api/reviews/${bId}`)
+            .then(response=>response.json())
+            .then(data=>{
+                var ans =0;
+                document.getElementById("BookReviews").innerHTML="";
+                for(let i=0;i<data.length;i++){
+
+                    ans = data[i].UserId === decoded.payload["ID"] ? 1 :0
+                    if(ans===1){
+                        flag =1;
+                    }
+                    var review=`<div class="BookReviewBody">
+                    <div>Reviewed by <span class="UserName">${data[i].UserName}</span></div>
+                    <div>Review :    <div ${ans===1 ? `data-user=${data[i].UserId}` :""} class="UserReview" ${ans===1 ? `id="UserRevwed"`:""} >${data[i].Review}</div></div>
+                    ${ans===1 ? `<div id="BtnDiv"><button id="EditRvw">Edit Review</button><button id="deletervw">Delete Review</button></div>`:`` }
+                    </div>`
+                    document.getElementById("BookReviews").innerHTML+=review;
+                }
+                console.log("BookReviewed")
+                if(flag===1){
+                    var EditRvw = document.getElementById("EditRvw")
+                    var uRvw= document.getElementById("UserRevwed")
+                    var deletervw = document.getElementById("deletervw")
+                    deletervw.addEventListener("click",function(){
+                        fetch(`/user/delbookreview/${decoded.payload["ID"]}/${bId}`,{method:"delete"})
+                        .then(response=>response.json())
+                        .then(data=>{
+                            if(data===true)
+                            {
+                                BookReviewed();
+                            }
+                        })
+                        
+
+                    });
+                    EditRvw.addEventListener("click",function(){
+                           
+                        var preRvw = document.getElementById("UserRevwed").innerText;
+                        uRvw.contentEditable=true;
+                        uRvw.classList.add("reviewEntryOutline");
+                        document.getElementById("BtnDiv").innerHTML+=`<button id="UpdateRvw">Update Review</button>`
+                        var updateRvw= document.getElementById("UpdateRvw")
+                        function windowclick(event) {
+                            if(event.target!=uRvw && event.target!=updateRvw && event.target !=EditRvw && event.target!=deletervw &&event.target!=UsRv)
+                            {
+                                console.log(event);
+                                uRvw.contentEditable=false;
+                                uRvw.classList.remove("reviewEntryOutline");
+                                updateRvw.remove();
+                                BookReviewed(); 
+                            }
+    
+                        }
+                        
+                        // function hasEventListeners() {
+                        //     const listeners = window.eventListeners;
+                        //     return listeners !== undefined && listeners.length > 0;
+                        //   }
+                          
+                        
+                        window.onclick = windowclick
+                        
+                        updateRvw.addEventListener("click",async function(){
+                            if(preRvw===uRvw.innerText){
+                                alert("Review Not Changed")
+                            }
+                            else{
+                                const headers = {
+                                    "Content-Type": "application/json",
+                                  };
+                                var json={
+                                    "BookId" : bId,
+                                    "Review" :uRvw.innerText,
+                                }
+                                await fetch(`/user/updatereview/${decoded.payload["ID"]}`,{method:"put",headers,body:JSON.stringify(json)})
+                                    .then(response=>response.json())
+                                    .then(data=>{
+                                        alert("Review Updated");
+                                        BookReviewed()
+                                    })
+                            }
+                        })
+                    })
+                    
+
+                }
+                
+            })
+            
+            BookRviewEntry(flag)
+            console.log("Bokj");
+        }
+        BookReviewed()
+        
+        function BookRviewEntry(ans){
+            if (ans===0){
+                document.getElementById("BookReviewEntry").innerHTML=`<textarea id="UsRv" placeholder="Write a Review"></textarea><div><button id="submitRv">Submit</button></div>`
+                var SubmitRv = document.getElementById("submitRv")
+                SubmitRv.addEventListener("click",function(){
+                    var Review = document.getElementById("UsRv")
+                    if(Review.value===""){
+                        alert("Empty Review")
+                    }
+                    else{
+                        var json={
+                            "BookId" : bId,
+                            "Review" :Review.value,
+                        }
+                        
+                        const headers = {
+                            "Content-Type": "application/json",
+                          };
+                        fetch(`/user/bookreview/${decoded.payload['ID']}`,{method:"post",headers,body:JSON.stringify(json)})
+                            .then(response=>response.json())
+                            .then(data=>{
+                                if(data===true)
+                                {
+                                    BookReviewed();
+                                    
+                                }
+                            })
+                    }
+                })
+            }
+            else{
+                document.getElementById("BookReviewEntry").innerHTML="";
+            }
+            
+            
+        }
+        
         
         
         
 
 });
+
+
 
 
 

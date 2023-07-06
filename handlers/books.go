@@ -450,3 +450,16 @@ func IsBookIssued(c *fiber.Ctx) error {
 	}
 	return c.JSON(false)
 }
+func BookReviewsByBookId(c *fiber.Ctx)error{
+	BookId,err:= strconv.Atoi(c.Params("bookid"))
+	if err!=nil{
+		return c.JSON(err)
+	}
+	var BookReviews []models.BookReviews
+	BookReviews,err= models.GetReviewsByBookId(BookId)
+	if err!=nil{
+		return c.JSON(err)
+	}
+	return c.JSON(BookReviews)
+
+}

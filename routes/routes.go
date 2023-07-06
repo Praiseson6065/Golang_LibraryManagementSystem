@@ -11,8 +11,8 @@ func Setuproutes(app *fiber.App) {
 
 	jwt := middlewares.NewAuthMiddleware(config.Secret)
 
-	//user
-	app.Get("/profile", handlers.ProfilePage)
+	
+	
 
 	app.Get("/protected", jwt, handlers.Protected)
 	//authorization
@@ -22,6 +22,9 @@ func Setuproutes(app *fiber.App) {
 	app.Get("/regsuccess", handlers.RegisterSuccessful)
 	app.Get("/logout", handlers.Logout)
 
+	//testing
+
+	
 	//api
 	api := app.Group("/api")
 
@@ -30,10 +33,16 @@ func Setuproutes(app *fiber.App) {
 	api.Post("/searchbook", handlers.SearchBooks)
 	api.Get("/book/:id", handlers.GetBook)
 	api.Get("/bookc/:bc", handlers.GetBookByCode)
-	api.Put("/updatebook/:id", handlers.UpdateBook)
+	api.Get("/reviews/:bookid",handlers.BookReviewsByBookId)
 
-	//cart
+	
 	user := app.Group("/user")
+	//userreview
+	user.Post("/bookreview/:userid",middlewares.UserMiddleWare,handlers.BookReviewByUser)
+	user.Delete("/delbookreview/:userid/:bookid",middlewares.UserMiddleWare,handlers.DeleteReviewByUser)
+	user.Put("/updatereview/:userid",middlewares.UserMiddleWare,handlers.UpdateReviewByUser)
+	//usercart
+	user.Get("/profile",middlewares.UserMiddleWare, handlers.ProfilePage)
 	user.Post("/cart/:userid/:bookid",middlewares.UserMiddleWare, handlers.AddtoCart)
 	user.Get("/getusercart/:userid",middlewares.UserMiddleWare, handlers.GetUserCart)
 	user.Delete("/cart/:userid/:bookid",middlewares.UserMiddleWare, handlers.RemoveFromCart)
@@ -58,10 +67,11 @@ func Setuproutes(app *fiber.App) {
 		if claims["usertype"] != "admin" {
 			return c.SendString("Un Authorized")
 		}
+		
 
 		return c.Next()
 	})
-
+	admin.Put("/updatebook/:id", handlers.UpdateBook)
 	admin.Get("/users", handlers.Userslist)
 	admin.Post("/addadmin", handlers.AddAdmin)
 	admin.Get("/reqbooks", handlers.ReqBook)

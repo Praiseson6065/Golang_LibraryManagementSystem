@@ -99,7 +99,7 @@ form.addEventListener('submit', (event) => {
   formData.append('Taglines', taglines);
   formData.append('Quantity', quantity);
   formData.append('ImgPath', imageFile);
-  fetch(`/api/updatebook/${bookId}`, {
+  fetch(`/admin/updatebook/${bookId}`, {
     method: 'PUT',
     body: formData,
   })

@@ -21,9 +21,12 @@ fetch(`/api/Getbooks/`)
     })
 var searchbtn = document.querySelector(".searchbtn");
 
+console.log(searchbtn)  
 
 searchbtn.addEventListener("click",function(){
+    
     var searchBar= document.getElementById("searchbar");
+    console.log(searchBar.value)
     if(searchBar.value===""){
         alert("Empty Field");
     }

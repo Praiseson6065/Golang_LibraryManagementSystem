@@ -5,7 +5,7 @@ userStatus(token);
 if(decoded.payload["usertype"]==="admin"){
   window.location="/admin.html"
 }
-var url="/profile";
+var url="/user/profile";
 fetch(url)
     .then(response => response.text())
     .then(data=>{

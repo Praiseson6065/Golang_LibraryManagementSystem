@@ -4,7 +4,7 @@
     display: flex;  
     padding: 2rem;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     justify-items: center;
     font-size: 2rem !important;
     border-radius: 16px;
