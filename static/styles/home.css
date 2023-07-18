@@ -4,6 +4,7 @@ main{
 }
 body{
     pointer-events: none;
+    
 }
 
 .tagline{
@@ -18,7 +19,11 @@ body{
     box-sizing: border-box;
     padding: 5rem 5rem;
     flex-direction: column;
+
     gap : 30px;
+    background-image: url('/img/Frame 3.svg');
+    background-size: cover;
+    
     background-image: linear-gradient(180deg, rgba(251, 251, 251, 0) 0.05%, #DEEBFF 99.95%);  
 }
 .wrap-search{
@@ -28,7 +33,9 @@ body{
     padding: 2rem 8rem;
     flex-direction: column ;
     height: 50vh;
-    
+    /* background-image: url('/img/Frame 3.svg');
+    background-size: cover;
+     */
 }
 .searchholder{
     padding: .75rem 1.75rem;

@@ -52,7 +52,7 @@ a{
     text-align: center;
 }
 .footer{
-   
+    
     display: flex;
     background: rgb(0,189,255);
     background: radial-gradient(circle, rgba(0, 187, 255, 0.4) 0%, rgba(9,9,121,0) 70%);

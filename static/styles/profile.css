@@ -50,7 +50,7 @@ details{
 #approvedbooks,#issuedbooks{
     display: grid;
     padding: 1rem 0rem;
-    gap: 20px;
+    row-gap: 4rem;
     justify-content: space-between;
     grid-template-columns: 48% 48% ;
     margin-bottom: 2rem;

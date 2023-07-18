@@ -1,5 +1,6 @@
 import{token,DecodedToken,userStatus,UserPage} from "./userstatus.js";
 userStatus(token);
+console.log(token);
 var decoded=DecodedToken(token);
 const queryString = window.location.search;
 var url  = new URLSearchParams(queryString);
@@ -73,63 +74,60 @@ fetch(`/api/bookc/${bookId}`)
         document.getElementById("book-wrap").innerHTML=book;
         if(token!=undefined && decoded.payload["usertype"]==="admin"){
             document.getElementById("Bookchk").innerHTML+=`<a href="/updatebook.html?BId=${data['BookId']}"><button id="editbook" >Edit Book</button></a>`;
-        }
+        }   
         if(data['Quantity']===0){
             document.getElementById("addtocart").innerText="Out of Stock";
             document.getElementById("addtocart").classList.add("bookoutofstock");
             document.getElementById("addtocart").disabled=true;
 
         }
-        function cartstatus(){
-            fetch(`/user/cartbkchk/${decoded.payload["ID"]}/${bId}`)
+        async function CartLimit(){
+            await fetch(`/user/getusercart/+${decoded.payload["ID"]}`)
                 .then(response=>response.json())
                 .then(data=>{
-                    if(data===true)
-                    {
-                        document.getElementById("addtocart").innerText="AddedToCart";
+                    if(data.length>=5){
+                        document.getElementById("addtocart").innerText="Cart Limit Reached";
                         document.getElementById("addtocart").classList.add("bookoutofstock");
                         document.getElementById("addtocart").disabled=true;
-                        
                     }
-                });
+                })
         }
-        function bookIssueChk(){
+        async function UserBookRelation(){
+            
             if(token!=undefined){
-                fetch(`/user/isbookissued/${decoded.payload["ID"]}/${bId}`)
-                    .then(response=>response.json())
-                    .then(data=>{
-                        if(data===true)
-                        {
-                            document.getElementById("addtocart").innerText="Already Book Issued   ";
-                            document.getElementById("addtocart").classList.add("bookoutofstock");
-                            document.getElementById("addtocart").disabled=true;
-                        }
-                    });
+                CartLimit();    
+                await   fetch(`/user/userbookdetails/${decoded.payload["ID"]}/${bId}`)
+                .then(response=>response.json())
+                .then(data=>{
+                    console.log(data)
+                    if(data.Approve==true){
+                        document.getElementById("addtocart").innerText="Already Book Taken";
+                        document.getElementById("addtocart").classList.add("bookoutofstock");
+                        document.getElementById("addtocart").disabled=true;
+                    }
+                    else if(data.Issued==true){
+                        document.getElementById("addtocart").innerText="Already Requested";
+                        document.getElementById("addtocart").classList.add("bookoutofstock");
+                        document.getElementById("addtocart").disabled=true;
+                    }
+                    else if(data.Cart==true){
+                        document.getElementById("addtocart").innerText="Added to Cart";
+                        document.getElementById("addtocart").classList.add("bookoutofstock");
+                        document.getElementById("addtocart").disabled=true;
+                    }
+                    
+                })
                 
             }
         }
-        function bookApproved(){
-            if(token!=undefined){
-                fetch(`/user/approvbooks/${decoded.payload["ID"]}`)
-                    .then(response=>response.json())
-                    .then(data=>{
-                        for(let i=0;i<data.length;i++){
-                            if (data[i].BookId===bId){
-
-                                document.getElementById("addtocart").innerText="Already Book Taken";
-                                document.getElementById("addtocart").classList.add("bookoutofstock");
-                                document.getElementById("addtocart").disabled=true;
-                                return;
-                            }
-                            continue;
-                        }
-                    })
-            }
-        }
+        UserBookRelation();
+        
+    
         var tags = data['Taglines'].split(",");
         var likebtn=document.getElementById("likebtn");
         function isliked(){
-            fetch(`/user/isliked/${decoded.payload["ID"]}/${data['BookId']}`)
+            if(token!=undefined){
+                fetch(`/user/isliked/${decoded.payload["ID"]}/${data['BookId']}`)
                     .then(response=> response.json())
                     .then(data=>{
                         if(data===true)
@@ -143,10 +141,14 @@ fetch(`/api/bookc/${bookId}`)
                         }
 
                     });
+
+            }
+            
         }
         isliked();
         likebtn.addEventListener("click",function(event){
-            fetch(`/user/like/${decoded.payload["ID"]}/${data['BookId']}`,{method:"POST"})
+            if(token!=undefined){
+                fetch(`/user/like/${decoded.payload["ID"]}/${data['BookId']}`,{method:"POST"})
                 .then(response=> response.json())
                 .then(data=> {
                         console.log(data);
@@ -156,12 +158,18 @@ fetch(`/api/bookc/${bookId}`)
                             .then(data=>{
                                document.getElementById("likecnt").innerText=`${data['votes']}`;
                             })
-                });
+                })
+            }
+            else{
+                alert("Please Login");
+            }
+            
         })
         suggestedBooks(tags);
         var AddtoCart=document.getElementById("addtocart");
         if(AddtoCart!=null){
             AddtoCart.addEventListener("click",function(){
+                console.log(token)
                 if(token===undefined){
                     alert("Please Login");
                 }
@@ -173,16 +181,12 @@ fetch(`/api/bookc/${bookId}`)
                                 document.getElementById("cartstatus").innerText=data["msg"];
                                 cartstatus();
 
-                        });
-                    
+                        });   
                 }
-                    
             });
         }
-
-        cartstatus();   
-        bookIssueChk();
-        bookApproved();
+        
+           
         async function BookReviewed(){
             
             var flag=0;

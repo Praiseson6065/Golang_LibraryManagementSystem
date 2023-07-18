@@ -79,7 +79,9 @@ function GetUserCart(){
                 var span = document.querySelector(".close");
                 var CheckoutCartbtn = document.getElementById("CheckoutBtn");
                 CheckoutCartbtn.addEventListener("click",function(){
-                    modal.style.display="block";    
+                    modal.style.display="block";  
+                    document.querySelector(".navbar").style.zIndex=-999;
+                    document.querySelector(".footer").style.zIndex=-990;  
                 })
                 span.onclick =  function (){
                     modal.style.display="none";
@@ -97,6 +99,7 @@ function GetUserCart(){
                         .then(data=>{
                             if(data===true)
                             {
+                                
                                 modalcontent.innerHTML="<h3>Books Issued</h3>"  ;
                                 setTimeout(function(){
                                     window.location.reload();

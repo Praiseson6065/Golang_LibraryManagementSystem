@@ -36,6 +36,11 @@ type User struct {
 	IssuedBooks   []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books;"`
 	ApprovedBooks []Book `json:"ApprovedBooks" gorm:"many2many:user_approved_books;"`
 }
+type UserBookDetails struct {
+	Approve bool `json:"Approve"`
+	Cart    bool `json:"Cart"`
+	Issued  bool `json:"Issued"`
+}
 type UserRequestedBooks struct {
 	UserId        int    `json:"UserId"`
 	BookName      string `json:"RequestedBooks"`

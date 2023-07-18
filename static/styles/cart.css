@@ -64,7 +64,7 @@ button{
 .modal{
     display: none;
     position: fixed;
-    z-index:5 ;
+    z-index: 1000 !important; 
     padding-top: 2rem;
     top: 0;
     overflow: auto;
@@ -75,6 +75,7 @@ button{
     background-color: rgba(0,0,0,0.4);
 }
 .modalcontent{
+    
     background-color: white;
     padding: 2rem;
     width: 80%;
@@ -101,8 +102,9 @@ button{
 }
 .ModalBookWrap{
    display: grid;
-   grid-template-columns: 50% 50%;
+   grid-template-columns: 30% 30% 30%;
    justify-content: space-around;
+   gap :1rem;
 }
 .ModalBookHolder{
     display: flex;

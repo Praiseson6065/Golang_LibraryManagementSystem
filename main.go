@@ -9,7 +9,6 @@ import (
 
 func main() {
 	engine := html.New("./static", ".html")
-
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
