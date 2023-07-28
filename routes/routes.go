@@ -46,6 +46,7 @@ func Setuproutes(app *fiber.App) {
 	//user
 	user.Get("/issuedbooks/:userid", middlewares.UserMiddleWare, handlers.UserIssuedBooks)
 	user.Get("/isbookIssued/:userid/:bookid", middlewares.UserMiddleWare, handlers.IsBookIssued)
+	user.Delete("/issuebook/:userid/:bookid",middlewares.UserMiddleWare,handlers.UserRemoveIssueBook)
 	user.Post("/returnbook/:userid/:bookid", middlewares.UserMiddleWare, handlers.ReturnBook)
 	user.Post("/like/:userid/:bookid", middlewares.UserMiddleWare, handlers.LikeBook)
 	user.Get("/isliked/:userid/:bookid", middlewares.UserMiddleWare, handlers.IsLiked)

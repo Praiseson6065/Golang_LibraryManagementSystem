@@ -97,6 +97,7 @@ fetch(`/user/userreqbook/${decoded.payload["ID"]}`)
           <div>${data[i].RequestedBooks}</div>
           <div>${data[i].ISBN}</div>
           <div>${data[i].Status}</div>
+
         </div>
         <div class="gradLine"></div>
         `;
@@ -124,12 +125,26 @@ fetch(`/user/issuedbooks/${decoded.payload["ID"]}`)
             <div class="bookDes"><div class="bookD">${data[i]['Pages']}</div><div  class="bookDName">Pages</div></div>
             <div class="bookDes"><div class="bookD">${data[i]['votes']}</div ><div class="bookDName">Likes</div></div>
         </div>
+        <button data-bookid=${data[i]['BookId']} class="removeissuereqbook">Remove</button>
         
     </div>`;
         
         document.getElementById("issuedbooks").innerHTML+=Issuedbook;
        
       }
+
+      const removeRequestBooks=document.querySelectorAll(".removeissuereqbook")
+      removeRequestBooks.forEach( btn => { btn.addEventListener("click",function (eve){
+          fetch(`/user/issuebook/${decoded.payload["ID"]}/${eve.target.dataset.bookid}`,{method:"Delete"})
+            .then(response => response.json())
+            .then(data=>{
+              if(data===true)
+              {
+                alert("Book Removed");
+                window.location.reload();
+              }
+            })
+      })})
 
     }
     else{

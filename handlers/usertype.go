@@ -190,3 +190,18 @@ func UserBookDetails(c *fiber.Ctx) error {
 
 	return c.JSON(UserBookDetails)
 }	
+func UserRemoveIssueBook(c *fiber.Ctx) error{
+	userid,err:= strconv.Atoi(c.Params("userid"))
+	if err!=nil{
+		return err;
+	}
+	bookid,err:= strconv.Atoi(c.Params("bookid"))
+	if err!=nil{
+		return err;
+	}
+	_,err= models.RemoveIssueBookByUser(userid,bookid)
+	if err!=nil{
+		return err
+	}
+	return c.JSON(true)
+}
