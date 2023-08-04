@@ -15,7 +15,7 @@ function ExistingData(){
     var url = "http://127.0.0.1:3000/api/book/";
     if(IdValue.value==='')
     {
-        var divFields =["BookId","BookName","ISBN","Author","Publisher","Pages","Taglines","Quantity"];
+        var divFields =["BookId","BookName","ISBN","Author","Price","Publisher","Pages","Taglines","Quantity"];
                 for (let i in divFields){
                     document.getElementById(divFields[i].toString()).innerText = "";
                 
@@ -85,7 +85,9 @@ form.addEventListener('submit', (event) => {
   const isbn = document.querySelector('input[name="ISBN"]').value;
   const pages = document.querySelector('input[name="Pages"]').value;
   const publisher = document.querySelector('input[name="Publisher"]').value;
+ 
   const author = document.querySelector('input[name="Author"]').value;
+  const price = document.querySelector('input[name="Price"]').value;
   const taglines = document.querySelector('input[name="Taglines"]').value;
   const quantity = document.querySelector('input[name="Quantity"]').value
   const imageFile = document.querySelector('input[name="ImgPath"]').files[0];
@@ -98,6 +100,7 @@ form.addEventListener('submit', (event) => {
   formData.append('Author', author);
   formData.append('Taglines', taglines);
   formData.append('Quantity', quantity);
+  formData.append('Price', price)
   formData.append('ImgPath', imageFile);
   fetch(`/admin/updatebook/${bookId}`, {
     method: 'PUT',

@@ -5,6 +5,7 @@ import (
 
 	"strconv"
 
+	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
@@ -12,6 +13,7 @@ import (
 )
 
 func ProfilePage(c *fiber.Ctx) error {
+	fmt.Println(config.EnvConfigs.SecretKey)
 	cookie := c.Cookies("jwt")
 	claims, err := middlewares.CookieGetData(cookie, c)
 
@@ -156,52 +158,114 @@ func UserBookDetails(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	ApprovedBooks,err:= models.GetUserApprovedBooks(userid)
+	ApprovedBooks, err := models.GetUserApprovedBooks(userid)
 	if err != nil {
 		return err
 	}
-	for _,i:= range ApprovedBooks{
-		if(i.ID==bookId){ 
-			UserBookDetails.Approve=true
+	for _, i := range ApprovedBooks {
+		if i.ID == bookId {
+			UserBookDetails.Approve = true
 			break
 		}
 	}
-	IssuedBooks,err:= models.GetIssuedBooks(userid)
+	IssuedBooks, err := models.GetIssuedBooks(userid)
 	if err != nil {
 		return err
 	}
-	for _,i:= range IssuedBooks{
-		if(i.ID==bookId){ 
-			UserBookDetails.Issued=true
+	for _, i := range IssuedBooks {
+		if i.ID == bookId {
+			UserBookDetails.Issued = true
 			break
 		}
 	}
-	Cartbooks,err:= models.GetCartBooksByUserID(userid)
+	Cartbooks, err := models.GetCartBooksByUserID(userid)
 	if err != nil {
 		return err
 	}
-	for _,i:= range Cartbooks{
-		if(i.ID==bookId){ 
-			UserBookDetails.Cart=true
+	for _, i := range Cartbooks {
+		if i.ID == bookId {
+			UserBookDetails.Cart = true
 			break
 		}
 	}
-
 
 	return c.JSON(UserBookDetails)
-}	
-func UserRemoveIssueBook(c *fiber.Ctx) error{
-	userid,err:= strconv.Atoi(c.Params("userid"))
-	if err!=nil{
-		return err;
+}
+func UserRemoveIssueBook(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
 	}
-	bookid,err:= strconv.Atoi(c.Params("bookid"))
-	if err!=nil{
-		return err;
+	bookid, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
 	}
-	_,err= models.RemoveIssueBookByUser(userid,bookid)
-	if err!=nil{
+	_, err = models.RemoveIssueBookByUser(userid, bookid)
+	if err != nil {
 		return err
 	}
 	return c.JSON(true)
+}
+func GetUserCart(c *fiber.Ctx) error {
+	Userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var CBooks []models.Book
+	CBooks, err = models.GetCartBooksByUserID(Userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(CBooks)
+}
+func GetPurchaseCart(c *fiber.Ctx) error {
+	Userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var cartPurchaseBooks []models.CartPurchaseBooks
+	cartPurchaseBooks, err = models.UserPurchaseCart(Userid)
+	if err != nil {
+		return err
+	}
+	var PurchaseCart []models.PurchaseCart
+	for _, i := range cartPurchaseBooks {
+		book, err := models.GetBookById(i.Book)
+		if err != nil {
+			return err
+		}
+		var Pc models.PurchaseCart
+		Pc.Book = book
+		Pc.PurchaseDetails = i
+		PurchaseCart = append(PurchaseCart, Pc)
+	}
+	return c.JSON(PurchaseCart)
+
+}
+func RemoveFromUserPurCart(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	bookid, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+	_, err = models.RemovefromPurchaseCart(userid, bookid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(true)
+}
+func PurchaseBook(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	_, err = models.PurchaseBooks(userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(true)
+
 }

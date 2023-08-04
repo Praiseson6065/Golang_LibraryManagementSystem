@@ -1,5 +1,35 @@
 package config
 
-// The secret key used to sign the JWT, this must be a secure key and should not be stored in the code
-const Secret = "$2a$12$yBtPdhvUtLWjK6RHtVL69.quEwY.Vk5.M2Eavy29ASS0I1nm038jO"
-const CookieSecret = "$2a$12$yBtPdhvUtLWjK6RHtVL69.quEwY.Vk5.M2Eavy29ASS0I1nm038jO"
+import (
+	"log"
+
+	"github.com/spf13/viper"
+)
+
+type envConfigs struct {
+	SecretKey       string `mapstructure:"SECRET_KEY"`
+	G_CLIENT_ID     string `mapstructure:"G_CLIENT_ID"`
+	G_CLIENT_SECRET string `mapstructure:"G_CLIENT_SECRET"`
+	G_REDIRECT      string `mapstructure:"G_REDIRECT "`
+	STRIPE_key      string `mapstructure:"STRIPE_key"`
+	STRIPE_P        string `mapstructure:"STRIPE_P"`
+}
+
+var EnvConfigs *envConfigs
+
+func InitEnvConfigs() {
+	EnvConfigs = loadEnvVariables()
+}
+func loadEnvVariables() (config *envConfigs) {
+	viper.AddConfigPath(".")
+	viper.SetConfigName("app")
+	viper.SetConfigType("env")
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatal("Error reading env file", err)
+	}
+	if err := viper.Unmarshal(&config); err != nil {
+		log.Fatal(err)
+	}
+	return
+}

@@ -1,13 +1,22 @@
 package models
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
 	"gorm.io/gorm"
 )
+
+type Pi struct {
+	Id           string `json:"id"`
+	ClientSecret string `json:"client_secret"`
+}
 
 type LoginRequest struct {
 	Email    string `json:"email"`
@@ -22,20 +31,37 @@ type Log struct {
 	BookId    int
 	Operation string
 }
-
+type UserBookLog struct {
+	gorm.Model
+	Book      int
+	Operation string
+}
+type CartPurchaseBooks struct {
+	gorm.Model
+	Book     int
+	Quantity int
+}
+type PurchaseCart struct {
+	Book            Book
+	PurchaseDetails CartPurchaseBooks
+}
 type User struct {
 	gorm.Model
-	ID            int    `json:"Id" gorm:"auto_increment:true;primary_key;unique"`
-	UserId        string `json:"UserId"`
-	Name          string `json:"Name"`
-	Email         string `json:"Email" gorm:"unique"`
-	Password      string `json:"Password"`
-	Usertype      string `json:"Usertype"`
-	CartBooks     []Book `json:"CartBooks" gorm:"many2many:user_cart_books;"`
-	LikedBooks    []Book `json:"LikedBooks" gorm:"many2many:user_liked_books;"`
-	IssuedBooks   []Book `json:"IssuedBooks" gorm:"many2many:user_issued_books;"`
-	ApprovedBooks []Book `json:"ApprovedBooks" gorm:"many2many:user_approved_books;"`
+	ID                int                 `json:"Id" gorm:"auto_increment:true;primary_key;unique"`
+	UserId            string              `json:"UserId"`
+	Name              string              `json:"Name"`
+	Email             string              `json:"Email" gorm:"unique"`
+	Password          string              `json:"Password"`
+	Usertype          string              `json:"Usertype"`
+	CartBooks         []Book              `json:"CartBooks" gorm:"many2many:user_cart_books;"`
+	LikedBooks        []Book              `json:"LikedBooks" gorm:"many2many:user_liked_books;"`
+	IssuedBooks       []Book              `json:"IssuedBooks" gorm:"many2many:user_issued_books;"`
+	ApprovedBooks     []Book              `json:"ApprovedBooks" gorm:"many2many:user_approved_books;"`
+	UserLog           []UserBookLog       `json:"UserBookLog" gorm:"many2many:user_log_books;"`
+	CartPurchaseBooks []CartPurchaseBooks `json:"CartPurchase" gorm:"many2many:user_cartpurchase_books"`
+	PurchasedBooks    []CartPurchaseBooks `json:"PurchasedBooks" gorm:"many2many:user_purchased_books"`
 }
+
 type UserBookDetails struct {
 	Approve bool `json:"Approve"`
 	Cart    bool `json:"Cart"`
@@ -47,7 +73,6 @@ type UserRequestedBooks struct {
 	ISBN          string `json:"ISBN"`
 	RequestStatus bool   `json:"Status"`
 }
-
 type UserData struct {
 	ID    int
 	Name  string
@@ -61,21 +86,21 @@ type BookReviews struct {
 	BookId   int    `json:"BookId"`
 	Review   string `json:"Review"`
 }
-
 type Book struct {
 	gorm.Model
-	ID           int    `json:"BookId" gorm:"auto_increment:true;primary_key;unique"`
-	BookCode     string `json:"BookCode" gorm:"unique"`
-	BookName     string `json:"BookName"`
-	ISBN         string `json:"ISBN" gorm:"unique"`
-	Pages        int    `json:"Pages"`
-	Publisher    string `json:"Publisher"`
-	Quantity     int    `json:"Quantity"`
-	Author       string `json:"Author"`
-	Taglines     string `json:"Taglines"`
-	InsertedTime string `json:"InsertedTime"`
-	Votes        int    `json:"votes"`
-	ImgPath      string `json:"ImgPath"`
+	ID           int     `json:"BookId" gorm:"auto_increment:true;primary_key;unique"`
+	BookCode     string  `json:"BookCode" gorm:"unique"`
+	BookName     string  `json:"BookName"`
+	ISBN         string  `json:"ISBN" gorm:"unique"`
+	Pages        int     `json:"Pages"`
+	Publisher    string  `json:"Publisher"`
+	Quantity     int     `json:"Quantity"`
+	Author       string  `json:"Author"`
+	Price        float64 `json:"Price"`
+	Taglines     string  `json:"Taglines"`
+	InsertedTime string  `json:"InsertedTime"`
+	Votes        int     `json:"votes"`
+	ImgPath      string  `json:"ImgPath"`
 }
 type SearchBook struct {
 	SearchValue  string `json:"SearchValue"`
@@ -84,6 +109,49 @@ type SearchBook struct {
 type ApprovBooks struct {
 	Userid  int   `json:"UserId"`
 	BookIds []int `json:"BookId"`
+}
+
+type GooglePayload struct {
+	SUB           string `json:"sub"`
+	Name          string `json:"name"`
+	GivenName     string `json:"given_name"`
+	FamilyName    string `json:"family_name"`
+	Picture       string `json:"picture"`
+	Email         string `json:"email"`
+	EmailVerified bool   `json:"email_verified"`
+	Locale        string `json:"locale"`
+}
+
+func ConvertToken(accessToken string) (*GooglePayload, error) {
+
+	resp, httpErr := http.Get(fmt.Sprintf("https://www.googleapis.com/oauth2/v3/userinfo?access_token=%s", accessToken))
+	if httpErr != nil {
+		return nil, httpErr
+	}
+
+	defer resp.Body.Close()
+
+	respBody, bodyErr := ioutil.ReadAll(resp.Body)
+	if bodyErr != nil {
+		return nil, bodyErr
+	}
+
+	var body map[string]interface{}
+	if err := json.Unmarshal(respBody, &body); err != nil {
+		return nil, err
+	}
+
+	if body["error"] != nil {
+		return nil, errors.New("invalid token")
+	}
+
+	var data GooglePayload
+	err := json.Unmarshal(respBody, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return &data, nil
 }
 
 func GetBookByBookCode(BookCode string) (Book, error) {
@@ -484,4 +552,161 @@ func GetReviewsByBookId(BookId int) ([]BookReviews, error) {
 	}
 	sqlDB.Close()
 	return BookReviews, nil
+}
+func UserPurchaseCart(userid int) ([]CartPurchaseBooks, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+	var cartPurchaseBooks []CartPurchaseBooks
+	if err := db.Joins("JOIN user_cartpurchase_books ON user_cartpurchase_books.cart_purchase_books_id  = cart_purchase_books.id").
+		Where("user_cartpurchase_books.user_id = ?", userid).
+		Find(&cartPurchaseBooks).Error; err != nil {
+		return nil, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return cartPurchaseBooks, nil
+
+}
+func AddtoPurchaseCart(userid, bookid, quantity int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	UserD, err := GetUser(userid)
+	if err != nil {
+		return false, err
+	}
+	Book, err := GetBookById(bookid)
+	if err != nil {
+		return false, err
+	}
+	userCartP, err := UserPurchaseCart(userid)
+	if err != nil {
+		return false, err
+	}
+	ans := false
+	for _, i := range userCartP {
+		if i.Book == bookid {
+
+			ans = true
+			i.Quantity = i.Quantity + quantity
+			if i.Quantity > 0 {
+				db.Save(&i)
+			} else {
+				RemovefromPurchaseCart(userid, bookid)
+			}
+
+			break
+		}
+	}
+	if !ans {
+		CPurchaseBook := CartPurchaseBooks{
+			Book:     Book.ID,
+			Quantity: quantity,
+		}
+
+		UserD.CartPurchaseBooks = append(UserD.CartPurchaseBooks, CPurchaseBook)
+		db.Save(&UserD)
+
+	}
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return true, nil
+}
+func RemovefromPurchaseCart(userid, bookid int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+	userCartP, err := UserPurchaseCart(userid)
+	if err != nil {
+		return false, err
+	}
+	for _, i := range userCartP {
+		if i.Book == bookid {
+			db.Delete(&i)
+			query := fmt.Sprintf("delete from user_cartpurchase_books where cart_purchase_books_id=%d;", i.ID)
+			err = db.Exec(query).Error
+			if err != nil {
+				return false, err
+			}
+			break
+		}
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return true, nil
+}
+func PurchaseBooks(userid int) (bool, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return false, err
+	}
+
+	UserD, err := GetUser(userid)
+	if err != nil {
+		return false, err
+	}
+	userCartP, err := UserPurchaseCart(userid)
+	if err != nil {
+		return false, err
+	}
+	for _, i := range userCartP {
+		book, err := GetBookById(i.Book)
+		if err != nil {
+			return false, err
+		}
+		book.Quantity = book.Quantity - i.Quantity
+		db.Save(&book)
+	}
+	UserD.PurchasedBooks = append(UserD.PurchasedBooks, userCartP...)
+	db.Save(&UserD)
+	query := fmt.Sprintf("delete from user_cartpurchase_books where user_id=%d;", userid)
+	err = db.Exec(query).Error
+	if err != nil {
+		return false, err
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+
+	return true, nil
+
+}
+func GetPurchaseCartbyId(userid int) ([]PurchaseCart, error) {
+
+	var cartPurchaseBook []CartPurchaseBooks
+	cartPurchaseBook, err := UserPurchaseCart(userid)
+	if err != nil {
+		return nil, err
+	}
+	var PurchaseCrt []PurchaseCart
+	for _, i := range cartPurchaseBook {
+		book, err := GetBookById(i.Book)
+		if err != nil {
+			return nil, err
+		}
+		var Pc PurchaseCart
+		Pc.Book = book
+		Pc.PurchaseDetails = i
+		PurchaseCrt = append(PurchaseCrt, Pc)
+	}
+	return PurchaseCrt, nil
+
 }

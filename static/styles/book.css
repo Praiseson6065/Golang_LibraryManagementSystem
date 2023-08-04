@@ -193,6 +193,7 @@ input[type="submit"]{
   .BookCheckout{
     display: flex;
     flex-direction: column;
+    width: 160px !important;
     gap:1rem;
   }
   .bookImg .bookImgCP{
@@ -209,7 +210,7 @@ input[type="submit"]{
     border-radius: 6px;
     border: none;
     color:white;
-    width: 100%;
+    width: 80%;
     box-sizing: content-box;
     padding: .4rem 1rem ;
   }
@@ -280,6 +281,42 @@ input[type="submit"]{
 .reviewEntryOutline:focus{
   outline: 2px solid rgba(53, 110, 253, 0.412);
   
+}
+#purchasequantity{
+    width:50px !important;
+    height: 1.8rem;
+    border: 2px solid  rgba(53,109,253,1);
+    border-radius: 8px;
+    padding: 0.1rem 0.4rem;
+    box-sizing: content-box;
+    
+}
+#purchasediv{
+  display: none;
+  justify-content: space-between;
+  height: 2rem;
+  align-items: center;
+}
+.bx-cart-add{
+  font-size: 20px;
+}
+#quantityValue{
+  margin:0rem .6rem;
+  box-sizing: content-box;
+  padding: .1rem;
+}
+.disabled{
+  background-color: rgb(18, 39, 91) !important;
+}
+#purchasebtn,#quantityDecrement,#quantityIncrement{
+  background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    box-sizing: content-box;
+    padding: .4rem .8rem ;
+    pointer-events: all;
+    cursor: pointer;
 }
 #BookReviewEntry
 {

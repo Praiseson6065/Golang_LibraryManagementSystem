@@ -9,7 +9,7 @@ import (
 
 func Setuproutes(app *fiber.App) {
 
-	jwt := middlewares.NewAuthMiddleware(config.Secret)
+	jwt := middlewares.NewAuthMiddleware(config.EnvConfigs.SecretKey)
 
 	app.Get("/protected", jwt, handlers.Protected)
 	//authorization
@@ -18,12 +18,10 @@ func Setuproutes(app *fiber.App) {
 	app.Post("/register", handlers.RegisterPost)
 	app.Get("/regsuccess", handlers.RegisterSuccessful)
 	app.Get("/logout", handlers.Logout)
-
-	//testing
-
+	app.Get("/google", handlers.GoogleAuthLogin)
+	app.Get("/auth/callback", handlers.GoogleCallBack)
 	//api
 	api := app.Group("/api")
-
 	api.Post("/book", handlers.AddBooksPost)
 	api.Get("/getbooks", handlers.GetBooks)
 	api.Post("/searchbook", handlers.SearchBooks)
@@ -43,10 +41,16 @@ func Setuproutes(app *fiber.App) {
 	user.Delete("/cart/:userid/:bookid", middlewares.UserMiddleWare, handlers.RemoveFromCart)
 	user.Post("/checkoutcart/:userid", middlewares.UserMiddleWare, handlers.CheckOutFromCart)
 	user.Get("/cartbkchk/:userid/:bookid", middlewares.UserMiddleWare, handlers.ChkBookCart)
+	user.Post("/cartpurchasebook/:userid/:bookid/:quantity", middlewares.UserMiddleWare, handlers.BookPurchaseCart)
+	user.Get("/purchasecart/:userid", middlewares.UserMiddleWare, handlers.GetPurchaseCart)
+	user.Delete("/rmPurchasecart/:userid/:bookid", middlewares.UserMiddleWare, handlers.RemoveFromUserPurCart)
+	user.Put("/purchasebook/:userid", middlewares.UserMiddleWare, handlers.PurchaseBook)
+	user.Post("/paymentforpurchasing/:userid", middlewares.UserMiddleWare, handlers.PaymentHandler)
+	user.Post("/confirmpayment/:userid", middlewares.UserMiddleWare, handlers.PaymentConfirm)
 	//user
 	user.Get("/issuedbooks/:userid", middlewares.UserMiddleWare, handlers.UserIssuedBooks)
 	user.Get("/isbookIssued/:userid/:bookid", middlewares.UserMiddleWare, handlers.IsBookIssued)
-	user.Delete("/issuebook/:userid/:bookid",middlewares.UserMiddleWare,handlers.UserRemoveIssueBook)
+	user.Delete("/issuebook/:userid/:bookid", middlewares.UserMiddleWare, handlers.UserRemoveIssueBook)
 	user.Post("/returnbook/:userid/:bookid", middlewares.UserMiddleWare, handlers.ReturnBook)
 	user.Post("/like/:userid/:bookid", middlewares.UserMiddleWare, handlers.LikeBook)
 	user.Get("/isliked/:userid/:bookid", middlewares.UserMiddleWare, handlers.IsLiked)

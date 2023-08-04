@@ -450,16 +450,36 @@ func IsBookIssued(c *fiber.Ctx) error {
 	}
 	return c.JSON(false)
 }
-func BookReviewsByBookId(c *fiber.Ctx)error{
-	BookId,err:= strconv.Atoi(c.Params("bookid"))
-	if err!=nil{
+func BookReviewsByBookId(c *fiber.Ctx) error {
+	BookId, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
 		return c.JSON(err)
 	}
 	var BookReviews []models.BookReviews
-	BookReviews,err= models.GetReviewsByBookId(BookId)
-	if err!=nil{
+	BookReviews, err = models.GetReviewsByBookId(BookId)
+	if err != nil {
 		return c.JSON(err)
 	}
 	return c.JSON(BookReviews)
 
+}
+func BookPurchaseCart(c *fiber.Ctx) error{
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	bookid, err := strconv.Atoi(c.Params("bookid"))
+	if err != nil {
+		return err
+	}
+	quantity, err := strconv.Atoi(c.Params("quantity"))
+	if err != nil {
+		return err
+	}
+	_,err=models.AddtoPurchaseCart(userid,bookid,quantity)
+	if err!=nil{
+		return err
+	}
+
+	return c.JSON(true)
 }

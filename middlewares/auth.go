@@ -2,9 +2,7 @@ package middlewares
 
 import (
 	"fmt"
-	
 	"strconv"
-
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"golang.org/x/crypto/bcrypt"
@@ -17,7 +15,7 @@ import (
 func NewAuthMiddleware(secret string) fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey: []byte(secret),
-	})
+	})	
 }
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -31,7 +29,7 @@ func CookieGetData(cookie string, c *fiber.Ctx) (jtoken.MapClaims, error) {
 
 	token, err := jtoken.Parse(cookie, func(token *jtoken.Token) (interface{}, error) {
 
-		return []byte(config.Secret), nil
+		return []byte(config.EnvConfigs.SecretKey), nil
 	})
 	if err != nil {
 

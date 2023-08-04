@@ -46,6 +46,7 @@ function suggestedBooks(taglines){
     }
     PrintBook();
     
+    
 }
 
 fetch(`/api/bookc/${bookId}`)
@@ -68,10 +69,87 @@ fetch(`/api/bookc/${bookId}`)
         <div class="BookCheckout" id="Bookchk">
         
             <div class="likediv"><button id="likebtn"><i class='bx bx-like'id="like"></i></button><span id="likecnt">${data['votes']}</span></div>
-            <button id="addtocart" >Add to Cart</button>
-        </div>`;
+            <div><input type="checkbox" id="purchasebkchk"><span>Purchase Book</span></div>
+            <div id="purchasediv"><div><button id="quantityDecrement">-</button><span id="quantityValue">1</span><button id="quantityIncrement">+</button></div><div><button id="purchasebtn"><i class='bx bx-cart-add'></i></button></div></div>
+            <div><button id="addtocart" >Lend</button></div>
+           
+            
+        
+        </div>
+        
+        `;
         
         document.getElementById("book-wrap").innerHTML=book;
+        document.getElementById("purchasebkchk").addEventListener("change",(event)=>{
+            if(event.target.checked){
+                document.getElementById("addtocart").style.display="none"
+                document.getElementById("purchasediv").style.display="flex";
+                var btnDecrement=document.getElementById("quantityDecrement");
+                var btnIncrement=document.getElementById("quantityIncrement");
+                var quantityValue=document.getElementById("quantityValue");
+                if(parseInt(quantityValue.innerHTML)===1){
+                    btnDecrement.disabled=true;
+                    btnDecrement.classList.add("disabled");
+                }
+                btnDecrement.addEventListener("click",()=>{
+                    if(parseInt(quantityValue.innerHTML)===1){
+                        btnDecrement.disabled=true;
+                        btnDecrement.classList.add("disabled");
+                    }
+                    else{
+                        btnDecrement.disabled=false;
+                        quantityValue.innerHTML=parseInt(quantityValue.innerHTML)-1;
+                        btnIncrement.disabled=false;
+                        btnDecrement.classList.remove("disabled");
+                        btnIncrement.classList.remove("disabled");
+                        if(parseInt(quantityValue.innerHTML)===1){
+                            btnDecrement.disabled=true;
+                            btnDecrement.classList.add("disabled");
+                        }
+                    }
+                });
+                btnIncrement.addEventListener("click",()=>{
+                    if(parseInt(quantityValue.innerHTML)===data['Quantity']){
+                        btnIncrement.disabled=true;
+                        btnIncrement.classList.add("disabled");
+
+                    }
+                    else{
+                        btnDecrement.disabled=false;
+                        btnDecrement.classList.remove("disabled");
+                        quantityValue.innerHTML=parseInt(quantityValue.innerHTML)+1;
+                        btnIncrement.classList.remove("disabled");
+                        if(parseInt(quantityValue.innerHTML)===data['Quantity']){
+                            btnIncrement.disabled=true;
+                            btnIncrement.classList.add("disabled");
+                        }
+                    }
+                });
+                var purchasebtn = document.getElementById("purchasebtn");
+                purchasebtn.addEventListener("click",()=>{
+                    fetch(`/user/cartpurchasebook/${decoded.payload['ID']}/${bId}/${parseInt(quantityValue.innerHTML)}`,{method:"POST"})
+                        .then(response=>response.json())
+                        .then(data=>{
+                            if(data===true){
+                            quantityValue.innerHTML=1;
+                            btnDecrement.disabled=true;
+                            btnDecrement.classList.add("disabled");
+                            }
+                        })
+
+                })
+
+            }
+            else{
+                document.getElementById("purchasediv").style.display="none";
+                document.getElementById("addtocart").style.display="block";
+                
+
+            }
+        })
+        
+        
+        
         if(token!=undefined && decoded.payload["usertype"]==="admin"){
             document.getElementById("Bookchk").innerHTML+=`<a href="/updatebook.html?BId=${data['BookId']}"><button id="editbook" >Edit Book</button></a>`;
         }   
@@ -81,6 +159,7 @@ fetch(`/api/bookc/${bookId}`)
             document.getElementById("addtocart").disabled=true;
 
         }
+        
         async function CartLimit(){
             await fetch(`/user/getusercart/+${decoded.payload["ID"]}`)
                 .then(response=>response.json())
