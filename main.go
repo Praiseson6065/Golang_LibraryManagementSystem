@@ -12,7 +12,6 @@ func main() {
 
 	config.InitEnvConfigs()
 	fmt.Println(config.EnvConfigs)
-
 	app := fiber.New()
 	app.Static("/", "./static", fiber.Static{Index: "home.html"})
 
