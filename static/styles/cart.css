@@ -94,6 +94,14 @@ button{
     border: 1px solid white;
     
 }
+.paymentdiv{
+    display: grid;
+   grid-template-columns: 45% 45%;
+   gap : 2rem;
+}
+#cancel{
+    margin: 1rem;
+}
 #CheckoutCart{
     padding: 1rem 8rem;
     display: flex;

@@ -5,7 +5,6 @@ import (
 
 	"strconv"
 
-	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/middlewares"
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/models"
@@ -13,7 +12,6 @@ import (
 )
 
 func ProfilePage(c *fiber.Ctx) error {
-	fmt.Println(config.EnvConfigs.SecretKey)
 	cookie := c.Cookies("jwt")
 	claims, err := middlewares.CookieGetData(cookie, c)
 

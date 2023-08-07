@@ -4,13 +4,40 @@ UserPage(token);
 var BooksPrice=0;
 var Purchasing=false;
 var BookLending = false;
+var RedirectUrl="";
+var lend=false;
+var pur=false;
 if(token!=undefined)
 {   
     var Decoded=DecodedToken(token);
     document.getElementById("CheckoutCart").hidden=true;    
 
 }
-
+function status(purc,lend){
+    console.log(purc,lend)
+    var modalcontent=document.querySelector(".modalcontent")
+    console.log("purchlend")
+    if(purc && lend){
+        modalcontent.innerHTML="Books Purchased && Issued"
+        
+    }
+    else if(purc ){
+        modalcontent.innerHTML="Books Purchased"
+        
+    }
+    else if(lend){
+        modalcontent.innerHTML="Books Issued"
+        
+    }
+    else{
+        modalcontent.innerHTML="Error"
+    }
+    setTimeout(() => {
+        console.log(RedirectUrl);
+        console.log("redirect");    
+        window.location.href = RedirectUrl;
+        },5000);
+}
 async function GetUserCart(){
     var url ="/user/getusercart/" + Decoded.payload["ID"];
 
@@ -258,107 +285,204 @@ async function handleBoth(){
     console.log(Purchasing,BookLending)
     var Confirm=document.getElementById("ModalConfirm");
         var modalcontent=document.querySelector(".modalcontent");
-        var lend=false;
-        var pur=false;
+        
     await Confirm.addEventListener("click",async function(){
-            if(Purchasing){
-                modalcontent.innerHTML=`
-                <div class="paymentMode">
-                    <div>Amount : ${BooksPrice}</div>
-                    <div>
-                    <label for="cname">Name on Card</label>
-                    <input type="text" id="cname" name="cardname" placeholder="John More Doe">
-                    <label for="ccnum">Credit card number</label>
-                    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
-                    <label for="expmonth">Exp Month</label>
-                    <input type="text" id="expmonth" name="expmonth" placeholder="September">
-                    </div>
-                    <div><button id="paynow">Pay Now</button></div>
-                </div>
-                `
+        if(BookLending && !Purchasing){
+            fetch(`/user/checkoutcart/${DecodedToken(token).payload["ID"]}`,{method:"POST"})
+            .then(response=> response.json())
+            .then(data=>{
+                if(data===true)
+                {
+                    lend=true;
+                }   
+                else{
+                    modalcontent.innerHTML="<h3>Books Are Not Issued</h3>";
+                }
+                
 
-                await document.getElementById("paynow").addEventListener("click",async ()=>{
-
-                    await fetch(`/user/paymentforpurchasing/${Decoded.payload['ID']}`,{method:"POST"})
-                    .then(response=>response.json())
-                    .then(async data=>{
-                        const headers = {
-                                    "Content-Type": "application/json",
-                          };
-                        //   var json = {
-                        //     "id":data.id,
-                        //     "client_secret":data.client_secret,
-                        //           }
-                            // console.log(json)
-                        await fetch(`/user/confirmpayment/${Decoded.payload["ID"]}`,{method:"POST",headers,body: JSON.stringify(data)})
-                             .then(response=>response.json())
-                             .then(async ans=>{
-                                console.log(ans)
-                                 if(ans==="http://localhost:3000/payment/success"){
-                                     await fetch(`/user/purchasebook/${Decoded.payload["ID"]}`,{method:"PUT"})
-                                         .then(response=>response.json())
-                                         .then(data=>{
-                                                 if(data==true){
-                                                            pur=true;
-                                                        }
-                                                    })
-                                            }
-
-                                        })
-                                })
-
-
-                            
-                        })
-                        
-                    }
-                    if(BookLending){
-                        await fetch(`/user/checkoutcart/${DecodedToken(token).payload["ID"]}`,{method:"POST"})
-                        .then(response=> response.json())
-                        .then(data=>{
-                            if(data===true)
-                            {
-                                lend=true;
-                            }   
-                            else{
-                                modalcontent.innerHTML="<h3>Books Are Not Issued</h3>";
-                            }
-                        if(pur && lend)
-                        {
+            })
+            .then(res=>{
+                status(pur,lend)
+            })
             
-                             modalcontent.innerHTML="<h3>Books Issued and Purchased</h3>"  ;
-                                        
-                        }
-                    else if(pur){
-                        modalcontent.innerHTML="<h3>Books Purchased</h3>"  ;
+            // .then(res=>{
+            //     status(purc,lend)
+            // })
 
-                    }
-                    else if(lend){
-                        modalcontent.innerHTML="<h3>Books Issued</h3>"
+        }
+        
+        else if(Purchasing && !BookLending){
+            modalcontent.innerHTML=`
+            <div class="paymentMode">   
+                <div>Amount : ${BooksPrice}</div>
+                <div class="paymentdiv">
+                <label for="cname">Name on Card</label>
+                <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+                <label for="ccnum">Credit card number</label>
+                <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                <label for="expmonth">Exp Month</label>
+                <input type="text" id="expmonth" name="expmonth" placeholder="September">
+                </div>
+                <div><button id="paynow">Pay Now</button><button id="cancel">cancel</button></div>
+            </div>
+            `
+            document.getElementById("cancel").addEventListener("click",()=>{
+                window.location.reload()
+            })
+            document.getElementById("paynow").addEventListener("click",async ()=>{
+
+                fetch(`/user/paymentforpurchasing/${Decoded.payload['ID']}`,{method:"POST"})
+                .then(response=>response.json())
+                .then(async data=>{
+                    const headers = {
+                                "Content-Type": "application/json",
+                      };
+                      
+                        await fetch(`/user/confirmpayment/${Decoded.payload["ID"]}`,{method:"POST",headers,body: JSON.stringify(data)})
+                         .then(response=>response.json())
+                         .then(async ans=>{
+                             if(ans){
+                                RedirectUrl=ans;
+                                console.log(RedirectUrl)
+                                  await fetch(`/user/purchasebook/${Decoded.payload["ID"]}`,{method:"PUT"})
+                                     .then(response=>response.json())
+                                     .then( data=>{
+                                             if(data==true){
+                                                        pur=true;
+                                                }
+                                                
+                                                    
+                                                })
+                                    .then(res=>{
+                                                    status(pur,lend)
+                                                })
+                                        }
+
+                                    })
+
+                                
+                            })
+
+
+                        
+                    })
                         
                     }
+            else if(Purchasing && BookLending){
+                fetch(`/user/checkoutcart/${DecodedToken(token).payload["ID"]}`,{method:"POST"})
+                .then(response=> response.json())
+                .then(data=>{
+                    if(data===true)
+                    {
+                        lend=true;
+                    }   
                     else{
                         modalcontent.innerHTML="<h3>Books Are Not Issued</h3>";
-                        
-                    }
-                    setTimeout(function(){
-                        window.location.reload();
-                     }, 5000);
-
-                        });
                     }
                     
+
+                })
+                .then(res=>{
+                    modalcontent.innerHTML=`
+                    <div class="paymentMode">
+                        <div>${lend===true ? "BookIssued PayNow" : "" }</div>
+                        <div>Amount : ${BooksPrice}</div>
+                        <div class="paymentdiv">
+                        <label for="cname">Name on Card</label>
+                        <input type="text" id="cname" name="cardname" placeholder="John More Doe">
+                        <label for="ccnum">Credit card number</label>
+                        <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                        <label for="expmonth">Exp Month</label>
+                        <input type="text" id="expmonth" name="expmonth" placeholder="September">
+                        </div>
+                        <div><button id="paynow">Pay Now</button><button id="cancel">cancel</button></div>
+                    </div>
+                    `
+                    document.getElementById("cancel").addEventListener("click",()=>{
+                        window.location.reload()
+                    })
+                    document.getElementById("paynow").addEventListener("click",async ()=>{
+    
+                        fetch(`/user/paymentforpurchasing/${Decoded.payload['ID']}`,{method:"POST"})
+                        .then(response=>response.json())
+                        .then(async data=>{
+                            const headers = {
+                                        "Content-Type": "application/json",
+                              };
+                              
+                                await fetch(`/user/confirmpayment/${Decoded.payload["ID"]}`,{method:"POST",headers,body: JSON.stringify(data)})
+                                 .then(response=>response.json())
+                                 .then(async ans=>{
+                                     if(ans){
+                                        RedirectUrl=ans;
+                                        console.log(RedirectUrl)
+                                          await fetch(`/user/purchasebook/${Decoded.payload["ID"]}`,{method:"PUT"})
+                                             .then(response=>response.json())
+                                             .then( data=>{
+                                                     if(data==true){
+                                                                pur=true;
+                                                        }
+                                                        
+                                                            
+                                                        })
+                                            .then(res=>{
+                                                        console.log(res)
+                                                            status(pur,lend)
+                                                        })
+                                                }
+    
+                                            })
+    
+                                        
+                                    })
+    
+    
+                                
+                            })
+
+                })
+
+
+            }
+                    
+                    
+                    
+    
                     
                 })
+
+    console.log("hello")
+    if(lend || pur){
+        console.log("hello")
+        return "Both"
+    }         
+    
+    else{
+        return "none"
+    }
                 
                 
 
 
 }
-await ModalHandler();
-await GetUserCart();
-await GetUserPurchaseCart();
-await handleBoth();
+
+  await ModalHandler();
+  await GetUserCart();
+  await GetUserPurchaseCart();
+  var ans= await handleBoth();
+  if(ans=="Both"){
+    console.log("xxxx")
+    console.log(ans)
+    status(pur, lend);
+    setTimeout(1000, () => {
+    console.log(RedirectUrl);
+    window.location = RedirectUrl;
+    });
+  }
+  
+
+   
+
 
          
 
