@@ -9,7 +9,7 @@ import (
 
 func Setuproutes(app *fiber.App) {
 
-	jwt := middlewares.NewAuthMiddleware(config.EnvConfigs.SecretKey)
+	jwt := middlewares.NewAuthMiddleware(config.EnvConfigs().SecretKey)
 
 	app.Get("/protected", jwt, handlers.Protected)
 	//authorization
@@ -47,6 +47,7 @@ func Setuproutes(app *fiber.App) {
 	user.Put("/purchasebook/:userid", middlewares.UserMiddleWare, handlers.PurchaseBook)
 	user.Post("/paymentforpurchasing/:userid", middlewares.UserMiddleWare, handlers.PaymentHandler)
 	user.Post("/confirmpayment/:userid", middlewares.UserMiddleWare, handlers.PaymentConfirm)
+	user.Get("/userpurchased/:userid", middlewares.UserMiddleWare, handlers.PurchasedBooks)
 	//user
 	user.Get("/issuedbooks/:userid", middlewares.UserMiddleWare, handlers.UserIssuedBooks)
 	user.Get("/isbookIssued/:userid/:bookid", middlewares.UserMiddleWare, handlers.IsBookIssued)

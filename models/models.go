@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
 	"gorm.io/gorm"
 )
@@ -707,5 +708,36 @@ func GetPurchaseCartbyId(userid int) ([]PurchaseCart, error) {
 		PurchaseCrt = append(PurchaseCrt, Pc)
 	}
 	return PurchaseCrt, nil
+
+}
+func GetPurchasedBooks(userid int) ([]PurchaseCart, error) {
+	db, err := database.DbGormConnect()
+	if err != nil {
+		return nil, err
+	}
+	var PurchasedBook []CartPurchaseBooks
+	if err := db.Joins("JOIN user_purchased_books ON user_purchased_books.cart_purchase_books_id  = cart_purchase_books.id").
+		Where("user_purchased_books.user_id = ?", userid).
+		Find(&PurchasedBook).Error; err != nil {
+		return nil, err
+	}
+
+	var PurchasedBooks []PurchaseCart
+	for _, i := range PurchasedBook {
+		book, err := GetBookById(i.Book)
+		if err != nil {
+			return nil, err
+		}
+		var Pc PurchaseCart
+		Pc.Book = book
+		Pc.PurchaseDetails = i
+		PurchasedBooks = append(PurchasedBooks, Pc)
+	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.Close()
+	return PurchasedBooks, nil
 
 }

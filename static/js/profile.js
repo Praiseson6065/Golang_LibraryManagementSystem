@@ -153,5 +153,37 @@ fetch(`/user/issuedbooks/${decoded.payload["ID"]}`)
 
   });
 
+  fetch(`/user/userpurchased/${decoded.payload["ID"]}`)
+    .then(response=>response.json())
+    .then(data=>{
+      if(data.length===0){
+        document.getElementById("purchasedbooks").innerHTML="empty"
+      }
+    else{
+      console.log(data);
+      var Books=""
+      for (let i=0;i<data.length;i++){
+        
+        var Purchasedbook=`
+        <div class="bookHolder">
+        <div class="bookImg"><a href="/book.html?BookC=${data[i]['Book']["BookCode"]}"><img class="bookImgCP" src="/img/books/${data[i]['Book']['ImgPath']}"></a></div>
+        <div class="bookDetails">
+        <div class="bookName">${data[i]['Book']['BookName']}</div>
+        <div class="bookAuthor">by ${(data[i]['Book']['Author']).replace(/[{}"]/g,'')}</div>
+        <div class="bookCritics">
+            <div class="bookDes"><div class="bookD">${data[i]['Book']['Pages']}</div><div  class="bookDName">Pages</div></div>
+            <div class="bookDes"><div class="bookD">${data[i]['Book']['votes']}</div ><div class="bookDName">Likes</div></div>
+        </div>
+        <div>Quantity :${data[i]['PurchaseDetails']['Quantity']}       Rate : ${data[i]['Book']['Price']} </div>
+        <div>Price :${data[i]['PurchaseDetails']['Quantity']*data[i]['Book']['Price']}</div>
+        </div>
+      </div>`;
+        Books+=Purchasedbook;
+
+      }
+      document.getElementById("purchasedbooks").innerHTML=Books
+  }
+    })
+
 
     

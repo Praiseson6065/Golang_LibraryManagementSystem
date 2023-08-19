@@ -267,3 +267,16 @@ func PurchaseBook(c *fiber.Ctx) error {
 	return c.JSON(true)
 
 }
+func PurchasedBooks(c *fiber.Ctx) error {
+	userid, err := strconv.Atoi(c.Params("userid"))
+	if err != nil {
+		return err
+	}
+	var PurchasedBooks []models.PurchaseCart
+	PurchasedBooks, err = models.GetPurchasedBooks(userid)
+	if err != nil {
+		return err
+	}
+	return c.JSON(PurchasedBooks)
+
+}

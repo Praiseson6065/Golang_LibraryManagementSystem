@@ -1,16 +1,15 @@
 package main
 
 import (
-	"github.com/Praiseson6065/Golang_LibraryManagementSystem/config"
-	"github.com/Praiseson6065/Golang_LibraryManagementSystem/database"
+	
+	
 	"github.com/Praiseson6065/Golang_LibraryManagementSystem/routes"
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
 
-	config.InitEnvConfigs()
-	database.InitDatabseConfig()
+	
 	app := fiber.New()
 	app.Static("/", "./static", fiber.Static{Index: "home.html"})
 

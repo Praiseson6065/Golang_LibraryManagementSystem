@@ -28,7 +28,7 @@ func PaymentHandler(c *fiber.Ctx) error {
 		Price += ((int(i.Book.Price)) * (i.PurchaseDetails.Quantity))
 	}
 
-	stripe.Key = config.EnvConfigs.STRIPE_key
+	stripe.Key = config.EnvConfigs().STRIPE_key
 	params := &stripe.PaymentIntentParams{
 		Amount:   stripe.Int64(int64(Price * 100)),
 		Currency: stripe.String(string(stripe.CurrencyINR)),
@@ -55,10 +55,10 @@ func PaymentConfirm(c *fiber.Ctx) error {
 	var data models.Pi
 	c.BodyParser(&data)
 	fmt.Println(data)
-	stripe.Key = config.EnvConfigs.STRIPE_key
+	stripe.Key = config.EnvConfigs().STRIPE_key
 	params := &stripe.PaymentIntentConfirmParams{
 		PaymentMethod: stripe.String("pm_card_visa"),
-		ReturnURL:     stripe.String("http://localhost:3000/profile.html"),
+		ReturnURL:     stripe.String("http://127.0.0.1:3000/profile.html"),
 	}
 	pi, _ := paymentintent.Confirm(
 		data.Id,

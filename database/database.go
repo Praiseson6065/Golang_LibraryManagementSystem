@@ -2,9 +2,9 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
-	"github.com/spf13/viper"
+	"os"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,30 +15,27 @@ type databaseConfigs struct {
 	DbUserName string `mapstructure:"DbUserName"`
 	DbPassword string `mapstructure:"DbPassword"`
 	DbPort     string `mapstructure:"DbPort"`
+	DbHost     string
 }
 
-var databaseConfig *databaseConfigs
 
-func InitDatabseConfig() {
-	databaseConfig = loadDatabaseVariables()
-}
-func loadDatabaseVariables() (config *databaseConfigs) {
-	viper.AddConfigPath(".")
-	viper.SetConfigName("app")
-	viper.SetConfigType("env")
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file", err)
-	}
-	if err := viper.Unmarshal(&config); err != nil {
-		log.Fatal(err)
-	}
-	return
+func DatabaseConfigs()(databaseConfigs) {
+	var databaseConfig databaseConfigs
+	databaseConfig.DbName = os.Getenv("DbName")
+	databaseConfig.DbType = os.Getenv("DbType")
+	databaseConfig.DbUserName = os.Getenv("DbUserName")
+	databaseConfig.DbPassword = os.Getenv("DbPassword")
+	databaseConfig.DbPort = os.Getenv("DbPort")
+	databaseConfig.DbHost = os.Getenv("DbHost")
+	return databaseConfig
+
 }
+
 func DbConnect() (*sql.DB, error) {
-	return sql.Open(databaseConfig.DbType, "postgres://"+databaseConfig.DbUserName+":"+databaseConfig.DbPassword+"@localhost:"+databaseConfig.DbPort+"/"+databaseConfig.DbName)
+	return sql.Open(DatabaseConfigs().DbType, "postgres://"+DatabaseConfigs().DbUserName+":"+DatabaseConfigs().DbPassword+"@"+DatabaseConfigs().DbHost+":"+DatabaseConfigs().DbPort+"/"+DatabaseConfigs().DbName)
 }
 func DbGormConnect() (*gorm.DB, error) {
-	dbURL := "postgres://" + databaseConfig.DbUserName + ":" + databaseConfig.DbPassword + "@localhost:" + databaseConfig.DbPort + "/" + databaseConfig.DbName
+	dbURL := "postgres://" + DatabaseConfigs().DbUserName + ":" + DatabaseConfigs().DbPassword + "@" + DatabaseConfigs().DbHost + ":" + DatabaseConfigs().DbPort + "/" + DatabaseConfigs().DbName
 	return gorm.Open(postgres.Open(dbURL), &gorm.Config{})
 }

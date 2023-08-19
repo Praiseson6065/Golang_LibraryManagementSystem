@@ -29,7 +29,7 @@ func CookieGetData(cookie string, c *fiber.Ctx) (jtoken.MapClaims, error) {
 
 	token, err := jtoken.Parse(cookie, func(token *jtoken.Token) (interface{}, error) {
 
-		return []byte(config.EnvConfigs.SecretKey), nil
+		return []byte(config.EnvConfigs().SecretKey), nil
 	})
 	if err != nil {
 

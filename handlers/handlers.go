@@ -45,7 +45,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
-	t, err := token.SignedString([]byte(config.EnvConfigs.SecretKey))
+	t, err := token.SignedString([]byte(config.EnvConfigs().SecretKey))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
@@ -92,9 +92,8 @@ func Loginpage(c *fiber.Ctx) error {
 	} else if claims["usertype"] == "admin" {
 		return c.Redirect("/admin.html")
 	} else {
-		return c.Redirect(("/login.html"))
+		return c.Redirect(("/home.html"))
 	}
-
 }
 
 //register
@@ -160,9 +159,9 @@ func Logout(c *fiber.Ctx) error {
 
 func GoogleAuthLogin(c *fiber.Ctx) error {
 	conf := &oauth2.Config{
-		ClientID:     config.EnvConfigs.G_CLIENT_ID,
-		ClientSecret: config.EnvConfigs.G_CLIENT_SECRET,
-		RedirectURL:  config.EnvConfigs.G_REDIRECT,
+		ClientID:     config.EnvConfigs().G_CLIENT_ID,
+		ClientSecret: config.EnvConfigs().G_CLIENT_SECRET,
+		RedirectURL:  config.EnvConfigs().G_REDIRECT,
 		Endpoint:     google.Endpoint,
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
 	}
@@ -171,9 +170,9 @@ func GoogleAuthLogin(c *fiber.Ctx) error {
 }
 func GoogleCallBack(c *fiber.Ctx) error {
 	conf := &oauth2.Config{
-		ClientID:     config.EnvConfigs.G_CLIENT_ID,
-		ClientSecret: config.EnvConfigs.G_CLIENT_SECRET,
-		RedirectURL:  config.EnvConfigs.G_REDIRECT,
+		ClientID:     config.EnvConfigs().G_CLIENT_ID,
+		ClientSecret: config.EnvConfigs().G_CLIENT_SECRET,
+		RedirectURL:  config.EnvConfigs().G_REDIRECT,
 		Endpoint:     google.Endpoint,
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"},
 	}
@@ -228,7 +227,7 @@ func GoogleCallBack(c *fiber.Ctx) error {
 
 	jwttoken := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
 
-	t, err := jwttoken.SignedString([]byte(config.EnvConfigs.SecretKey))
+	t, err := jwttoken.SignedString([]byte(config.EnvConfigs().SecretKey))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

@@ -47,7 +47,7 @@ summary{
 details{
     padding: 1rem 8rem;
 }
-#approvedbooks,#issuedbooks{
+#approvedbooks,#issuedbooks,#purchasedbooks{
     display: grid;
     padding: 1rem 0rem;
     row-gap: 4rem;
