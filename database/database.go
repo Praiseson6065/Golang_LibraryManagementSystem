@@ -2,8 +2,10 @@ package database
 
 import (
 	"database/sql"
-
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,12 +17,15 @@ type databaseConfigs struct {
 	DbUserName string `mapstructure:"DbUserName"`
 	DbPassword string `mapstructure:"DbPassword"`
 	DbPort     string `mapstructure:"DbPort"`
-	DbHost     string
+	DbHost     string `mapstructure:"DbHost"`
 }
 
+func DatabaseConfigs() databaseConfigs {
+	err := godotenv.Load(".env")
 
-
-func DatabaseConfigs()(databaseConfigs) {
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 	var databaseConfig databaseConfigs
 	databaseConfig.DbName = os.Getenv("DbName")
 	databaseConfig.DbType = os.Getenv("DbType")
