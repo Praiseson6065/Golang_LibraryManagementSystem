@@ -145,14 +145,9 @@ func Logout(c *fiber.Ctx) error {
 
 	if claims["name"] != "nologin" {
 		c.ClearCookie()
-		return c.JSON(fiber.Map{
-			"logoutmsg": claims["name"],
-		})
+		return c.Redirect("/")
 	} else {
-		return c.Render("logout", map[string]interface{}{
-			"title":     "Logout",
-			"logoutmsg": "Not Logged In.",
-		})
+		return c.Redirect("/")
 	}
 
 }

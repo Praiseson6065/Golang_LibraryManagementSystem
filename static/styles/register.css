@@ -75,3 +75,31 @@ a{
 #email:invalid{
     outline-color: rgb(229, 41, 41) !important;
 }
+.googleauth{
+    width: calc(360px+1.6rem) !important;
+    cursor: pointer;
+    margin-top:1rem
+
+}
+.googleimg{
+    width:25px;
+    height: 25px;
+}
+
+.googlesignupbtn{
+    width: 360px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    outline: none;
+    border-radius: 8px;
+    color: black;
+    /* border: .1rem solid rgba(53,109,253,1); */
+    border: none;
+    height: 1.8rem;
+    padding: 0.5rem 0.8rem;
+    box-sizing: content-box;
+    background-color: white;
+    box-shadow: 0 5px 5px rgba(1, 26, 54, 0.076);   
+}

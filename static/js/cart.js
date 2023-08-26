@@ -5,6 +5,8 @@ var BooksPrice=0;
 var Purchasing=false;
 var BookLending = false;
 var RedirectUrl="";
+var error=false;
+var error_books=[];    
 var lend=false;
 var pur=false;
 if(token!=undefined)
@@ -45,10 +47,8 @@ async function GetUserCart(){
         .then(response=> response.json())
         .then(data=>  {   
             
-            if(data.length===0){
-                document.getElementById("cart-bookswrap").innerHTML="Empty Cart";
-            }
-            else{
+            
+            if(data.length!=0){
                 BookLending=true;
                 for (let i in data){
                     var BookDetails=`
@@ -138,9 +138,19 @@ async function ModalHandler(){
     var span = document.querySelector(".close");
     var CheckoutCartbtn = document.getElementById("CheckoutBtn");
     CheckoutCartbtn.addEventListener("click",function(){
+        
+        if(error){
+
+           var dataer=document.querySelectorAll("div[data-booker]") 
+           for(let i=0;i<dataer.length;i++){
+                dataer[i].classList.add("error");
+           }
+           alert("Please Check the Quantity of the books.")
+        }else{
         modal.style.display="block";  
         document.querySelector(".navbar").style.zIndex=-999;
-        document.querySelector(".footer").style.zIndex=-990;  
+        document.querySelector(".footer").style.zIndex=-990;
+        }  
     })
     span.onclick =  function (){
         modal.style.display="none";
@@ -159,16 +169,19 @@ async function GetUserPurchaseCart(){
                     .then(response=>response.json())
                     .then(data=>{
                         document.getElementById("purchasecart").innerHTML="";
-                        if(data.length===0){
-                            document.getElementById("purchasecart").innerHTML="Empty Cart";
-                        }
-                        else{
+                        
+                        if(data!=null){
+                            
                             Purchasing=true;
                             for (let i in data){
-                            if(data[i]['PurchaseDetails']['Quantity']>=1){ 
-                            
+                                if(data[i]['PurchaseDetails']['Quantity']>=1){ 
+                                    if(data[i]['PurchaseDetails']['Quantity']>data[i]['Book']['Quantity']){
+                                        error=true;
+                                        error_books.push(data[i]['Book']['BookId'])
+                                        var erval=`data-booker=${data[i]['Book']['BookId']}`
+                                    }
                             var BookDetails=`
-                            <div class="PurbookHolder">
+                            <div class="PurbookHolder" ${erval}>
                             <div class="bookImg"><a href="/book.html?BookC=${data[i]['Book']["BookCode"]}"><img class="bookImgCP" src="/img/books/${data[i]['Book']['ImgPath']}"></a></div>
                             <div class="bookDetails">
                             <div class="bookName">${data[i]['Book']['BookName']}</div>
@@ -197,6 +210,7 @@ async function GetUserPurchaseCart(){
                                         .then(data=>{
                                             if(data===true){
                                                 GetUserPurchaseCart();
+                                                window.location.reload();   
                                             }
                                         })
                                         
@@ -279,8 +293,23 @@ async function GetUserPurchaseCart(){
 
 }
 async function handleBoth(){
-    if(Purchasing || BookLending){
-        document.getElementById("CheckoutBtn").hidden=false;
+    
+    if(!Purchasing && BookLending){
+        document.querySelector(".purhsecrthead").style.display="none";
+
+    }
+    else if(Purchasing && !BookLending){
+        document.querySelector(".lendcrthead").style.display="none";
+        
+
+    }
+    else if(!Purchasing && !BookLending){
+        document.getElementById("CheckoutBtn").style.display="none";
+        document.querySelector(".purhsecrthead").style.display="none";
+        document.querySelector(".lendcrthead").style.display="none";
+        document.getElementById("cart-bookswrap").innerHTML="Empty Cart"
+
+
     }
     console.log(Purchasing,BookLending)
     var Confirm=document.getElementById("ModalConfirm");
@@ -451,7 +480,7 @@ async function handleBoth(){
                     
                 })
 
-    console.log("hello")
+    
     if(lend || pur){
         console.log("hello")
         return "Both"
@@ -470,9 +499,8 @@ async function handleBoth(){
   await GetUserCart();
   await GetUserPurchaseCart();
   var ans= await handleBoth();
+  await console.log(error,"Error",error_books)
   if(ans=="Both"){
-    console.log("xxxx")
-    console.log(ans)
     status(pur, lend);
     setTimeout(1000, () => {
     console.log(RedirectUrl);

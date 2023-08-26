@@ -205,3 +205,9 @@ button{
 .rmBookbtn ,#CheckoutBtn{
     pointer-events: all;
 }
+.purhsecrthead,.lendcrthead{
+    padding: .2rem 8rem;
+}
+.error{
+    outline: solid 2px  rgba(229, 41, 41, 0.664) !important;
+}

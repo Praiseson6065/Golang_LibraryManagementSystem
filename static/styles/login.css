@@ -19,6 +19,26 @@ h3{
     font-size: 24px;
     text-align: center;
 }
+.googleimg{
+    width:25px;
+    height: 25px;
+}
+.googleloginbtn{
+    width: 360px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    outline: none;
+    border-radius: 8px;
+    /* border: .1rem solid rgba(53,109,253,1); */
+    border: none;
+    height: 1.8rem;
+    padding: 0.5rem 0.8rem;
+    box-sizing: content-box;
+    background-color: white;
+    box-shadow: 0 5px 5px rgba(1, 26, 54, 0.076);   
+}
 .login{
     display: flex;
     justify-content: center;
@@ -34,10 +54,16 @@ input{
     width:360px !important;
     height: 1.8rem;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     margin :0.5rem 0rem 1rem;
     padding: 0.5rem 0.8rem;
     box-shadow: 0 5px 5px rgba(1, 26, 54, 0.176);
+}
+
+.googleauth{
+    width: calc(360px+1.6rem) !important;
+    cursor: pointer;
+
 }
 input[type="submit"]{
     background-color: rgba(53,109,253,1);

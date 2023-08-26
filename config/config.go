@@ -1,9 +1,9 @@
 package config
 
 import (
-	
-	"os"
 	"log"
+	"os"
+
 	"github.com/joho/godotenv"
 )
 
@@ -16,9 +16,7 @@ type envConfigs struct {
 	STRIPE_P        string `mapstructure:"STRIPE_P"`
 }
 
-
-
-func EnvConfigs() (envConfigs){
+func EnvConfigs() envConfigs {
 	err := godotenv.Load(".env")
 
 	if err != nil {
@@ -28,9 +26,10 @@ func EnvConfigs() (envConfigs){
 	EnvConfig.SecretKey = os.Getenv("SecretKey")
 	EnvConfig.G_CLIENT_ID = os.Getenv("G_CLIENT_ID")
 	EnvConfig.G_CLIENT_SECRET = os.Getenv("G_CLIENT_SECRET")
+	EnvConfig.G_REDIRECT = os.Getenv("G_REDIRECT")
 	EnvConfig.STRIPE_key = os.Getenv("STRIPE_key")
 	EnvConfig.STRIPE_P = os.Getenv("STRIPE_P")
-	
+
 	return EnvConfig
 
 }
