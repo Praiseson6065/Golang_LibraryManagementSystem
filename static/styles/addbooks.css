@@ -16,6 +16,7 @@ form{
 .wrap-item{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     
 }
 .wrap-itemv{
@@ -40,4 +41,44 @@ form{
 .imgHolder{
     display: flex;
     gap :10px;
+}
+input{
+    width:360px;
+    height: 1.8rem;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 5px 5px rgba(1, 26, 54, 0.176);
+    outline: solid;
+    outline-color: rgba(53,109,253,1);
+        
+}
+input[type="submit"]{
+    
+    background-color: rgba(53,109,253,1);
+    border-radius: 6px;
+    border: none;
+    color:white;
+    width: 100px;
+    height: 16px;
+    box-sizing: content-box;
+}
+input[type="file"]::file-selector-button {
+    border-radius: 4px;
+    padding: 0 2rem;
+    height: 32px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+   
+    margin-right: 16px;
+    transition: background-color 200ms;
+    
+  }
+input[type="file"]{
+    outline: none;  
+    box-shadow: 0 0 0 0 !important;
+}
+.endright{
+    justify-self: end;
 }
