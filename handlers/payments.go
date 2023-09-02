@@ -58,7 +58,7 @@ func PaymentConfirm(c *fiber.Ctx) error {
 	stripe.Key = config.EnvConfigs().STRIPE_key
 	params := &stripe.PaymentIntentConfirmParams{
 		PaymentMethod: stripe.String("pm_card_visa"),
-		ReturnURL:     stripe.String("http://127.0.0.1:3000/profile.html"),
+		ReturnURL:     stripe.String("/profile.html"),
 	}
 	pi, _ := paymentintent.Confirm(
 		data.Id,

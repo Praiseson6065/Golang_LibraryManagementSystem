@@ -49,7 +49,7 @@ fetch("/api/GetBooks")
 
 SearchValue.addEventListener("input",function(){
     if(SearchValue.value===""){
-        fetch("http://127.0.0.1:3000/api/GetBooks")
+        fetch("/api/GetBooks")
             .then(response=>response.json())
             .then(data=>{
                 DisplayBook(data);
@@ -64,7 +64,7 @@ SearchValue.addEventListener("input",function(){
             const headers = {
                 "Content-Type": "application/json",
               };
-            const SearchData = fetch("http://127.0.0.1:3000/api/searchbook", {method: "POST",headers,body: JSON.stringify(json),})
+            const SearchData = fetch("/api/searchbook", {method: "POST",headers,body: JSON.stringify(json),})
               .then((response) => response.json())
               .then((books) => { 
                 return books;
@@ -93,7 +93,7 @@ if(Search!=null || Search!=""){
     const headers = {
         "Content-Type": "application/json",
       };
-    const SearchData = fetch("http://127.0.0.1:3000/api/searchbook", {method: "POST",headers,body: JSON.stringify(json),})
+    const SearchData = fetch("/api/searchbook", {method: "POST",headers,body: JSON.stringify(json),})
       .then((response) => response.json())
       .then((books) => { 
         return books;

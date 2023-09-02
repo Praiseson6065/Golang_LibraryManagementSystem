@@ -4,7 +4,7 @@ if(token === undefined){
     window.location=`/home.html`;
     if(DecodedToken(token).payload["usertype"]!="admin")
     {
-    window.location="http://127.0.0.1:3000/profile.html";
+    window.location="/profile.html";
     }
 }
 else{
@@ -12,7 +12,7 @@ else{
 }
 
 function ExistingData(){
-    var url = "http://127.0.0.1:3000/api/book/";
+    var url = "/api/book/";
     if(IdValue.value==='')
     {
         var divFields =["BookId","BookName","ISBN","Author","Price","Publisher","Pages","Taglines","Quantity"];
@@ -60,7 +60,7 @@ function ExistingData(){
                     document.getElementById(divFields[i].toString()).innerText = divFields[i] + " : "+ data[divFields[i]] ;
                 
                 }
-                document.getElementById("CoverPage").setAttribute("src","http://127.0.0.1:3000/img/books/"+data["ImgPath"]);
+                document.getElementById("CoverPage").setAttribute("src","/img/books/"+data["ImgPath"]);
             }
                 
         });
