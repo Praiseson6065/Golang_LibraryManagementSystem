@@ -1,8 +1,9 @@
 package main
 
 import (
+	"LibManMicroServ/books"
 	"LibManMicroServ/middleware"
-	"LibManMicroServ/payments"
+	"LibManMicroServ/reviews"
 	"fmt"
 	"net/http"
 
@@ -10,17 +11,16 @@ import (
 	"github.com/spf13/viper"
 )
 
-func PaymentsServer() *http.Server {
-	PORT := viper.GetString("PORT.PAYMENTS")
-	fmt.Println("Payments Server Started at PORT - " + PORT)
+func booksServer() *http.Server {
+	PORT := viper.GetString("PORT.BOOKS")
+	fmt.Println("Books Server Started at PORT - " + PORT)
 
 	r := gin.New()
 	r.Use(middleware.CORS())
-	r.Use(middleware.Authenicator())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	payments.Router(r)
-
+	books.Router(r)
+	reviews.Router(r)
 	server := &http.Server{
 		Addr:    ":" + PORT,
 		Handler: r,

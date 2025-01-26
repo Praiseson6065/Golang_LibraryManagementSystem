@@ -1,4 +1,4 @@
-package books
+package reviews
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ func connectDB() {
 	port := viper.GetString("DATABASE.PORT")
 	password := viper.GetString("DATABASE.PASSWORD")
 
-	dbName := viper.GetString("DBNAME.BOOKS")
+	dbName := viper.GetString("DBNAME.REVIEWS")
 	user := dbName + viper.GetString("DATABASE.USER")
 
 	dsn := "host=" + host + " user=" + user + " password=" + password
@@ -30,21 +30,21 @@ func connectDB() {
 		// Logger: logger.Default.LogMode(logger.Error),
 	})
 	if err != nil {
-		log.Fatal("Failed to connect to Books database: ", err)
+		log.Fatal("Failed to connect to Reviews database: ", err)
 		panic(err)
 	}
 
 	db = database
-
-	err = db.AutoMigrate(&Book{})
+	err = db.AutoMigrate(&Review{})
 	if err != nil {
-		log.Fatal("Failed to migrate Books database: ", err)
+		log.Fatal("Failed to migrate Reviews database: ", err)
 		panic(err)
 	}
 
-	fmt.Println("Connected to Books database")
+	fmt.Println("Connected to Reviews database")
 }
 
 func init() {
 	connectDB()
+
 }
