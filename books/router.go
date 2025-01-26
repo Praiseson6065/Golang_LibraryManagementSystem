@@ -11,7 +11,7 @@ func Router(r *gin.Engine) {
 }
 
 func AdminRouter(r *gin.Engine) {
-	books := r.Group("/")
+	books := r.Group("/admin/books")
 	{
 		books.POST("/", bookAdd())
 		books.PUT("/", bookUpdate())

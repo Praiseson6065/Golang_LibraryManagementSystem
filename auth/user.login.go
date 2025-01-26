@@ -36,7 +36,7 @@ func userLogin() gin.HandlerFunc {
 			})
 			return
 		}
-		token, err := middleware.GenerateToken(userId.String(), roleId)
+		token, err := middleware.GenerateToken(userId, roleId)
 
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

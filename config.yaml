@@ -10,7 +10,12 @@ DBNAME:
   BOOKS : "books"
   REVIEWS : "reviews"
   PAYMENTS : "payments"
+  LENDING : "lending"
 PORT:
+  API: 3460
   AUTH: 3475
   PAYMENTS: 3480
+  ADMIN:
+    BOOKS : 3700
+    LENDING : 3701
   

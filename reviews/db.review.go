@@ -4,29 +4,28 @@ import (
 	"LibManMicroServ/middleware"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
-func CreateAReview(ctx *gin.Context, review Review) (uuid.UUID, error) {
+func CreateAReview(ctx *gin.Context, review Review) (string, error) {
 	tx := db.WithContext(ctx).Create(&review)
 	if tx.Error != nil {
 
-		return uuid.UUID{}, tx.Error
+		return "", tx.Error
 
 	}
 	return review.ID, nil
 
 }
 
-func UpdateAReview(ctx *gin.Context, review Review) (uuid.UUID, error) {
+func UpdateAReview(ctx *gin.Context, review Review) (string, error) {
 	tx := db.WithContext(ctx).Updates(&review)
 	if tx.Error != nil {
-		return uuid.UUID{}, tx.Error
+		return "", tx.Error
 	}
 	return review.ID, nil
-}
+}	
 
-func DeleteAReview(ctx *gin.Context, reviewId uuid.UUID) error {
+func DeleteAReview(ctx *gin.Context, reviewId string) error {
 	tx := db.WithContext(ctx).Delete(&Review{}, reviewId)
 	if tx.Error != nil {
 		return tx.Error

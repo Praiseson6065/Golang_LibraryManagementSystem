@@ -37,7 +37,7 @@ func connectDB() {
 	}
 
 	db = database
-	stripeKey = viper.GetString("STRIPE.SECRET_KEY ")
+	stripeKey = viper.GetString("STRIPE.SECRET_KEY")
 	err = db.AutoMigrate(&Payment{}, &Book{})
 	if err != nil {
 		log.Fatal("Failed to migrate payments database: ", err)

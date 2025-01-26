@@ -2,7 +2,6 @@ package books
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getBooks(ctx *gin.Context) ([]Book, error) {
@@ -23,23 +22,23 @@ func getBook(ctx *gin.Context, id string) (Book, error) {
 	return book, nil
 }
 
-func addBook(ctx *gin.Context, book Book) (uuid.UUID, error) {
+func addBook(ctx *gin.Context, book Book) (string, error) {
 	tx := db.WithContext(ctx).Create(&book)
 	if tx.Error != nil {
-		return uuid.UUID{}, tx.Error
+		return "", tx.Error
 	}
 	return book.ID, nil
 }
 
-func updateBook(ctx *gin.Context, book Book) (uuid.UUID, error) {
+func updateBook(ctx *gin.Context, book Book) (string, error) {
 	tx := db.WithContext(ctx).Save(&book)
 	if tx.Error != nil {
-		return uuid.UUID{}, tx.Error
+		return "", tx.Error
 	}
 	return book.ID, nil
 }
 
-func deleteBook(ctx *gin.Context, id uuid.UUID) error {
+func deleteBook(ctx *gin.Context, id string) error {
 	tx := db.WithContext(ctx).Delete(&Book{}, id)
 	if tx.Error != nil {
 		return tx.Error

@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func bookAdd() gin.HandlerFunc {
@@ -39,14 +38,12 @@ func bookUpdate() gin.HandlerFunc {
 			return
 		}
 
-		bookUUID, err := uuid.Parse(bookId)
+		_, err := updateBook(ctx, bookUpdateRequest)
 		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+
 			return
 		}
-		bookUpdateRequest.ID = bookUUID
-
-		_, err = updateBook(ctx, bookUpdateRequest)
 
 		ctx.JSON(http.StatusOK, gin.H{"bookId": bookId})
 	}
@@ -57,13 +54,8 @@ func bookDelete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		bookId := ctx.Param("id")
-		bookUUID, err := uuid.Parse(bookId)
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
 
-		err = deleteBook(ctx, bookUUID)
+		err := deleteBook(ctx, bookId)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

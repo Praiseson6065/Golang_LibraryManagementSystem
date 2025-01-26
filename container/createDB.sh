@@ -11,3 +11,5 @@ sudo systemctl start postgresql
 
 CreateDB auth
 CreateDB payments
+CreateDB reviews
+CreateDB books

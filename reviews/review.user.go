@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func getAllReviewsByUser() gin.HandlerFunc {
@@ -55,12 +54,8 @@ func updateReview() gin.HandlerFunc {
 func deleteReview() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		reviewId := ctx.Param("id")
-		reviewUUID, err := uuid.Parse(reviewId)
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		err = DeleteAReview(ctx, reviewUUID)
+
+		err := DeleteAReview(ctx, reviewId)
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

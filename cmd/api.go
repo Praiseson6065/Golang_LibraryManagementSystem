@@ -4,16 +4,14 @@ import (
 	"LibManMicroServ/books"
 	"LibManMicroServ/middleware"
 	"LibManMicroServ/reviews"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
-func booksServer() *http.Server {
-	PORT := viper.GetString("PORT.BOOKS")
-	fmt.Println("Books Server Started at PORT - " + PORT)
+func APIServer() *http.Server {
+	PORT := viper.GetString("PORT.API")
 
 	r := gin.New()
 	r.Use(middleware.CORS())

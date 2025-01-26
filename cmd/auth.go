@@ -3,7 +3,7 @@ package main
 import (
 	"LibManMicroServ/auth"
 	"LibManMicroServ/middleware"
-	"fmt"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ import (
 func AuthServer() *http.Server {
 
 	PORT := viper.GetString("PORT.AUTH")
-	fmt.Println("Auth Server started at PORT: ", PORT)
+
 	r := gin.New()
 	r.Use(middleware.CORS())
 	r.Use(gin.Logger())
