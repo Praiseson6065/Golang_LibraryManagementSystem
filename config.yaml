@@ -1,0 +1,16 @@
+FRONTEND:
+  URL: "http://localhost:3000"
+JWT:
+  EXPIRE : 2000
+DATABASE:
+  PORT: "5432"
+  USER: "admin"
+DBNAME:
+  AUTH: "auth"
+  BOOKS : "books"
+  REVIEWS : "reviews"
+  PAYMENTS : "payments"
+PORT:
+  AUTH: 3475
+  PAYMENTS: 3480
+  
