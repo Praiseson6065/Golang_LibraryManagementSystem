@@ -1,8 +1,12 @@
 package auth
 
-import "github.com/gin-gonic/gin"
+import (
+	"LibManMicroServ/events"
 
-func Router(r *gin.Engine) {
+	"github.com/gin-gonic/gin"
+)
+
+func Router(eventBus events.EventBus, r *gin.Engine) {
 	auth := r.Group("/auth")
 	{
 		auth.POST("/signup", userSignup())

@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "LibManMicroServ/config"
+	"LibManMicroServ/events"
 	"context"
 	"os"
 	"os/signal"
@@ -23,6 +24,8 @@ func main() {
 		cancel() // Cancel the context on receiving a signal
 	}()
 	defer cancel()
+
+	var eventBus = events.NewEventBus()
 	var g errgroup.Group
 
 	gin.SetMode(gin.ReleaseMode)
@@ -30,9 +33,9 @@ func main() {
 	g.Go(func() error {
 		return startServer(ctx, APIServer(), "ApiServer")
 	})
-	
+
 	g.Go(func() error {
-		return startServer(ctx, AuthServer(), "AuthServer")
+		return startServer(ctx, AuthServer(*eventBus), "AuthServer")
 	})
 
 	g.Go(func() error {

@@ -9,6 +9,7 @@ func firstOrCreateUser(ctx *gin.Context, user *User) (string, error) {
 	if tx.Error != nil {
 		return "", tx.Error
 	}
+	
 	return user.ID, tx.Error
 }
 

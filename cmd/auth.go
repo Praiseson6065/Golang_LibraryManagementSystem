@@ -2,6 +2,7 @@ package main
 
 import (
 	"LibManMicroServ/auth"
+	"LibManMicroServ/events"
 	"LibManMicroServ/middleware"
 
 	"net/http"
@@ -10,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func AuthServer() *http.Server {
+func AuthServer(eventBus events.EventBus) *http.Server {
 
 	PORT := viper.GetString("PORT.AUTH")
 
@@ -18,7 +19,7 @@ func AuthServer() *http.Server {
 	r.Use(middleware.CORS())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	auth.Router(r)
+	auth.Router(eventBus, r)
 
 	server := &http.Server{
 		Addr:    ":" + PORT,
