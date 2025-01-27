@@ -10,16 +10,21 @@ import (
 func startServer(ctx context.Context, server *http.Server, name string) error {
 
 	go func() {
-		log.Printf("%s started on %s", name, server.Addr)
+
+		startTime := time.Now().UnixMilli()
+		log.Printf("[%d] %s started on %s", startTime, name, server.Addr)
+
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Printf("%s failed: %v", name, err)
+			log.Printf("[%d] %s failed: %v", startTime, name, err)
 			cancelContext(ctx)
 		}
 	}()
 
 	<-ctx.Done()
 
-	log.Printf("Shutting down %s...", name)
+	shutdownTime := time.Now().UnixMilli()
+	log.Printf("[%d] Shutting down %s...", shutdownTime, name)
+
 	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	return server.Shutdown(shutdownCtx)
