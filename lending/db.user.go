@@ -32,6 +32,14 @@ func ReturnABook(ctx *gin.Context, lendBook LendBook) error {
 	return nil
 }
 
+func ReturnBooks(ctx *gin.Context, lendBook []LendBook) error {
+	tx := db.WithContext(ctx).Updates(&lendBook)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+
 func GetLendBooksByUserId(ctx *gin.Context, UserId string) ([]LendBook, error) {
 	var lendBook []LendBook
 	tx := db.WithContext(ctx).Where("user_id = ?", UserId).Find(&lendBook)
