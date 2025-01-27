@@ -28,17 +28,29 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	g.Go(func() error {
+		return startServer(ctx, APIServer(), "ApiServer")
+	})
+	
+	g.Go(func() error {
 		return startServer(ctx, AuthServer(), "AuthServer")
+	})
+
+	g.Go(func() error {
+		return startServer(ctx, UserLendingServer(), "UserLendingServer")
+	})
+	g.Go(func() error {
+		return startServer(ctx, UserReviewServer(), "UserReviewServer")
 	})
 
 	g.Go(func() error {
 		return startServer(ctx, PaymentsServer(), "PaymentsServer")
 	})
 	g.Go(func() error {
-		return startServer(ctx, APIServer(), "ApiServer")
-	})
-	g.Go(func() error {
 		return startServer(ctx, AdminBooksServer(), "AdminBooksServer")
+	})
+
+	g.Go(func() error {
+		return startServer(ctx, AdminLendingServer(), "AdminLendingServer")
 	})
 
 	if err := g.Wait(); err != nil {

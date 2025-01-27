@@ -1,6 +1,7 @@
 package lending
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -22,4 +23,17 @@ func (obj *LendBook) BeforeUpdate(tx *gorm.DB) (err error) {
 		obj.IsApproved = true
 	}
 	return
+}
+
+func (obj *LendBook) BeforeSave(tx *gorm.DB) (err error) {
+	validStatuses := map[string]bool{
+		"Pending":  true,
+		"Approved": true,
+		"Rejected": true,
+		"Returned": true,
+	}
+	if !validStatuses[obj.Status] {
+		return fmt.Errorf("invalid status: %s", obj.Status)
+	}
+	return nil
 }

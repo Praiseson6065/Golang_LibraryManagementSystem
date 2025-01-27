@@ -26,7 +26,7 @@ func BookLending() gin.HandlerFunc {
 
 }
 
-func BookReturn() gin.HandlerFunc {
+func BookReturning() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req []LendBook
 		if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -40,7 +40,7 @@ func BookReturn() gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, gin.H{"message": "Book Returned successfully"})
+		ctx.JSON(http.StatusOK, gin.H{"message": "Books Returned successfully"})
 
 	}
 

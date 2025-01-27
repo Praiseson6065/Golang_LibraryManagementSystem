@@ -1,21 +1,23 @@
 FRONTEND:
   URL: "http://localhost:3000"
 JWT:
-  EXPIRE : 2000
+  EXPIRE: 2000
 DATABASE:
   PORT: "5432"
   USER: "admin"
 DBNAME:
   AUTH: "auth"
-  BOOKS : "books"
-  REVIEWS : "reviews"
-  PAYMENTS : "payments"
-  LENDING : "lending"
+  BOOKS: "books"
+  REVIEWS: "reviews"
+  PAYMENTS: "payments"
+  LENDING: "lending"
 PORT:
-  API: 3460
-  AUTH: 3475
-  PAYMENTS: 3480
+  API: 3450
+  AUTH: 3470
+  PAYMENTS: 3490
+  USER:
+    REVIEWS: 3600
+    LENDING: 3610
   ADMIN:
-    BOOKS : 3700
-    LENDING : 3701
-  
+    BOOKS: 3700
+    LENDING: 3710

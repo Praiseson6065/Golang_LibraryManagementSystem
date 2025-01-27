@@ -16,7 +16,7 @@ type LendBook struct {
 	DueDate    time.Time  `json:"dueDate" gorm:"not null"`
 	ReturnedAt *time.Time `json:"returnedAt,omitempty"`
 	IsApproved bool       `json:"isApproved" gorm:"default:false"`
-	Status     string     `json:"status" gorm:"type:enum('Pending','Approved','Rejected','Returned');default:'Pending'"`
+	Status     string     `json:"status" gorm:"type:varchar(20);default:'Pending'"`
 }
 
 type ApproveBooksRequest struct {
