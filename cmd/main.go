@@ -44,6 +44,9 @@ func main() {
 	g.Go(func() error {
 		return startServer(ctx, UserReviewServer(), "UserReviewServer")
 	})
+	g.Go(func() error {
+		return startServer(ctx, UserCartServer(eventBus), "UserCartServer")
+	})
 
 	g.Go(func() error {
 		return startServer(ctx, PaymentsServer(), "PaymentsServer")

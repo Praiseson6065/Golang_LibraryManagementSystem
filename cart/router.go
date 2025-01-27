@@ -17,5 +17,5 @@ func Router(eventBus *events.EventBus, r *gin.Engine) {
 			CreateUserCart(c, payload.UserId)
 		}
 	}()
-
+		
 }
