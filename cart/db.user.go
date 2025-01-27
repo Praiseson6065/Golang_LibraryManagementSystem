@@ -1,14 +1,12 @@
 package cart
 
 import (
-	"LibManMicroServ/middleware"
-
 	"github.com/gin-gonic/gin"
 )
 
-func CreateUserCart(ctx *gin.Context) error {
+func CreateUserCart(ctx *gin.Context, UserId string) error {
 	var cart Cart
-	cart.UserID = middleware.GetUserID(ctx)
+	cart.UserID = UserId
 	tx := db.WithContext(ctx).Create(&cart)
 
 	if tx.Error != nil {

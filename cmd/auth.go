@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func AuthServer(eventBus events.EventBus) *http.Server {
+func AuthServer(eventBus *events.EventBus) *http.Server {
 
 	PORT := viper.GetString("PORT.AUTH")
 

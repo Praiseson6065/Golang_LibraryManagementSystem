@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"LibManMicroServ/events"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ type UserSignupRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func userSignup() gin.HandlerFunc {
+func userSignup(eventsBus *events.EventBus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var userSignupRequest UserSignupRequest
 
@@ -33,6 +34,13 @@ func userSignup() gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		eventsBus.Publish(events.Event{
+			Type:    events.EventUserSignedUp,
+			Context: ctx,
+			Payload: events.EventUserSignedUpPayload{
+				UserId: id,
+			},
+		})
 
 		ctx.JSON(http.StatusOK, gin.H{"status": "Successfully signed up", "userId": id})
 

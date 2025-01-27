@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Router(eventBus events.EventBus, r *gin.Engine) {
+func Router(eventBus *events.EventBus, r *gin.Engine) {
 	auth := r.Group("/auth")
 	{
-		auth.POST("/signup", userSignup())
+		auth.POST("/signup", userSignup(eventBus))
 		auth.POST("/login", userLogin())
 	}
 }

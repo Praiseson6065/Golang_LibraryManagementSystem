@@ -11,6 +11,7 @@ DBNAME:
   REVIEWS: "reviews"
   PAYMENTS: "payments"
   LENDING: "lending"
+  CART : "cart"
 PORT:
   API: 3450
   AUTH: 3470

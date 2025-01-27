@@ -21,7 +21,7 @@ func main() {
 		sigChan := make(chan os.Signal, 1)
 		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 		<-sigChan
-		cancel() // Cancel the context on receiving a signal
+		cancel()
 	}()
 	defer cancel()
 
@@ -35,7 +35,7 @@ func main() {
 	})
 
 	g.Go(func() error {
-		return startServer(ctx, AuthServer(*eventBus), "AuthServer")
+		return startServer(ctx, AuthServer(eventBus), "AuthServer")
 	})
 
 	g.Go(func() error {

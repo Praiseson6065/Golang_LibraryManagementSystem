@@ -14,3 +14,4 @@ PurgeDB payments
 PurgeDB reviews
 PurgeDB books
 PurgeDB lending
+PurgeDB cart
