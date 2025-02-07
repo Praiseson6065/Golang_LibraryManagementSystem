@@ -8,10 +8,19 @@ import (
 )
 
 type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
+// @Summary User Login
+// @Description Authenticates a user and returns a token
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "User Login Data"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /auth/login [post]
 func userLogin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 

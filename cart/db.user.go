@@ -16,3 +16,13 @@ func CreateUserCart(ctx *gin.Context, UserId string) error {
 	}
 	return nil
 }
+
+func GetCart(ctx *gin.Context, UserId string) (Cart, error) {
+	var cart Cart
+	tx := db.WithContext(ctx).Where("user_id = ?", UserId).First(&cart)
+
+	if tx.Error != nil {
+		return cart, tx.Error
+	}
+	return cart, nil
+}

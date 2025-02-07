@@ -9,7 +9,7 @@ import (
 type Cart struct {
 	gorm.Model
 	ID            string             `json:"id" gorm:"primaryKey"`
-	UserID        string             `json:"userId" binding:"required" gorm:"not null"`
+	UserID        string             `json:"userId" binding:"required" gorm:"uniqueIndex;not null"`
 	LendItems     []LendCartItem     `json:"lendItems" gorm:"foreignKey:CartID"`
 	PurchaseItems []PurchaseCartItem `json:"purchaseItems" gorm:"foreignKey:CartID"`
 	CreatedAt     time.Time          `json:"createdAt"`

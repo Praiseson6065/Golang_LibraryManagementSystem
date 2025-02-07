@@ -5,10 +5,11 @@ import "gorm.io/gorm"
 type Book struct {
 	gorm.Model
 	BookId   uint    `json:"bookId"`
-	Title	string  `json:"title"`
+	Title    string  `json:"title"`
 	Quantity uint    `json:"quantity"`
 	Price    float64 `json:"price"`
 	ImageURL string  `json:"imageURL"`
+	Type     string  `json:"type"`
 }
 
 type Payment struct {

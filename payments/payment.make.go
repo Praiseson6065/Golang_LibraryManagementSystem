@@ -9,6 +9,7 @@ import (
 type PaymentRequest struct {
 	Amount        float64 `json:"amount"`
 	PaymentMethod string  `json:"paymentMethod"`
+	PaymentType   string  `json:"paymentType"`
 	UserId        uint    `json:"userId"`
 	Email         string  `json:"email"`
 	Books         []Book  `json:"books"`

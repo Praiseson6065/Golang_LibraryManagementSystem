@@ -7,16 +7,15 @@ import (
 type EventType string
 
 const (
-	EventUserSignedUp          EventType = "user.signed.up"
-	EventUserLoggedIn          EventType = "user.logged.in"
-	EventUserLoggedOut         EventType = "user.logged.out"
-	EventCartCheckedOut        EventType = "cart.checked.out"
-	EventBookValidationSuccess EventType = "book.validation.success"
-	EventBookValidationFailed  EventType = "book.validation.failed"
-	EventPaymentMade           EventType = "payment.made"
-	EventBookLent              EventType = "book.lent"
-	EventBookReturned          EventType = "book.returned"
-	EventReviewAdded           EventType = "review.added"
+	EventUserSignedUp    EventType = "user.signed.up"
+	EventUserLoggedIn    EventType = "user.logged.in"
+	EventUserLoggedOut   EventType = "user.logged.out"
+	EventCartCheckedOut  EventType = "cart.checked.out"
+	EventBooksValidation EventType = "book.validate"
+	EventPaymentMade     EventType = "payment.made"
+	EventBookLent        EventType = "book.lent"
+	EventBookReturned    EventType = "book.returned"
+	EventReviewAdded     EventType = "review.added"
 )
 
 type Event struct {

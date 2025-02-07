@@ -24,7 +24,6 @@ func AdminBooksServer() *http.Server {
 		Handler: r,
 	}
 	return server
-
 }
 
 func AdminLendingServer() *http.Server {

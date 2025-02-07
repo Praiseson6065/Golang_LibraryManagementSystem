@@ -45,3 +45,15 @@ func deleteBook(ctx *gin.Context, id string) error {
 	}
 	return nil
 }
+
+func IsBookQuantityAvailable(ctx *gin.Context, bookID string, quantity uint) (bool, error) {
+	var book Book
+	tx := db.WithContext(ctx).First(&book, bookID)
+	if tx.Error != nil {
+		return false, tx.Error
+	}
+	if book.Quantity < quantity {
+		return false, nil
+	}
+	return true, nil
+}
