@@ -1,0 +1,98 @@
+basePath: /cart
+definitions:
+  cart.LendCartItem:
+    properties:
+      bookId:
+        type: string
+      cartId:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dueDate:
+        type: string
+      id:
+        type: string
+      lendDate:
+        type: string
+      status:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - bookId
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+info:
+  contact: {}
+  description: User Cart Server
+  title: UserCartServer
+  version: "1.0"
+paths:
+  /addItemToCart:
+    post:
+      consumes:
+      - application/json
+      description: AddItemToCart
+      parameters:
+      - description: Item to add
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/cart.LendCartItem'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Add Item To Cart
+      tags:
+      - Cart
+  /checkout:
+    post:
+      consumes:
+      - application/json
+      description: CheckOutCart
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Check Out Cart
+      tags:
+      - Cart
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
