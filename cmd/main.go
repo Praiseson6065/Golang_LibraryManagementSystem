@@ -31,7 +31,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	g.Go(func() error {
-		return startServer(ctx, APIServer(), "ApiServer")
+		return startServer(ctx, APIServer(eventBus), "ApiServer")
 	})
 
 	g.Go(func() error {

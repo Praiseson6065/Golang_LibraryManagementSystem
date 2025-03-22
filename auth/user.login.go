@@ -18,9 +18,7 @@ type LoginRequest struct {
 // @Accept json
 // @Produce json
 // @Param request body LoginRequest true "User Login Data"
-// @Success 201 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Router /auth/login [post]
+// @Router /login [post]
 func userLogin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 

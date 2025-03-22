@@ -2,7 +2,7 @@ package events
 
 type BookForPayload struct {
 	BookId    string `json:"bookId"`
-	Quantity  int    `json:"quantity"`
+	Quantity  uint   `json:"quantity"`
 	Available bool   `json:"avaliable"`
 }
 

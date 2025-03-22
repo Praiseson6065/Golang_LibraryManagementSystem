@@ -1,4 +1,4 @@
-basePath: /
+basePath: /auth
 definitions:
   auth.LoginRequest:
     properties:
@@ -6,6 +6,9 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - email
+    - password
     type: object
   auth.UserSignupRequest:
     properties:
@@ -21,19 +24,12 @@ definitions:
     - password
     type: object
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is a sample server.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
+  contact: {}
+  description: Authentication Server
   title: AuthServer
   version: "1.0"
 paths:
-  /auth/login:
+  /login:
     post:
       consumes:
       - application/json
@@ -47,21 +43,11 @@ paths:
           $ref: '#/definitions/auth.LoginRequest'
       produces:
       - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       summary: User Login
       tags:
       - Auth
-  /auth/signup:
+  /signup:
     post:
       consumes:
       - application/json

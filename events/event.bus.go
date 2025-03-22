@@ -49,7 +49,7 @@ func (eb *EventBus) Publish(event Event) []interface{} {
 		go func(ch chan Event, respCh chan interface{}) {
 			defer wg.Done()
 			ch <- event
-			resp := <-respCh // Wait for response
+			resp := <-respCh 
 			responseData = append(responseData, resp)
 		}(ch, resCh[i])
 	}

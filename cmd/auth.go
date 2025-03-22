@@ -5,6 +5,9 @@ import (
 	_ "LibManMicroServ/docs/auth"
 	"LibManMicroServ/events"
 	"LibManMicroServ/middleware"
+
+	// "time"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,16 +19,7 @@ import (
 //	@title			AuthServer
 //	@version		1.0
 //	@description	Authentication Server
-//	@termsOfService	http://swagger.io/terms/
-
-//	@contact.name	API Support
-//	@contact.url	http://www.swagger.io/support
-//	@contact.email	support@swagger.io
-
-//	@license.name	Apache 2.0
-//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
-
-//	@BasePath	/
+//	@BasePath	/auth
 func AuthServer(eventBus *events.EventBus) *http.Server {
 
 	PORT := viper.GetString("PORT.AUTH")

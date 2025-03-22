@@ -2,6 +2,7 @@ package main
 
 import (
 	"LibManMicroServ/books"
+	"LibManMicroServ/events"
 	"LibManMicroServ/middleware"
 	"LibManMicroServ/reviews"
 	"net/http"
@@ -10,13 +11,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func APIServer() *http.Server {
+func APIServer(eventBus *events.EventBus) *http.Server {
 	PORT := viper.GetString("PORT.API")
 	r := gin.New()
 	r.Use(middleware.CORS())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-	books.Router(r)
+	books.Router(eventBus, r)
 	reviews.Router(r)
 	server := &http.Server{
 		Addr:    ":" + PORT,
@@ -24,4 +25,3 @@ func APIServer() *http.Server {
 	}
 	return server
 }
-

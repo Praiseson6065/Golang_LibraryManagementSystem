@@ -15,4 +15,13 @@ func (obj *Cart) BeforeCreate(tx *gorm.DB) (err error) {
 	}
 	return
 }
+func (lc *LendCartItem) BeforeCreate(tx *gorm.DB) (err error) {
+	lc.ID = "LC" + strings.Replace(uuid.New().String(), "-", "", -1)
+	return
+}
+
+func (pc *PurchaseCartItem) BeforeCreate(tx *gorm.DB) (err error) {
+	pc.ID = "PC" + strings.Replace(uuid.New().String(), "-", "", -1)
+	return
+}
 

@@ -8,48 +8,56 @@ import (
 	"LibManMicroServ/reviews"
 	"net/http"
 
+	_ "LibManMicroServ/docs/usercart"
+
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func UserReviewServer() *http.Server {
-	PORT := viper.GetString("PORT.USER.REVIEWS")
+func newRouter(swaggerInstance string) *gin.Engine {
 	r := gin.New()
 	r.Use(middleware.Authenicator())
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.NewHandler(), ginSwagger.InstanceName(swaggerInstance)))
+	return r
+}
+
+func UserReviewServer() *http.Server {
+	PORT := viper.GetString("PORT.USER.REVIEWS")
+	r := newRouter("user")
 	reviews.UserRouter(r)
-	server := &http.Server{
+	return &http.Server{
 		Addr:    ":" + PORT,
 		Handler: r,
 	}
-	return server
 }
 
 func UserLendingServer() *http.Server {
 	PORT := viper.GetString("PORT.USER.LENDING")
-	r := gin.New()
-	r.Use(middleware.Authenicator())
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	r := newRouter("user")
 	lending.UserRouter(r)
-	server := &http.Server{
+	return &http.Server{
 		Addr:    ":" + PORT,
 		Handler: r,
 	}
-	return server
 }
 
+//	@title			UserCartServer
+//	@version		1.0
+//	@description	User Cart Server
+//	@BasePath	/cart
+//	@securityDefinitions.apikey BearerAuth
+// 	@in header
+// 	@name Authorization
 func UserCartServer(eventBus *events.EventBus) *http.Server {
 	PORT := viper.GetString("PORT.USER.CART")
-	r := gin.New()
-	r.Use(middleware.Authenicator())
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	r := newRouter("usercart")
 	cart.Router(eventBus, r)
-	server := &http.Server{
+	return &http.Server{
 		Addr:    ":" + PORT,
 		Handler: r,
 	}
-	return server
 }

@@ -10,6 +10,11 @@ import (
 func Authenicator() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
+		if strings.HasPrefix(ctx.Request.URL.Path, "/docs") {
+			ctx.Next()
+			return
+		}
+
 		authorization := ctx.GetHeader("Authorization")
 		if len(authorization) == 0 {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is required"})

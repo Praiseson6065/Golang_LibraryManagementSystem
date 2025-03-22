@@ -21,7 +21,7 @@ type UserSignupRequest struct {
 // @Param request body UserSignupRequest true "User Signup Data"
 // @Success 201 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
-// @Router /auth/signup [post]
+// @Router /signup [post]
 func userSignup(eventsBus *events.EventBus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var userSignupRequest UserSignupRequest
@@ -51,7 +51,7 @@ func userSignup(eventsBus *events.EventBus) gin.HandlerFunc {
 			},
 		})
 		if len(responses) > 0 {
-			_, err = responses[0].(events.EventUserSignedUpResponse).Success, responses[0].(events.EventUserSignedUpResponse).Error
+			err = responses[0].(events.EventUserCartCreationResponse).Error
 			if err != nil {
 				ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 				return

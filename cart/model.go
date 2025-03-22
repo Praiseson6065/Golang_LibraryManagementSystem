@@ -18,21 +18,21 @@ type Cart struct {
 }
 type LendCartItem struct {
 	gorm.Model
+	ID       string    `json:"id" gorm:"primaryKey"`
 	CartID   string    `json:"cartId" gorm:"not null"`
 	BookID   string    `json:"bookId" binding:"required" gorm:"not null"`
-	Title    string    `json:"title"`
-	ISBN     string    `json:"isbn"`
 	LendDate time.Time `json:"lendDate"`
 	DueDate  time.Time `json:"dueDate"`
+	Status   string    `json:"status" gorm:"type:varchar(20);default:'pending'"`
 }
 
 type PurchaseCartItem struct {
 	gorm.Model
+	ID         string  `json:"id" gorm:"primaryKey"`
 	CartID     string  `json:"cartId" gorm:"not null"`
 	BookID     string  `json:"bookId" binding:"required" gorm:"not null"`
-	Title      string  `json:"title"`
-	ISBN       string  `json:"isbn"`
 	Quantity   int     `json:"quantity" gorm:"default:1"`
 	UnitPrice  float64 `json:"unitPrice"`
 	TotalPrice float64 `json:"totalPrice"`
+	Status     string  `json:"status" gorm:"type:varchar(20);default:'pending'"`
 }

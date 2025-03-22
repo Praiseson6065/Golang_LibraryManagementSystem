@@ -9,22 +9,13 @@ const docTemplateauth = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/login": {
+        "/login": {
             "post": {
                 "description": "Authenticates a user and returns a token",
                 "consumes": [
@@ -48,25 +39,10 @@ const docTemplateauth = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
-        "/auth/signup": {
+        "/signup": {
             "post": {
                 "description": "Registers a new user",
                 "consumes": [
@@ -112,6 +88,10 @@ const docTemplateauth = `{
     "definitions": {
         "auth.LoginRequest": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -147,10 +127,10 @@ const docTemplateauth = `{
 var SwaggerInfoauth = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "/auth",
 	Schemes:          []string{},
 	Title:            "AuthServer",
-	Description:      "This is a sample server.",
+	Description:      "Authentication Server",
 	InfoInstanceName: "auth",
 	SwaggerTemplate:  docTemplateauth,
 	LeftDelim:        "{{",
